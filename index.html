@@ -117,10 +117,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 .back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;margin-bottom:18px;transition:color .15s}
 .back-btn:hover{color:var(--ink)}
 .detail-header{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
-.detail-header-left{flex:1;min-width:0}.detail-header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 22px 16px}.detail-vstrip{border-top:1px solid var(--border2);padding:9px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.detail-title{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-.02em;margin-bottom:4px}
+.detail-header-left{width:100%}.detail-header-top{padding:18px 22px 14px}.detail-vstrip{border-top:1px solid var(--border2);padding:9px 22px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;min-width:0}
+.detail-title{font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-.02em;margin-bottom:0}
 .detail-sub{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.detail-actions{display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0}
+.detail-actions{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;align-items:center}
 
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;text-decoration:none;white-space:nowrap}
@@ -350,6 +350,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
         <button class="ctab-btn" id="ctab-all" onclick="switchClientsTab('all')" style="font-size:12px;font-weight:600;padding:6px 14px;border-radius:99px;border:none;cursor:pointer;background:#111;color:white;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.18);flex-shrink:0;transition:all .15s">All Clients <span id="ctab-all-cnt" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;background:rgba(255,255,255,.22);color:white">—</span></button>
         <button class="ctab-btn" id="ctab-delinquent" onclick="switchClientsTab('delinquent')" style="font-size:12px;font-weight:500;padding:6px 14px;border-radius:99px;border:none;cursor:pointer;background:transparent;color:#6b7280;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;transition:all .15s"><span style="width:6px;height:6px;border-radius:50%;background:#dc2626;flex-shrink:0"></span>Delinquent <span id="ctab-delinquent-cnt" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;background:#fee2e2;color:#991b1b;display:none">0</span></button>
         <button class="ctab-btn" id="ctab-pending" onclick="switchClientsTab('pending')" style="font-size:12px;font-weight:500;padding:6px 14px;border-radius:99px;border:none;cursor:pointer;background:transparent;color:#6b7280;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;transition:all .15s"><span style="width:6px;height:6px;border-radius:50%;background:#d97706;flex-shrink:0"></span>Pending Review <span id="ctab-pending-cnt" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;background:#fef3c7;color:#92400e;display:none">0</span></button>
+        <button class="ctab-btn" id="ctab-terminating" onclick="switchClientsTab('terminating')" style="font-size:12px;font-weight:500;padding:6px 14px;border-radius:99px;border:none;cursor:pointer;background:transparent;color:#6b7280;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;transition:all .15s"><span style="width:6px;height:6px;border-radius:50%;background:#92400e;flex-shrink:0"></span>Pending Termination <span id="ctab-terminating-cnt" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;background:#fef3c7;color:#92400e;display:none">0</span></button>
       </div>
       <div class="section">
         <div class="section-head" style="flex-wrap:wrap;gap:10px">
@@ -468,6 +469,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 </div>
 
 <!-- EDIT MODAL -->
+<div class="modal-overlay" id="terminationModal">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-head"><div class="modal-title">&#128197; Set Termination Date</div><button class="modal-close" onclick="closeModal('terminationModal')">&#10005;</button></div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Account will be automatically deactivated at 12:01 AM on this date.</p>
+      <div class="form-group"><label class="form-label">Termination Date</label><input class="form-input" id="termDateInput" type="date" style="font-family:'DM Sans',sans-serif"></div>
+      <div id="termQuickSelect" style="margin-top:4px;font-size:12px;color:var(--muted)"></div>
+      <div id="termError" style="font-size:12px;color:#dc2626;min-height:16px;margin-top:6px"></div>
+    </div>
+    <div class="modal-footer" style="justify-content:space-between">
+      <button class="btn btn-ghost" id="termClearBtn" onclick="clearTerminationDate()" style="color:#dc2626;border-color:#fca5a5">&#10005; Clear Date</button>
+      <div style="display:flex;gap:8px"><button class="btn btn-ghost" onclick="closeModal('terminationModal')">Cancel</button><button class="btn btn-red" onclick="saveTerminationDate()" id="termSaveBtn">Save</button></div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="adminPwdModal">
   <div class="modal" style="max-width:360px">
     <div class="modal-head"><div class="modal-title">&#128274; Admin Password Required</div><button class="modal-close" onclick="closeModal('adminPwdModal')">&#10005;</button></div>
@@ -876,6 +893,13 @@ function renderDetail(c){
   const status=c['Account Status|hidden-3']||'ACTIVE',isActive=status==='ACTIVE',isForward=(c['Forwarding']||'').toLowerCase()==='yes';
   const bizDesc=c['Brief Description of Your Business|text-6']||'';
   const isDelinquent=(c['Delinquent']||'').toLowerCase()==='yes';
+  const termDateRaw=c['TerminationDate']||'';
+  const termDate=termDateRaw?new Date(termDateRaw.includes('T')?termDateRaw:termDateRaw+'T00:00:00'):null;
+  const todayD=new Date();todayD.setHours(0,0,0,0);
+  const isPendingTerm=!!(termDate&&termDate>todayD&&isActive);
+  const isTerminated=!!(termDate&&termDate<=todayD&&!isActive);
+  const termDaysLeft=termDate?Math.ceil((termDate-todayD)/86400000):0;
+  const termDateFmt=termDate?termDate.toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric',timeZone:'America/Toronto'}):'';
   const recipients=[c['Recipient Name (1) | Legal Company Name|text-4'],c['Recipient Name (2)|text-1'],c['Recipient Name (3)|text-3'],c['Recipient Name (4)|text-2'],c['Recipient Name (5)|text-9']].filter(Boolean);
   const agents=[adminName,c['(1) Legal Full Name|name-2'],c['(2) Legal Full Name|name-3'],c['(3) Legal Full Name|name-4']].filter(Boolean);
   const allMails=getAllMails(pid);
@@ -933,6 +957,12 @@ function renderDetail(c){
           <div class="info-item"><div class="info-label">Period End</div><div class="info-value">${fmtDate(periodEnd)}</div></div>
           ${usageBar(mailsUsed,mailsAllowed,'Mail Usage')}
           ${usageBar(parcelsUsed,parcelsAllowed,'Parcel Usage')}
+          ${(()=>{
+            const _allMail=allMails.filter(m=>m['Item Type|radio-1']==='Mail'||m['Item Type|radio-1']==='Confidential Mail').length;
+            const _allParcel=allMails.filter(m=>m['Item Type|radio-1']==='Parcel').length;
+            return `<div class="info-item"><div class="info-label">All&#8209;time Mail</div><div class="info-value">${_allMail} item${_allMail!==1?'s':''}</div></div>`
+              +`<div class="info-item"><div class="info-label">All&#8209;time Parcels</div><div class="info-value">${_allParcel} item${_allParcel!==1?'s':''}</div></div>`;
+          })()}
         </div>
       </div>
     </div>`;
@@ -942,18 +972,17 @@ function renderDetail(c){
   _detailTarget.innerHTML=`
     <div class="detail-header">
       <div class="detail-header-top">
-        <div class="detail-header-left" style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
-            <div class="detail-title">${esc(company)}</div>
-            <div class="detail-actions">
-          <button class="btn btn-ghost" onclick="generateProofOfAddress()" style="border-color:var(--border)">&#128196; Proof of Address</button>
-          ${isAdminMode?'<a class="btn btn-ghost" href="https://yyzoffices.com/yyz-dashboard-7/?Plan_ID='+esc(pid)+'&email='+encodeURIComponent(email)+'&Company_Legal_Name='+encodeURIComponent(company)+'" target="_blank" style="text-decoration:none">&#9881; Admin Action</a>':''}
-          ${isAdminMode?'<button class="btn btn-outline" onclick="promptAdminPwd()">&#9999;&#65039; Edit Profile</button>':''}
-          ${isAdminMode?'<button class="btn '+(isActive?'btn-danger':'btn-green')+'" id="toggleBtn" onclick="toggleStatus()">'+(isActive?'&#9208; Deactivate':'&#9654; Activate')+'</button>':''}
-          ${isAdminMode?'<button class="btn" id="delinqBtn" onclick="toggleDelinquent()" style="'+(isDelinquent?'background:#fee2e2;color:#991b1b;border:1px solid #fca5a5':'background:#fff7ed;color:#c2410c;border:1px solid #fdba74')+'">'+(isDelinquent?'&#10003; Clear Delinquent':'&#9888; Mark Delinquent')+'</button>':''}
-            </div>
+        <div class="detail-header-left" style="width:100%">
+          <div class="detail-title" title="${esc(company)}">${esc(company)}</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px;padding-bottom:4px">
+            <button class="btn btn-ghost btn-sm" onclick="generateProofOfAddress()" style="border-color:var(--border)">&#128196; Proof of Address</button>
+            ${isAdminMode?'<a class="btn btn-ghost btn-sm" href="https://yyzoffices.com/yyz-dashboard-7/?Plan_ID='+esc(pid)+'&email='+encodeURIComponent(email)+'&Company_Legal_Name='+encodeURIComponent(company)+'" target="_blank" style="text-decoration:none">&#9881; Admin Action</a>':''}
+            ${isAdminMode?'<button class="btn btn-outline btn-sm" onclick="promptAdminPwd()">&#9999;&#65039; Edit Profile</button>':''}
+            ${isAdminMode?'<button class="btn btn-sm '+(isActive?'btn-danger':'btn-green')+'" id="toggleBtn" onclick="toggleStatus()">'+(isActive?'&#9208; Deactivate':'&#9654; Activate')+'</button>':''}
+            ${isAdminMode?'<button class="btn btn-sm" id="delinqBtn" onclick="toggleDelinquent()" style="'+(isDelinquent?'background:#fee2e2;color:#991b1b;border:1px solid #fca5a5':'background:#fff7ed;color:#c2410c;border:1px solid #fdba74')+'">'+(isDelinquent?'&#10003; Clear Delinquent':'&#9888; Mark Delinquent')+'</button>':''}
+            ${isAdminMode?'<button class="btn btn-sm" id="termBtn" onclick="openTerminationPicker()" style="'+(isPendingTerm?'background:#fef3c7;color:#92400e;border:1px solid #fde68a':'background:#f9fafb;color:#374151;border:1px solid #e5e7eb')+'">&#128197; '+(isPendingTerm?'Edit Termination':'Set Termination')+'</button>':''}
           </div>
-          <div class="detail-sub" style="margin-top:6px">
+          <div class="detail-sub" style="margin-top:8px">
             <span class="badge ${isActive?'badge-active':'badge-inactive'}">${esc(status)}</span>
             <span class="badge badge-plan">${esc(planLabel(plan))}</span>
             ${(c['How did you hear about us?|radio-2']||'')?'<span style="font-size:10px;color:var(--muted);background:var(--bg2);padding:2px 9px;border-radius:99px;border:0.5px solid var(--border2)">via '+esc(c['How did you hear about us?|radio-2'])+'</span>':''}
@@ -961,6 +990,16 @@ function renderDetail(c){
           </div>
         </div>
       </div>
+            ${isPendingTerm?'<div style="display:flex;align-items:center;gap:10px;padding:10px 18px;background:#fffbeb;border-bottom:0.5px solid #fde68a">'
+        +'<div style="width:28px;height:28px;border-radius:50%;background:#fef3c7;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#128197;</div>'
+        +'<div><div style="font-size:12px;font-weight:600;color:#92400e">Pending Termination</div>'
+        +'<div style="font-size:11px;color:#b45309;margin-top:1px">Terminating in '+termDaysLeft+' day'+(termDaysLeft!==1?'s':'')+' — '+termDateFmt+'</div></div>'
+        +'</div>':''}
+      ${isTerminated?'<div style="display:flex;align-items:center;gap:10px;padding:10px 18px;background:#f9fafb;border-bottom:0.5px solid #e5e7eb">'
+        +'<div style="width:28px;height:28px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#10003;</div>'
+        +'<div><div style="font-size:12px;font-weight:600;color:#6b7280">Account Terminated</div>'
+        +'<div style="font-size:11px;color:#9ca3af;margin-top:1px">Terminated on '+termDateFmt+'</div></div>'
+        +'</div>':''}
       ${isDelinquent?'<div style="display:flex;align-items:center;gap:10px;padding:10px 18px;background:#fef2f2;border-bottom:0.5px solid #fecaca">'
         +'<div style="width:28px;height:28px;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#9888;</div>'
         +'<div><div style="font-size:12px;font-weight:600;color:#991b1b">Account Delinquent</div>'
@@ -1212,6 +1251,77 @@ async function updateStatus(mailId,sel){
 }
 
 // TOGGLE CLIENT STATUS
+function openTerminationPicker(){
+  if(!isAdminMode){enterAdminMode();return;}
+  const c=currentClient;if(!c)return;
+  const existing=c['TerminationDate']||'';
+  const inp=document.getElementById('termDateInput');
+  if(inp)inp.value=existing;
+  // Quick select: billing period end
+  const qs=document.getElementById('termQuickSelect');
+  const periodEnd=c['Current Period End']||'';
+  if(qs&&periodEnd){
+    // Format for display
+    const fmt=new Date(periodEnd).toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});
+    // Format for date input (YYYY-MM-DD)
+    const d=new Date(periodEnd.includes('T')?periodEnd:periodEnd+'T00:00:00');
+    const yyyy=d.getFullYear();
+    const mm=String(d.getMonth()+1).padStart(2,'0');
+    const dd=String(d.getDate()).padStart(2,'0');
+    const inputVal=yyyy+'-'+mm+'-'+dd;
+    const btn=document.createElement('button');
+    btn.textContent='Billing end — '+fmt;
+    btn.style.cssText='font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;border:1px solid var(--border);background:white;cursor:pointer;margin-left:4px';
+    btn.onclick=function(){document.getElementById('termDateInput').value=inputVal;};
+    qs.innerHTML='<span style="font-size:11px;color:var(--muted)">Quick select: </span>';
+    qs.appendChild(btn);
+  }else if(qs)qs.innerHTML='';
+  document.getElementById('termError').textContent='';
+  const clearBtn=document.getElementById('termClearBtn');
+  if(clearBtn)clearBtn.style.display=existing?'':'none';
+  openModal('terminationModal');
+  setTimeout(()=>inp&&inp.focus(),200);
+}
+async function saveTerminationDate(){
+  const c=currentClient;if(!c)return;
+  const pid=c['Plan ID|hidden-5'];
+  const date=document.getElementById('termDateInput').value;
+  if(!date){document.getElementById('termError').textContent='Please select a date.';return;}
+  const btn=document.getElementById('termSaveBtn');if(btn)btn.disabled=true;
+  try{
+    const params=new URLSearchParams({action:'setTerminationDate',planId:pid,date});
+    const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
+    let ok=false;try{const d=await res.json();ok=d.success;}catch(e){ok=true;}
+    if(ok){
+      c['TerminationDate']=date;
+      const row=planData.find(r=>String(r['Plan ID|hidden-5']).trim()===String(pid).trim());
+      if(row)row['TerminationDate']=date;
+      closeModal('terminationModal');
+      showToast('Termination date set ✓','success');
+      renderDetail(c);
+      updateClientsTabCounts();
+    }else showToast('Error saving termination date','error');
+  }catch(e){showToast('Network error','error');}
+  finally{const b=document.getElementById('termSaveBtn');if(b)b.disabled=false;}
+}
+async function clearTerminationDate(){
+  const c=currentClient;if(!c)return;
+  const pid=c['Plan ID|hidden-5'];
+  try{
+    const params=new URLSearchParams({action:'setTerminationDate',planId:pid,date:''});
+    const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
+    let ok=false;try{const d=await res.json();ok=d.success;}catch(e){ok=true;}
+    if(ok){
+      c['TerminationDate']='';
+      const row=planData.find(r=>String(r['Plan ID|hidden-5']).trim()===String(pid).trim());
+      if(row)row['TerminationDate']='';
+      closeModal('terminationModal');
+      showToast('Termination date cleared','success');
+      renderDetail(c);
+      updateClientsTabCounts();
+    }else showToast('Error clearing termination date','error');
+  }catch(e){showToast('Network error','error');}
+}
 async function toggleDelinquent(){
   if(!isAdminMode){enterAdminMode();return;}
   const c=currentClient;if(!c)return;
@@ -1240,8 +1350,15 @@ async function toggleStatus(){
     const params=new URLSearchParams({action:'toggleStatus',planId:pid,newStatus:ns});
     const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
     const data=await res.json();
-    if(data.success){c['Account Status|hidden-3']=ns;if(data.stamp)c['StatusChangedAt']=data.stamp;const row=planData.find(r=>String(r['Plan ID|hidden-5']).trim()===String(pid).trim());if(row){row['Account Status|hidden-3']=ns;if(data.stamp)row['StatusChangedAt']=data.stamp;}showToast('Client '+(ns==='ACTIVE'?'activated':'deactivated')+' \u2713','success');renderDetail(c);}
-    else{showToast('Error: '+(data.error||'Unknown'),'error');btn.disabled=false;}
+    if(data.success){
+      c['Account Status|hidden-3']=ns;
+      if(data.stamp)c['StatusChangedAt']=data.stamp;
+      if(ns==='ACTIVE')c['TerminationDate']='';
+      const row=planData.find(r=>String(r['Plan ID|hidden-5']).trim()===String(pid).trim());
+      if(row){row['Account Status|hidden-3']=ns;if(data.stamp)row['StatusChangedAt']=data.stamp;if(ns==='ACTIVE')row['TerminationDate']='';}
+      showToast('Client '+(ns==='ACTIVE'?'activated':'deactivated')+' ✓','success');
+      renderDetail(c);updateTabCounts();updateClientsTabCounts();
+    }else{showToast('Error: '+(data.error||'Unknown'),'error');btn.disabled=false;}
   }catch(e){showToast('Network error','error');btn.disabled=false;}
 }
 
@@ -1624,7 +1741,7 @@ function renderClientsTab(forceRefresh){
 
 let _clientsActiveTab='all';
 function switchClientsTab(tab){
-  if(tab==='delinquent'&&!isAdminMode){enterAdminMode();if(!isAdminMode)return;}
+  if((tab==='delinquent'||tab==='terminating')&&!isAdminMode){enterAdminMode();if(!isAdminMode)return;}
   _clientsActiveTab=tab;
   document.querySelectorAll('.ctab-btn').forEach(b=>{
     b.style.background='transparent';
@@ -1653,6 +1770,8 @@ function updateClientsTabCounts(){
   const ac=document.getElementById('ctab-all-cnt');if(ac){ac.textContent=tot;ac.style.display='inline';}
   const dc=document.getElementById('ctab-delinquent-cnt');if(dc){dc.textContent=del;dc.style.display=del>0?'inline':'none';}
   const pc=document.getElementById('ctab-pending-cnt');if(pc){pc.textContent=pend;pc.style.display=pend>0?'inline':'none';}
+  const term=allClientsCache.filter(c=>c['TerminationDate']&&(c['Account Status|hidden-3']||'ACTIVE')==='ACTIVE').length;
+  const tc=document.getElementById('ctab-terminating-cnt');if(tc){tc.textContent=term;tc.style.display=term>0?'inline':'none';}
 
 }
 function filterClientsTable(q){
@@ -1662,6 +1781,7 @@ function filterClientsTable(q){
   const filtered=allClientsCache.filter(c=>{
     if(_clientsActiveTab==='delinquent'&&(c['Delinquent']||'').toLowerCase()!=='yes')return false;
     if(_clientsActiveTab==='pending'&&(c['Verified']||''))return false;
+    if(_clientsActiveTab==='terminating'&&!(c['TerminationDate']&&(c['Account Status|hidden-3']||'ACTIVE')==='ACTIVE'))return false;
     const statusMatch=statusF==='ASSOCIATED'?getRelatedAccounts(c).length>0:(!statusF||(c['Account Status|hidden-3']||'ACTIVE').toUpperCase()===statusF);
     const planMatch=!planF||(c['planName']||'').trim()===planF;
     const fn=(c['First Name|name-1-first-name']||'').toLowerCase();
@@ -1697,7 +1817,11 @@ function renderClientsTable(clients){
   const _delFirst=_clientsActiveTab==='all'?[...clients].sort((a,b)=>{
     const ad=(a['Delinquent']||'').toLowerCase()==='yes';
     const bd=(b['Delinquent']||'').toLowerCase()==='yes';
-    return ad===bd?0:ad?-1:1;
+    const at2=!!(a['TerminationDate']&&(a['Account Status|hidden-3']||'ACTIVE')==='ACTIVE');
+    const bt2=!!(b['TerminationDate']&&(b['Account Status|hidden-3']||'ACTIVE')==='ACTIVE');
+    if(ad!==bd)return ad?-1:1;
+    if(at2!==bt2)return at2?-1:1;
+    return 0;
   }):clients;
   const sorted=[..._delFirst].sort((a,b)=>{
     if(sortBy==='recent'){
@@ -1844,9 +1968,16 @@ function renderClientsTable(clients){
     const vs=c['Verified']||'',vTag=!vs?'<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:99px;background:#faeeda;color:#854f0b;border:0.5px solid #f0c070">&#9888; Pending Review</span>':vs==='ID Not Verifiable'?'<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:99px;background:#fee2e2;color:#dc2626;border:0.5px solid #fca5a5">&#10007; ID Not Verifiable</span>':'';
     const isDelCard=(c['Delinquent']||'').toLowerCase()==='yes';
     const delTag=isDelCard?'<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:99px;background:#fee2e2;color:#991b1b;border:0.5px solid #fca5a5;display:inline-block">&#9888; Delinquent</span>':'';
+    const cTermDate=c['TerminationDate']||'';
+    const cTermActive=(c['Account Status|hidden-3']||'ACTIVE')==='ACTIVE';
+    const cTermTag=cTermDate&&cTermActive?(()=>{
+      const td=new Date(cTermDate);const tod=new Date();tod.setHours(0,0,0,0);
+      const days=Math.ceil((td-tod)/86400000);
+      return '<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:99px;background:#fef3c7;color:#92400e;border:0.5px solid #fde68a;display:inline-block">&#128197; Terminating in '+days+'d</span>';
+    })():'';
     const qTag=overQuota?'<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:99px;background:#FEE2E2;color:#B91C1C;display:inline-block;width:fit-content">Over quota</span>':nearQuota?'<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:99px;background:#FEF3C7;color:#B45309;display:inline-block;width:fit-content">Near quota</span>':'';
     return `<div onclick="openClientFromList('${esc(String(pid))}')" style="display:grid;grid-template-columns:130px minmax(0,2fr) minmax(0,1.5fr) 200px 90px;align-items:center;padding:12px 14px;background:${bg};border:1px solid ${cb};border-radius:10px;cursor:pointer;transition:all .12s;margin-bottom:5px" onmouseover="this.style.background='${bgh}';this.style.borderColor='${cbh}'" onmouseout="this.style.background='${bg}';this.style.borderColor='${cb}'">
-      <div style="display:flex;flex-direction:column;gap:4px;padding-right:8px"><span style="font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;background:${pm.bg};color:${pm.color};display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:112px" title="${pm.label}">${pm.label}</span>${getRelatedAccounts(c).length>0?'<div style="font-size:9px;color:#92400e;margin-top:2px;display:flex;align-items:center;gap:3px"><span style="width:5px;height:5px;border-radius:50%;background:#f59e0b;display:inline-block"></span>Associated</div>':''}<div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:${isActive?'#22C55E':'#D1D5DB'};flex-shrink:0"></div><span style="font-size:11px;color:${isActive?'#15803D':'#6B7280'};font-weight:500">${isActive?'Active':'Inactive'}</span></div>${delTag}${qTag}</div>
+      <div style="display:flex;flex-direction:column;gap:4px;padding-right:8px"><span style="font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;background:${pm.bg};color:${pm.color};display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:112px" title="${pm.label}">${pm.label}</span>${getRelatedAccounts(c).length>0?'<div style="font-size:9px;color:#92400e;margin-top:2px;display:flex;align-items:center;gap:3px"><span style="width:5px;height:5px;border-radius:50%;background:#f59e0b;display:inline-block"></span>Associated</div>':''}<div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:${isActive?'#22C55E':'#D1D5DB'};flex-shrink:0"></div><span style="font-size:11px;color:${isActive?'#15803D':'#6B7280'};font-weight:500">${isActive?'Active':'Inactive'}</span></div>${delTag}${cTermTag}${qTag}</div>
       <div style="min-width:0;padding-right:12px"><div style="font-size:13px;font-weight:600;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px">${esc(company)}</div>${extraRecipients.length?`<div style="font-size:11px;color:#6B7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px">${extraRecipients.slice(0,2).map(esc).join(' · ')}</div>`:''}<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span style="font-size:10px;color:#9CA3AF">Joined ${regDate||'—'} · ID ${esc(String(pid))}</span>${vTag}</div></div>
       <div style="min-width:0;padding-right:12px"><div style="font-size:12px;font-weight:500;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px">${esc(admin)||'—'}</div><div style="font-size:11px;color:#6B7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'DM Mono',monospace;margin-bottom:1px">${esc(email)||'—'}</div>${phone?`<div style="font-size:11px;color:#9CA3AF;font-family:'DM Mono',monospace">${esc(phone)}</div>`:''}</div>
       <div style="display:flex;flex-direction:column;gap:5px;padding:0 12px"><div style="font-size:10px;color:#6B7280;font-weight:500;margin-bottom:1px">Renews ${esc(periodEnd)}</div>${usageRow(mailsUsed,mailsAllowed,'Mail')}${usageRow(parcelsUsed,parcelsAllowed,'Parcels')}</div>

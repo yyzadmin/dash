@@ -329,13 +329,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
     <div class="tab-pane" id="pane-overdue">
       <div class="section">
         <div class="section-head" style="flex-wrap:wrap;gap:8px">
-          <div class="section-title">&#9200; Overdue &mdash; Past Collect-By Date, Still Pending</div>
+          <div class="section-title">&#9200; Overdue</div>
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <button id="overdueExportBtn" class="btn btn-ghost btn-sm" onclick="exportOverduePDF()" style="display:none">&#128196; Export PDF</button>
             <button id="overdueDiscardBtn" class="btn btn-sm" onclick="bulkDiscardConfirm()" style="display:none;background:#fee2e2;color:#991b1b;border:1px solid #fca5a5">&#128465; Discard Selected</button>
             <button class="btn btn-ghost btn-sm" onclick="renderOverdueTab(true)">&#8635; Refresh</button>
           </div>
         </div>
+        <!-- Overdue 3 pill tabs -->
+        <div style="display:flex;align-items:center;background:var(--bg2);border-radius:12px;padding:3px;gap:2px;width:fit-content;margin-bottom:14px;position:relative">
+          <div id="ovdSegSlider" style="position:absolute;background:white;border-radius:9px;box-shadow:0 1px 3px rgba(0,0,0,.07);transition:all .22s cubic-bezier(.4,0,.2,1);pointer-events:none"></div>
+          <button id="ovdTabDiscard" onclick="switchOverdueTab('discard')" style="font-size:13px;font-weight:500;padding:6px 18px;border-radius:9px;border:none;cursor:pointer;background:transparent;color:var(--muted);display:flex;align-items:center;gap:7px;position:relative;z-index:1;font-family:'DM Sans',sans-serif;white-space:nowrap">&#128465; Ready to Discard <span id="ovdCntDiscard" style="font-size:11px;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--bg2);color:var(--muted)">—</span></button>
+          <button id="ovdTabNotify" onclick="switchOverdueTab('notify')" style="font-size:13px;font-weight:500;padding:6px 18px;border-radius:9px;border:none;cursor:pointer;background:transparent;color:var(--muted);display:flex;align-items:center;gap:7px;position:relative;z-index:1;font-family:'DM Sans',sans-serif;white-space:nowrap">&#128276; Ready to Notify <span id="ovdCntNotify" style="font-size:11px;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--bg2);color:var(--muted)">—</span></button>
+          <button id="ovdTabNotified" onclick="switchOverdueTab('notified')" style="font-size:13px;font-weight:500;padding:6px 18px;border-radius:9px;border:none;cursor:pointer;background:transparent;color:var(--muted);display:flex;align-items:center;gap:7px;position:relative;z-index:1;font-family:'DM Sans',sans-serif;white-space:nowrap">&#10003; Notified <span id="ovdCntNotified" style="font-size:11px;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--bg2);color:var(--muted)">—</span></button>
+        </div>
+        <!-- Discard sel bar (Ready to Discard only) -->
         <div id="overdueSelBar" style="display:none;padding:8px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:8px;gap:10px;align-items:center">
           <input type="checkbox" id="overdueSelectAll" onchange="toggleSelectAllOverdue(this.checked)" style="width:14px;height:14px;cursor:pointer">
           <span style="font-size:12px;color:#374151" id="overdueSelCount">0 selected</span>
@@ -346,6 +354,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 
     <!-- ALL CLIENTS TAB -->
     <div class="tab-pane" id="pane-clients">
+      <div id="clientsStatsStrip" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 2px;margin-bottom:10px;border-bottom:1px solid var(--border)"></div>
       <div id="clientsTabWrap" style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;overflow-x:auto;margin-bottom:12px">
         <button class="ctab-btn" id="ctab-all" onclick="switchClientsTab('all')" style="font-size:12px;font-weight:600;padding:6px 14px;border-radius:99px;border:none;cursor:pointer;background:#111;color:white;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.18);flex-shrink:0;transition:all .15s">All Clients <span id="ctab-all-cnt" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;background:rgba(255,255,255,.22);color:white">—</span></button>
         <button class="ctab-btn" id="ctab-delinquent" onclick="switchClientsTab('delinquent')" style="font-size:12px;font-weight:500;padding:6px 14px;border-radius:99px;border:none;cursor:pointer;background:transparent;color:#6b7280;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;transition:all .15s"><span style="width:6px;height:6px;border-radius:50%;background:#dc2626;flex-shrink:0"></span>Delinquent <span id="ctab-delinquent-cnt" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;background:#fee2e2;color:#991b1b;display:none">0</span></button>
@@ -861,6 +870,17 @@ function mailItemHtml(m){
   };
   const opts=getMailStatuses().map(s=>'<option value="'+esc(s)+'"'+(cur===s?' selected':'')+'>'+esc(s)+'</option>').join('');
   const days=daysInfo(cb,isPending);
+  const noticeSentAt=m['OverdueNoticeSentAt']||'';
+  const noticeBadge=(()=>{
+    if(!noticeSentAt||!isPending)return'';
+    try{
+      const d=new Date(noticeSentAt);if(isNaN(d))return'';
+      const days=Math.floor((Date.now()-d.getTime())/86400000);
+      const fmt=d.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});
+      const label=days===0?'today':days===1?'yesterday':days+'d ago';
+      return '<div style="font-size:11px;margin-top:4px;padding:3px 9px;background:#eff6ff;border-radius:99px;color:#1d4ed8;border:0.5px solid #bfdbfe;display:inline-block">📧 Courtesy notice sent — '+fmt+' ('+label+')</div>';
+    }catch(e){return'';}
+  })();
   const notes=(internalNote?'<div style="font-size:11px;margin-top:5px;padding:5px 8px;background:#fef3c7;border-radius:5px;color:#92400e">📋 <strong>Internal:</strong> '+esc(internalNote)+'</div>':'')+(custNote?'<div style="font-size:11px;margin-top:4px;padding:5px 8px;background:#f0f9ff;border-radius:5px;color:#0369a1">💬 <strong>Note to client:</strong> '+esc(custNote)+'</div>':'');
   if(!isPending){
     const HIST_STYLE={'Picked Up':'background:#dcfce7;color:#15803d','Scanned':'background:#dbeafe;color:#1d4ed8','Forwarded':'background:#ede9fe;color:#6d28d9','Discarded':'background:#F3F4F6;color:#6B7280'};
@@ -883,7 +903,7 @@ function mailItemHtml(m){
       +'</div>'
       +'</div>';
   }
-  return '<div class="mail-item" id="mi_'+esc(mid)+'">'+'<div class="mail-item-icon">'+typeIcon(itype)+'</div>'+'<div class="mail-item-body">'+'<div class="mail-item-title">'+esc(itype)+(sender?' — from '+esc(sender):'')+(recip?' → '+esc(recip):'')+'</div>'+'<div class="mail-item-meta">'+'<span>ID: <strong>'+esc(mid)+'</strong></span>'+(loc?'<span>📍 '+esc(loc)+'</span>':'')+(cb?'<span>⏰ '+fmtD2(cb)+'</span>':'')+days+(nd?'<span style="color:#9CA3AF">Notified: '+fmtD2(nd)+'</span>':'')+'<span class="badge '+statusClass(cur)+'" id="badge_'+esc(mid)+'">'+esc(cur)+'</span>'+'</div>'+notes+'</div>'+'<div class="mail-item-actions"><select class="status-select" id="sel_'+esc(mid)+'" onchange="updateStatus(\''+esc(mid)+'\',this)">'+opts+'</select></div>'+'</div>';
+  return '<div class="mail-item" id="mi_'+esc(mid)+'">'+'<div class="mail-item-icon">'+typeIcon(itype)+'</div>'+'<div class="mail-item-body">'+'<div class="mail-item-title">'+esc(itype)+(sender?' — from '+esc(sender):'')+(recip?' → '+esc(recip):'')+'</div>'+'<div class="mail-item-meta">'+'<span>ID: <strong>'+esc(mid)+'</strong></span>'+(loc?'<span>📍 '+esc(loc)+'</span>':'')+(cb?'<span>⏰ '+fmtD2(cb)+'</span>':'')+days+(nd?'<span style="color:#9CA3AF">Notified: '+fmtD2(nd)+'</span>':'')+'<span class="badge '+statusClass(cur)+'" id="badge_'+esc(mid)+'">'+esc(cur)+'</span>'+'</div>'+notes+noticeBadge+'</div>'+'<div class="mail-item-actions"><select class="status-select" id="sel_'+esc(mid)+'" onchange="updateStatus(\''+esc(mid)+'\',this)">'+opts+'</select></div>'+'</div>';
 }
 
 function renderDetail(c){
@@ -1526,7 +1546,7 @@ function overdueRowHtml(m){
     +(m['Note to Customer|textarea-1']?'<div style="font-size:11px;margin-top:3px;padding:4px 8px;background:#f0f9ff;border-radius:5px;color:#0369a1">💬 Note to client: '+esc(m['Note to Customer|textarea-1'])+'</div>':'')
     +(note?'<div style="font-size:11px;margin-top:4px;padding:4px 8px;background:#fef3c7;border-radius:5px;color:#92400e">'+esc(note)+'</div>':'')
     +'</div>'
-    +(()=>{let _act='<div class="mail-item-actions">';if(isAdminMode)_act+='<select class="status-select" id="gsel_'+esc(mid)+'" onchange="updateGlobalStatus(this)" data-mid="'+esc(mid)+'">'+opts+'</select>';if(client)_act+='<button class="btn btn-ghost btn-sm" onclick="jumpToClient(\''+esc(pid)+'\')" >View</button>';_act+='</div></div>';return _act;})()
+    +(()=>{let _act='<div class="mail-item-actions">';if(isAdminMode)_act+='<select class="status-select" id="gsel_'+esc(mid)+'" onchange="updateGlobalStatus(\''+esc(mid)+'\',this,\''+esc(pid)+'\')" >'+opts+'</select>';if(client)_act+='<button class="btn btn-ghost btn-sm" onclick="jumpToClient(\''+esc(pid)+'\')" >View</button>';_act+='</div></div>';return _act;})()
 }
 
 function updateOverdueSelCount(){
@@ -1664,60 +1684,345 @@ function renderForwardTab(forceRefresh){
 }
 
 // OVERDUE TAB
-function renderOverdueTab(forceRefresh){
+async function renderOverdueTab(forceRefresh){
+  if(!window._ovdActiveTab)window._ovdActiveTab='discard';
   const body=document.getElementById('overdueBody');
-  body.innerHTML='<div class="state-box"><div class="spinner"></div><div class="state-label">Loading\u2026</div></div>';
-  const doRender=()=>{
-    const today=new Date();today.setHours(0,0,0,0);
-    const items=mailData.filter(m=>{
-      if((m['Status|hidden-3']||'').toLowerCase()!=='pending')return false;
-      const d=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';
-      if(!d)return false;const dt=new Date(d);dt.setHours(0,0,0,0);return dt<today;
-    }).sort((a,b)=>{
-      const da=new Date(a['Mail must be collected by|date-1']||a['Parcel must be collected by|date-3']||0);
-      const db=new Date(b['Mail must be collected by|date-1']||b['Parcel must be collected by|date-3']||0);
-      return da-db;
+  if(!body)return;
+  if(forceRefresh){
+    body.innerHTML='<div class="state-box"><div class="spinner"></div><div class="state-label">Refreshing&#8230;</div></div>';
+    try{
+      const fresh=await fetchSheet('mailNotice');
+      if(fresh&&fresh.length)mailData=fresh;
+    }catch(e){showToast('Refresh failed','error');}
+  }
+  if(!mailData||!mailData.length){body.innerHTML='<div class="state-box"><div class="state-label">No data loaded</div></div>';return;}
+  renderOverdueByTab();
+  setTimeout(()=>positionOvdSlider(window._ovdActiveTab),0);
+}
+
+function positionOvdSlider(tab){
+  const idMap={discard:'ovdTabDiscard',notify:'ovdTabNotify',notified:'ovdTabNotified'};
+  const btn=document.getElementById(idMap[tab]);
+  const sl=document.getElementById('ovdSegSlider');
+  const wrap=sl&&sl.parentElement;
+  if(!btn||!sl||!wrap)return;
+  const wr=wrap.getBoundingClientRect(),br=btn.getBoundingClientRect();
+  sl.style.width=btn.offsetWidth+'px';
+  sl.style.height=btn.offsetHeight+'px';
+  sl.style.top='3px';
+  sl.style.left=(br.left-wr.left)+'px';
+}
+
+function switchOverdueTab(tab){
+  window._ovdActiveTab=tab;
+  ['ovdTabDiscard','ovdTabNotify','ovdTabNotified'].forEach(id=>{
+    const b=document.getElementById(id);
+    if(b){b.style.fontWeight='500';b.style.color='var(--muted)';}
+  });
+  const activeId=tab==='discard'?'ovdTabDiscard':tab==='notify'?'ovdTabNotify':'ovdTabNotified';
+  const ab=document.getElementById(activeId);
+  if(ab){ab.style.fontWeight='600';ab.style.color='var(--text)';}
+  setTimeout(()=>positionOvdSlider(tab),0);
+  // Show/hide action buttons
+  const exportBtn=document.getElementById('overdueExportBtn');
+  const discardBtn=document.getElementById('overdueDiscardBtn');
+  const selBar=document.getElementById('overdueSelBar');
+  renderOverdueByTab();
+}
+
+function getOverdueItems(){
+  const today=new Date();today.setHours(0,0,0,0);
+  return (mailData||[]).filter(m=>{
+    const s=m['Status|hidden-3']||'';
+    if(!ACTIVE_STATUSES.includes(s))return false;
+    const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';
+    if(!cb)return false;
+    const d=new Date(cb.includes('T')?cb:cb+'T00:00:00');
+    return d<today;
+  });
+}
+
+function getNoticeSentAt(m){
+  return m['OverdueNoticeSentAt']||'';
+}
+
+function noticeDaysAgo(m){
+  const s=getNoticeSentAt(m);
+  if(!s)return null;
+  const d=new Date(s);
+  if(isNaN(d))return null;
+  return Math.floor((Date.now()-d.getTime())/86400000);
+}
+
+function groupByClient(items){
+  const map={};
+  items.forEach(m=>{
+    const pid=String(m['Plan ID|hidden-5']||'');
+    if(!map[pid])map[pid]=[];
+    map[pid].push(m);
+  });
+  return map;
+}
+
+function renderOverdueByTab(){
+  const tab=window._ovdActiveTab||'discard';
+  const body=document.getElementById('overdueBody');
+  if(!body)return;
+  const all=getOverdueItems();
+  const today=new Date();today.setHours(0,0,0,0);
+
+  // Split by notice status — mutually exclusive
+  const needsNotice=all.filter(m=>{const d=noticeDaysAgo(m);return d===null;});
+  const notified=all.filter(m=>{const d=noticeDaysAgo(m);return d!==null&&d<7;});
+  const readyDiscard=all.filter(m=>{const d=noticeDaysAgo(m);return d!==null&&d>=7;});
+
+  // Update counts
+  const nc=document.getElementById('ovdCntNotify');
+  const dc=document.getElementById('ovdCntDiscard');
+  const nfc=document.getElementById('ovdCntNotified');
+  const clientsNeedNotice=Object.keys(groupByClient(needsNotice)).length;
+  const clientsDiscard=Object.keys(groupByClient(readyDiscard)).length;
+  if(nc){nc.textContent=clientsNeedNotice||'—';}
+  if(dc){dc.textContent=clientsDiscard||'—';}
+  if(nfc){nfc.textContent=notified.length||'—';}
+
+  // Show/hide bulk buttons
+  const exportBtn=document.getElementById('overdueExportBtn');
+  const discardBtn=document.getElementById('overdueDiscardBtn');
+  const selBar=document.getElementById('overdueSelBar');
+  if(exportBtn)exportBtn.style.display=(tab==='discard'&&isAdminMode)?'inline-flex':'';
+  if(discardBtn)discardBtn.style.display=(tab==='discard'&&isAdminMode)?'inline-flex':'';
+  if(selBar&&tab!=='discard')selBar.style.display='none';
+
+  if(tab==='notify') body.innerHTML=renderNotifyTab(needsNotice);
+  else if(tab==='notified') body.innerHTML=renderNotifiedTab(notified);
+  else body.innerHTML=renderDiscardTab(readyDiscard);
+}
+
+function overdueItemRowHtml(m, opts){
+  opts=opts||{};
+  const mid=String(m['Mail ID|hidden-4']||'');
+  const pid=String(m['Plan ID|hidden-5']||'');
+  const itype=m['Item Type|radio-1']||'';
+  const recip=m['Recipient Name|text-1']||'';
+  const loc=m['Location of Mail|text-4']||'';
+  const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';
+  const nd=m['Notification Date|hidden-1']||'';
+  const sender=m['Sender Name|text-2']||'';
+  const internalNote=m['Internal Note|text-3']||'';
+  const custNote=m['Note to Customer|textarea-1']||'';
+  const today=new Date();today.setHours(0,0,0,0);
+  const dueD=cb?new Date(cb.includes('T')?cb:cb+'T00:00:00'):null;
+  const daysOvd=dueD?Math.ceil((today-dueD)/86400000):0;
+  const client=getClientByPid(pid);
+  const fmtD=d=>{if(!d)return'';try{const dt=new Date(d.includes('T')?d:d+'T00:00:00');return isNaN(dt)?d:dt.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});}catch(e){return d;}};
+  const opts2=getMailStatuses();
+  const selHtml=opts.checkbox?'<input type="checkbox" class="overdue-check" data-mid="'+esc(mid)+'" onchange="updateOverdueSelCount()" style="width:14px;height:14px;cursor:pointer;flex-shrink:0">':'';
+  const statusSel='<select class="status-select" style="font-size:11px;padding:4px 8px;border-radius:7px;border:0.5px solid #C0C0C0;background:#F2F2F2;color:#111;cursor:pointer;font-family:inherit;outline:none" onchange="updateGlobalStatus(\''+esc(mid)+'\',this,\''+esc(pid)+'\')">'
+    +opts2.map(s=>'<option value="'+esc(s)+'"'+(m['Status|hidden-3']===s?' selected':'')+'>'+esc(s)+'</option>').join('')+'</select>';
+  const viewBtn=client?'<button class="btn btn-ghost btn-sm" onclick="jumpToClient(\''+esc(pid)+'\')">View Client</button>':'';
+  return '<div class="mail-item" style="margin-bottom:8px" id="ovd_'+esc(mid)+'">'
+    +'<div style="display:flex;align-items:flex-start;gap:10px;width:100%">'
+    +selHtml
+    +'<div class="mail-item-icon">'+typeIcon(itype)+'</div>'
+    +'<div class="mail-item-body" style="flex:1;min-width:0">'
+    +'<div class="mail-item-title">'+esc(itype)+(sender?' — from '+esc(sender):'')+(recip?' → '+esc(recip):'')+'</div>'
+    +'<div class="mail-item-meta">'
+    +'<span title="Click to copy" onclick="copyId(\''+esc(mid)+'\',\'Mail ID\')" style="cursor:pointer;font-family:monospace;font-weight:700;background:#F3F4F6;padding:1px 5px;border-radius:4px">'+esc(mid)+'</span>'
+    +(loc?'<span>📍 '+esc(loc)+'</span>':'')
+    +(cb?'<span style="color:#9CA3AF">Due: '+fmtD(cb)+'</span>':'')
+    +'<span class="overdue-badge">'+daysOvd+'d overdue</span>'
+    +'</div>'
+    +(nd?'<div style="font-size:11px;margin-top:3px;color:#6b7280">📅 Arrived: '+fmtD(nd)+'</div>':'')
+    +(internalNote?'<div style="font-size:11px;margin-top:4px;padding:4px 8px;background:#fef3c7;border-radius:5px;color:#92400e">📋 <strong>Internal:</strong> '+esc(internalNote)+'</div>':'')
+    +(custNote?'<div style="font-size:11px;margin-top:3px;padding:4px 8px;background:#f0f9ff;border-radius:5px;color:#0369a1">💬 <strong>Note to client:</strong> '+esc(custNote)+'</div>':'')
+    +'</div>'
+    +'<div class="mail-item-actions" style="flex-shrink:0;display:flex;flex-direction:column;gap:6px;align-items:flex-end">'
+    +statusSel
+    +viewBtn
+    +'</div>'
+    +'</div>'
+    +'</div>';
+}
+
+function overdueClientCardHtml(pid, items, opts){
+  opts=opts||{};
+  const client=getClientByPid(pid);
+  const company=client?(client['Company Legal Name|text-1']||client['Admin Name|text-2']||pid):pid;
+  const email=client?(client['Email Address|email-1']||''):'';
+  const cardId='ovdCard_'+pid;
+  const bodyId='ovdCardBody_'+pid;
+  const itemsHtml=items.map(m=>overdueItemRowHtml(m,opts)).join('');
+  const noticeInfo=opts.showNoticeDate&&items[0]?'<span style="font-size:11px;color:#6b7280;margin-left:8px">Notified '+noticeDaysAgo(items[0])+'d ago</span>':'';
+  return '<div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px" id="'+cardId+'">'
+    +'<div onclick="toggleOvdCard(\''+bodyId+'\')" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#f9fafb;cursor:pointer;user-select:none">'
+    +'<div style="display:flex;align-items:center;gap:10px;min-width:0">'
+    +'<span style="font-size:13px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(company)+'</span>'
+    +(email?'<span style="font-size:11px;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(email)+'</span>':'')
+    +noticeInfo
+    +'</div>'
+    +'<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">'
+    +'<span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#fee2e2;color:#991b1b">'+items.length+' item'+(items.length!==1?'s':'')+'</span>'
+    +(opts.sendBtn&&isAdminMode?'<button class="btn btn-sm" onclick="sendOverdueNotice(event,\''+esc(pid)+'\')" style="background:#1a1a1a;color:#fff;border:1px solid #1a1a1a">📧 Send Notice</button>':'')
+    +'<span id="ovdCardChev_'+esc(pid)+'" style="font-size:12px;color:var(--muted);transition:transform .2s">▼</span>'
+    +'</div>'
+    +'</div>'
+    +'<div id="'+bodyId+'" style="display:none;padding:12px">'
+    +itemsHtml
+    +'</div>'
+    +'</div>';
+}
+
+function toggleOvdCard(bodyId){
+  const el=document.getElementById(bodyId);
+  if(!el)return;
+  const pid=bodyId.replace('ovdCardBody_','');
+  const chev=document.getElementById('ovdCardChev_'+pid);
+  const open=el.style.display==='none';
+  el.style.display=open?'block':'none';
+  if(chev)chev.style.transform=open?'rotate(180deg)':'';
+}
+
+function renderNotifyTab(items){
+  if(!items.length)return'<div class="state-box"><div class="state-label">✓ No clients need notice right now</div></div>';
+  const grouped=groupByClient(items);
+  return Object.entries(grouped).map(([pid,mitems])=>overdueClientCardHtml(pid,mitems,{sendBtn:true})).join('');
+}
+
+function renderNotifiedTab(items){
+  if(!items.length)return'<div class="state-box"><div class="state-label">No recently notified clients</div></div>';
+  const grouped=groupByClient(items);
+  return Object.entries(grouped).map(([pid,mitems])=>overdueClientCardHtml(pid,mitems,{showNoticeDate:true})).join('');
+}
+
+function renderDiscardTab(items){
+  if(!items.length)return'<div class="state-box"><div class="state-label">No items ready to discard</div></div>';
+  const grouped=groupByClient(items);
+  return Object.entries(grouped).map(([pid,mitems])=>overdueClientCardHtml(pid,mitems,{checkbox:true})).join('');
+}
+
+async function sendOverdueNotice(evt, pid){
+  evt.stopPropagation();
+  if(!isAdminMode){enterAdminMode();return;}
+  const client=getClientByPid(pid);
+  if(!client){showToast('Client not found','error');return;}
+  const email=client['Email Address|email-1']||'';
+  const adminName=client['Admin Name|text-2']||client['Company Legal Name|text-1']||'';
+  const company=client['Company Legal Name|text-1']||adminName||'';
+  const planId=client['Plan ID|hidden-5']||'';
+  if(!email){showToast('No email on file for this client','error');return;}
+
+  // Get their overdue items
+  const today=new Date();today.setHours(0,0,0,0);
+  const overdueItems=(mailData||[]).filter(m=>{
+    if(String(m['Plan ID|hidden-5']||'')!==String(pid))return false;
+    if(!ACTIVE_STATUSES.includes(m['Status|hidden-3']||''))return false;
+    const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';
+    if(!cb)return false;
+    const d=new Date(cb.includes('T')?cb:cb+'T00:00:00');
+    return d<today;
+  });
+  const pendingItems=(mailData||[]).filter(m=>{
+    if(String(m['Plan ID|hidden-5']||'')!==String(pid))return false;
+    if(!ACTIVE_STATUSES.includes(m['Status|hidden-3']||''))return false;
+    const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';
+    if(!cb)return false;
+    const d=new Date(cb.includes('T')?cb:cb+'T00:00:00');
+    return d>=today;
+  });
+
+  // Build email body
+  const fmtD=d=>{if(!d)return'';try{const dt=new Date(d.includes('T')?d:d+'T00:00:00');return isNaN(dt)?d:dt.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});}catch(e){return d;}};
+  const daysOvd=m=>{const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';if(!cb)return 0;const d=new Date(cb.includes('T')?cb:cb+'T00:00:00');return Math.ceil((today-d)/86400000);};
+  const daysLeft=m=>{const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';if(!cb)return 0;const d=new Date(cb.includes('T')?cb:cb+'T00:00:00');return Math.ceil((d-today)/86400000);};
+
+  const fmtND=d=>{if(!d)return'';try{const dt=new Date(d.includes('T')?d:d+'T00:00:00');return isNaN(dt)?'':dt.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});}catch(e){return'';}  };
+  let body='Hello '+adminName+',\n\n';
+  body+='This is a notice regarding your mailbox. The following items are overdue for pickup and will be discarded within 7 days if no arrangements are made.\n\n';
+  body+='\u26a0\ufe0f OVERDUE ITEMS \u2014 Pending Discard\n\n';
+  overdueItems.forEach(m=>{
+    const itype=m['Item Type|radio-1']||'Mail';
+    const mid=m['Mail ID|hidden-4']||'';
+    const sender=m['Sender Name|text-2']||'';
+    const recip=m['Recipient Name|text-1']||'';
+    const nd=m['Notification Date|hidden-1']||'';
+    const days=daysOvd(m);
+    body+='    \u2022 '+itype+' \u2014 ID: '+mid+(recip?' \u2014 for '+recip:'')+(sender?' \u2014 from '+sender:'')+(nd?' \u2014 Received: '+fmtND(nd):'')+' \u2014 '+days+' days overdue\n';
+  });
+  if(pendingItems.length){
+    body+='\n\n\ud83d\udcec You also have the following mail awaiting pickup:\n\n';
+    pendingItems.forEach(m=>{
+      const itype=m['Item Type|radio-1']||'Mail';
+      const mid=m['Mail ID|hidden-4']||'';
+      const sender=m['Sender Name|text-2']||'';
+      const recip=m['Recipient Name|text-1']||'';
+      const nd=m['Notification Date|hidden-1']||'';
+      const days=daysLeft(m);
+      body+='    \u2022 '+itype+' \u2014 ID: '+mid+(recip?' \u2014 for '+recip:'')+(sender?' \u2014 from '+sender:'')+(nd?' \u2014 Received: '+fmtND(nd):'')+' \u2014 '+days+' day'+(days!==1?'s':'')+' remaining\n';
     });
-    if(!items.length){
-      body.innerHTML='<div class="empty-mail"><div class="empty-mail-icon">\u2705</div>No overdue items.</div>';
-      ['overdueExportBtn','overdueSelBar','overdueDiscardBtn'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
-      return;
-    }
-    body.innerHTML=items.map(m=>overdueRowHtml(m)).join('');
-    const _sb=document.getElementById('overdueSelBar');if(_sb)_sb.style.display='flex';
-    const _eb=document.getElementById('overdueExportBtn');if(_eb)_eb.style.display='none';
-    const _db=document.getElementById('overdueDiscardBtn');if(_db)_db.style.display='none';
-    updateOverdueSelCount();
-  };
-  if(!dataLoaded||forceRefresh){
-    loadAllData().then(doRender).catch(e=>{body.innerHTML='<div class="state-box"><div class="state-icon">\u26A0\uFE0F</div><div class="state-label">Error</div><div class="state-sub">'+esc(e.message)+'</div></div>';});
-  }else doRender();
+    body+='\n';
+  }
+  body+='\nPlease reply to this email within 24 hours to make arrangements.';
+  body+='\n\nSincerely,\n\n\nYYZ OFFICES | www.yyzoffices.com \u00bb support@yyzoffices.com \u00bb 416-781-9826';
+
+  const subject='Action Required \u2014 Overdue Mail (Pending Discard)';
+  const gmailUrl='https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(email)+'&su='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+
+  // Stamp OverdueNoticeSentAt for each overdue item
+  const mailIds=overdueItems.map(m=>String(m['Mail ID|hidden-4']||'')).filter(Boolean);
+  if(mailIds.length){
+    try{
+      const params=new URLSearchParams({action:'stampOverdueNotice',mailIds:mailIds.join(',')});
+      const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
+      const data=await res.json();
+      if(data.success){
+        const stamp=data.stamp||new Date().toISOString();
+        overdueItems.forEach(m=>{m['OverdueNoticeSentAt']=stamp;});
+        showToast('Notice stamped & Gmail opened \u2713','success');
+      }
+    }catch(e){showToast('Stamp failed, Gmail still opening','error');}
+  }
+  window.open(gmailUrl,'_blank');
+  renderOverdueByTab();
 }
 
-async function updateGlobalStatus(selOrId,selEl){
-  let mailId,sel;
-  if(typeof selOrId==='string'){mailId=selOrId;sel=selEl;}
-  else{sel=selOrId;mailId=sel.dataset.mid||'';}
-  if(!mailId){showToast('Mail ID not found','error');return;}
-  const newStatus=sel.value;sel.disabled=true;
-  try{
-    const params=new URLSearchParams({action:'markPickedUp',mailId,newStatus});
-    const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
-    const data=await res.json();
-    if(data.success){
-      const row=mailData.find(m=>String(m['Mail ID|hidden-4']).trim()===String(mailId).trim());
-      if(row)row['Status|hidden-3']=newStatus;
-      const badge=document.getElementById('gbadge_'+mailId);
-      if(badge){badge.className='badge '+statusClass(newStatus);badge.textContent=newStatus;}
-      if(!ACTIVE_STATUSES.includes(newStatus)){const item=document.getElementById('gmi_'+mailId);if(item){item.style.transition='opacity .5s';item.style.opacity='0';setTimeout(()=>{item.remove();updateTabCounts();},600);}}
-      showToast('Status \u2192 '+newStatus+' \u2713','success');updateTabCounts();
-    }else{showToast('Error: '+(data.error||'Unknown'),'error');const row=mailData.find(m=>String(m['Mail ID|hidden-4']).trim()===String(mailId).trim());if(row)sel.value=row['Status|hidden-3'];}
-  }catch(e){showToast('Network error','error');}finally{sel.disabled=false;}
+
+function renderClientsStatsStrip(){
+  const strip=document.getElementById('clientsStatsStrip');
+  if(!strip||!planData||!planData.length)return;
+  const today=new Date();today.setHours(0,0,0,0);
+  const total=planData.length;
+  const active=planData.filter(c=>(c['Account Status|hidden-3']||'ACTIVE')==='ACTIVE').length;
+  const inactive=planData.filter(c=>(c['Account Status|hidden-3']||'ACTIVE')==='INACTIVE').length;
+  const terminated=planData.filter(c=>{
+    if((c['Account Status|hidden-3']||'ACTIVE')!=='INACTIVE')return false;
+    const td=c['TerminationDate']||'';
+    if(!td)return false;
+    const d=new Date(td.includes('T')?td:td+'T00:00:00');
+    return !isNaN(d)&&d<=today;
+  }).length;
+  const delinquent=planData.filter(c=>(c['Delinquent']||'').toLowerCase()==='yes').length;
+  const terminating=planData.filter(c=>{
+    const td=c['TerminationDate']||'';
+    if(!td)return false;
+    const d=new Date(td.includes('T')?td:td+'T00:00:00');
+    return !isNaN(d)&&d>today&&(c['Account Status|hidden-3']||'ACTIVE')==='ACTIVE';
+  }).length;
+  const pendingReview=planData.filter(c=>!(c['Verified']||'')).length;
+  const chip=(bg,color,text)=>'<span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;background:'+bg+';color:'+color+';white-space:nowrap">'+text+'</span>';
+  strip.innerHTML=
+    chip('#f3f4f6','#374151','👥 '+total+' Total')
+    +'<span style="font-size:11px;color:#d1d5db">|</span>'
+    +chip('#dcfce7','#15803d','✅ '+active+' Active')
+    +chip('#f3f4f6','#6b7280','⚫ '+inactive+' Inactive')
+    +(terminated?chip('#f9fafb','#9ca3af','🚪 '+terminated+' Terminated'):'')
+    +(delinquent?chip('#fee2e2','#991b1b','⚠️ '+delinquent+' Delinquent'):'')
+    +(terminating?chip('#fef3c7','#92400e','📅 '+terminating+' Terminating'):'')
+    +(pendingReview?chip('#ede9fe','#6d28d9','🔍 '+pendingReview+' Pending Review'):'');
 }
 
-// ALL CLIENTS TAB
-let allClientsCache=[];
 function renderClientsTab(forceRefresh){
+  renderClientsStatsStrip();
   const wrap=document.getElementById('clientsTableWrap');
   wrap.innerHTML='<div class="state-box"><div class="spinner"></div><div class="state-label">Loading…</div></div>';
   const doRender=()=>{
@@ -2893,6 +3198,7 @@ function renderMailboxTable(allItems){
       +locHtml+noteHtml
       +'</div>'
       +cnoteHtml
+      +(mbxActiveTab==='pending'?(()=>{const _ns=m['OverdueNoticeSentAt']||'';if(!_ns)return'';try{const _d=new Date(_ns);if(isNaN(_d))return'';const _days=Math.floor((Date.now()-_d.getTime())/86400000);const _fmt=_d.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});const _lbl=_days===0?'today':_days===1?'yesterday':_days+'d ago';return '<div style="font-size:11px;margin-top:4px;padding:3px 9px;background:#eff6ff;border-radius:99px;color:#1d4ed8;border:0.5px solid #bfdbfe;display:inline-block">📧 Courtesy notice sent — '+_fmt+' ('+_lbl+')</div>';}catch(e){return'';}})():'')
       +'</div>'
       +'<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">'
       +(mbxActiveTab==='discarded'&&!isAdminMode
@@ -2927,6 +3233,31 @@ function mbxEditInline(span,mailId,field,type){
   inp.addEventListener('blur',save);
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();inp.blur();}if(e.key==='Escape')filterMailbox('');});
 }
+async function updateGlobalStatus(mailId,sel,pid){
+  const newStatus=sel.value;sel.disabled=true;
+  try{
+    const params=new URLSearchParams({action:'markPickedUp',mailId,newStatus});
+    const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
+    const data=await res.json();
+    if(data.success){
+      const row=mailData.find(m=>String(m['Mail ID|hidden-4']).trim()===String(mailId).trim());
+      if(row)row['Status|hidden-3']=newStatus;
+      showToast('Status → '+newStatus+' ✓','success');
+      updateTabCounts();
+      // If item no longer pending, remove from overdue tab
+      if(!ACTIVE_STATUSES.includes(newStatus)){
+        const el=document.getElementById('ovd_'+mailId);
+        if(el)el.style.opacity='0.4';
+        setTimeout(()=>renderOverdueByTab(),800);
+      }
+    }else{
+      showToast('Error: '+(data.error||'Unknown'),'error');
+      const row=mailData.find(m=>String(m['Mail ID|hidden-4']).trim()===String(mailId).trim());
+      if(row)sel.value=row['Status|hidden-3'];
+    }
+  }catch(e){showToast('Network error','error');}finally{sel.disabled=false;}
+}
+
 async function updateMailboxStatus(mailId,sel){
   const newStatus=sel.value;sel.disabled=true;
   try{

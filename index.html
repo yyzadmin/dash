@@ -139,7 +139,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 
 /* SECTIONS */
 .section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden}
-.section-head{padding:14px 18px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between}
+.section-head{padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
 .section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--red)}
 .section-body{padding:16px 18px}
 
@@ -337,18 +337,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
           </div>
         </div>
         <!-- Overdue 3 pill tabs -->
-        <div style="display:flex;align-items:center;background:var(--bg2);border-radius:12px;padding:3px;gap:2px;width:fit-content;margin-bottom:14px;position:relative">
-          <div id="ovdSegSlider" style="position:absolute;background:white;border-radius:9px;box-shadow:0 1px 3px rgba(0,0,0,.07);transition:all .22s cubic-bezier(.4,0,.2,1);pointer-events:none"></div>
-          <button id="ovdTabDiscard" onclick="switchOverdueTab('discard')" style="font-size:13px;font-weight:500;padding:6px 18px;border-radius:9px;border:none;cursor:pointer;background:transparent;color:var(--muted);display:flex;align-items:center;gap:7px;position:relative;z-index:1;font-family:'DM Sans',sans-serif;white-space:nowrap">&#128465; Ready to Discard <span id="ovdCntDiscard" style="font-size:11px;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--bg2);color:var(--muted)">—</span></button>
-          <button id="ovdTabNotify" onclick="switchOverdueTab('notify')" style="font-size:13px;font-weight:500;padding:6px 18px;border-radius:9px;border:none;cursor:pointer;background:transparent;color:var(--muted);display:flex;align-items:center;gap:7px;position:relative;z-index:1;font-family:'DM Sans',sans-serif;white-space:nowrap">&#128276; Ready to Notify <span id="ovdCntNotify" style="font-size:11px;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--bg2);color:var(--muted)">—</span></button>
-          <button id="ovdTabNotified" onclick="switchOverdueTab('notified')" style="font-size:13px;font-weight:500;padding:6px 18px;border-radius:9px;border:none;cursor:pointer;background:transparent;color:var(--muted);display:flex;align-items:center;gap:7px;position:relative;z-index:1;font-family:'DM Sans',sans-serif;white-space:nowrap">&#10003; Notified <span id="ovdCntNotified" style="font-size:11px;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--bg2);color:var(--muted)">—</span></button>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:14px;padding:0 18px">
+          <div id="ovdSegSlider" style="display:none"></div>
+          <button id="ovdTabDiscard" onclick="switchOverdueTab('discard')" style="font-size:12px;font-weight:600;padding:7px 18px;border-radius:99px;border:1px solid #fca5a5;cursor:pointer;background:#fee2e2;color:#991b1b;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:all .15s;line-height:1.4">&#128465; Ready to Discard <span id="ovdCntDiscard" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;background:#fca5a5;color:#7f1d1d">—</span></button>
+          <button id="ovdTabNotify" onclick="switchOverdueTab('notify')" style="font-size:12px;font-weight:500;padding:7px 18px;border-radius:99px;border:0.5px solid #e5e7eb;cursor:pointer;background:transparent;color:#6b7280;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:all .15s;line-height:1.4">&#128276; Ready to Notify <span id="ovdCntNotify" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;background:#f3f4f6;color:#6b7280">—</span></button>
+          <button id="ovdTabNotified" onclick="switchOverdueTab('notified')" style="font-size:12px;font-weight:500;padding:7px 18px;border-radius:99px;border:0.5px solid #e5e7eb;cursor:pointer;background:transparent;color:#6b7280;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:all .15s;line-height:1.4">&#10003; Notified <span id="ovdCntNotified" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;background:#f3f4f6;color:#6b7280">—</span></button>
         </div>
-        <!-- Discard sel bar (Ready to Discard only) -->
-        <div id="overdueSelBar" style="display:none;padding:8px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:8px;gap:10px;align-items:center">
+        <div id="overdueSelBar" style="display:none;padding:8px 18px;background:#f9fafb;border-top:0.5px solid #e5e7eb;border-bottom:0.5px solid #e5e7eb;margin-bottom:8px;gap:10px;align-items:center">
           <input type="checkbox" id="overdueSelectAll" onchange="toggleSelectAllOverdue(this.checked)" style="width:14px;height:14px;cursor:pointer">
-          <span style="font-size:12px;color:#374151" id="overdueSelCount">0 selected</span>
+          <label style="font-size:12px;color:#374151;cursor:pointer" for="overdueSelectAll" id="overdueSelCount">0 selected</label>
         </div>
-        <div class="section-body" id="overdueBody"><div class="state-box"><div class="spinner"></div><div class="state-label">Loading&#8230;</div></div></div>
+        <div class="section-body" id="overdueBody" style="padding:0 6px"><div class="state-box"><div class="spinner"></div><div class="state-label">Loading&#8230;</div></div></div>
       </div>
     </div>
 
@@ -1552,8 +1551,8 @@ function overdueRowHtml(m){
 function updateOverdueSelCount(){
   const chks=[...document.querySelectorAll('.overdue-chk:checked')];
   const el=document.getElementById('overdueSelCount');if(el)el.textContent=chks.length+' selected';
-  const db=document.getElementById('overdueDiscardBtn');if(db)db.style.display=(isAdminMode&&chks.length>0)?'':'none';
-  const eb=document.getElementById('overdueExportBtn');if(eb)eb.style.display=chks.length>0?'inline':'none';
+  const db=document.getElementById('overdueDiscardBtn');if(db)db.style.display=(isAdminMode&&chks.length>0)?'inline-flex':'none';
+  const eb=document.getElementById('overdueExportBtn');if(eb)eb.style.display=(isAdminMode&&chks.length>0)?'inline':'none';
 }
 
 function toggleSelectAllOverdue(checked){
@@ -1685,7 +1684,10 @@ function renderForwardTab(forceRefresh){
 
 // OVERDUE TAB
 async function renderOverdueTab(forceRefresh){
-  if(!window._ovdActiveTab)window._ovdActiveTab='discard';
+  if(!window._ovdActiveTab){
+    window._ovdActiveTab='discard';
+    setTimeout(()=>switchOverdueTab('discard'),0);
+  }
   const body=document.getElementById('overdueBody');
   if(!body)return;
   if(forceRefresh){
@@ -1715,21 +1717,32 @@ function positionOvdSlider(tab){
 
 function switchOverdueTab(tab){
   window._ovdActiveTab=tab;
+  const inactiveStyle={fontWeight:'500',background:'transparent',color:'#6b7280',border:'0.5px solid #e5e7eb'};
   ['ovdTabDiscard','ovdTabNotify','ovdTabNotified'].forEach(id=>{
     const b=document.getElementById(id);
-    if(b){b.style.fontWeight='500';b.style.color='var(--muted)';}
+    if(b){Object.assign(b.style,inactiveStyle);}
+    const cntId=id==='ovdTabDiscard'?'ovdCntDiscard':id==='ovdTabNotify'?'ovdCntNotify':'ovdCntNotified';
+    const cnt=document.getElementById(cntId);
+    if(cnt){cnt.style.background='#f3f4f6';cnt.style.color='#6b7280';}
   });
-  const activeId=tab==='discard'?'ovdTabDiscard':tab==='notify'?'ovdTabNotify':'ovdTabNotified';
-  const ab=document.getElementById(activeId);
-  if(ab){ab.style.fontWeight='600';ab.style.color='var(--text)';}
-  setTimeout(()=>positionOvdSlider(tab),0);
-  // Show/hide action buttons
-  const exportBtn=document.getElementById('overdueExportBtn');
-  const discardBtn=document.getElementById('overdueDiscardBtn');
-  const selBar=document.getElementById('overdueSelBar');
+  if(tab==='discard'){
+    const b=document.getElementById('ovdTabDiscard');
+    if(b){b.style.fontWeight='600';b.style.background='#fee2e2';b.style.color='#991b1b';b.style.border='1px solid #fca5a5';}
+    const cnt=document.getElementById('ovdCntDiscard');
+    if(cnt){cnt.style.background='#fca5a5';cnt.style.color='#7f1d1d';}
+  }else if(tab==='notify'){
+    const b=document.getElementById('ovdTabNotify');
+    if(b){b.style.fontWeight='600';b.style.background='#fef3c7';b.style.color='#92400e';b.style.border='1px solid #fde68a';}
+    const cnt=document.getElementById('ovdCntNotify');
+    if(cnt){cnt.style.background='#fde68a';cnt.style.color='#78350f';}
+  }else{
+    const b=document.getElementById('ovdTabNotified');
+    if(b){b.style.fontWeight='600';b.style.background='#dcfce7';b.style.color='#15803d';b.style.border='1px solid #86efac';}
+    const cnt=document.getElementById('ovdCntNotified');
+    if(cnt){cnt.style.background='#86efac';cnt.style.color='#14532d';}
+  }
   renderOverdueByTab();
 }
-
 function getOverdueItems(){
   const today=new Date();today.setHours(0,0,0,0);
   return (mailData||[]).filter(m=>{
@@ -1782,17 +1795,22 @@ function renderOverdueByTab(){
   const nfc=document.getElementById('ovdCntNotified');
   const clientsNeedNotice=Object.keys(groupByClient(needsNotice)).length;
   const clientsDiscard=Object.keys(groupByClient(readyDiscard)).length;
-  if(nc){nc.textContent=clientsNeedNotice||'—';}
-  if(dc){dc.textContent=clientsDiscard||'—';}
-  if(nfc){nfc.textContent=notified.length||'—';}
+  if(nc){nc.textContent=clientsNeedNotice||'0';}
+  if(dc){dc.textContent=clientsDiscard||'0';}
+  if(nfc){nfc.textContent=notified.length||'0';}
 
   // Show/hide bulk buttons
   const exportBtn=document.getElementById('overdueExportBtn');
   const discardBtn=document.getElementById('overdueDiscardBtn');
   const selBar=document.getElementById('overdueSelBar');
-  if(exportBtn)exportBtn.style.display=(tab==='discard'&&isAdminMode)?'inline-flex':'';
-  if(discardBtn)discardBtn.style.display=(tab==='discard'&&isAdminMode)?'inline-flex':'';
-  if(selBar&&tab!=='discard')selBar.style.display='none';
+  if(exportBtn)exportBtn.style.display='none';
+  if(discardBtn)discardBtn.style.display='none';
+  if(selBar)selBar.style.display='none';
+  // Reset select all
+  const saEl=document.getElementById('overdueSelectAll');
+  if(saEl)saEl.checked=false;
+  const scEl=document.getElementById('overdueSelCount');
+  if(scEl)scEl.textContent='0 selected';
 
   if(tab==='notify') body.innerHTML=renderNotifyTab(needsNotice);
   else if(tab==='notified') body.innerHTML=renderNotifiedTab(notified);
@@ -1817,7 +1835,7 @@ function overdueItemRowHtml(m, opts){
   const client=getClientByPid(pid);
   const fmtD=d=>{if(!d)return'';try{const dt=new Date(d.includes('T')?d:d+'T00:00:00');return isNaN(dt)?d:dt.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});}catch(e){return d;}};
   const opts2=getMailStatuses();
-  const selHtml=opts.checkbox?'<input type="checkbox" class="overdue-check" data-mid="'+esc(mid)+'" onchange="updateOverdueSelCount()" style="width:14px;height:14px;cursor:pointer;flex-shrink:0">':'';
+  const selHtml=opts.checkbox?'<input type="checkbox" class="overdue-chk" data-id="'+esc(mid)+'" onchange="updateOverdueSelCount()" style="width:14px;height:14px;cursor:pointer;flex-shrink:0">':'';
   const statusSel='<select class="status-select" style="font-size:11px;padding:4px 8px;border-radius:7px;border:0.5px solid #C0C0C0;background:#F2F2F2;color:#111;cursor:pointer;font-family:inherit;outline:none" onchange="updateGlobalStatus(\''+esc(mid)+'\',this,\''+esc(pid)+'\')">'
     +opts2.map(s=>'<option value="'+esc(s)+'"'+(m['Status|hidden-3']===s?' selected':'')+'>'+esc(s)+'</option>').join('')+'</select>';
   const viewBtn=client?'<button class="btn btn-ghost btn-sm" onclick="jumpToClient(\''+esc(pid)+'\')">View Client</button>':'';
@@ -1896,7 +1914,12 @@ function renderNotifiedTab(items){
 }
 
 function renderDiscardTab(items){
-  if(!items.length)return'<div class="state-box"><div class="state-label">No items ready to discard</div></div>';
+  const selBar=document.getElementById('overdueSelBar');
+  if(!items.length){
+    if(selBar)selBar.style.display='none';
+    return'<div class="state-box"><div class="state-label">No items ready to discard</div></div>';
+  }
+  if(selBar&&isAdminMode){selBar.style.display='flex';}
   const grouped=groupByClient(items);
   return Object.entries(grouped).map(([pid,mitems])=>overdueClientCardHtml(pid,mitems,{checkbox:true})).join('');
 }

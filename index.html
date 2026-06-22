@@ -1750,7 +1750,7 @@ function getOverdueItems(){
     if(!ACTIVE_STATUSES.includes(s))return false;
     const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';
     if(!cb)return false;
-    const d=new Date(cb.includes('T')?cb:cb+'T00:00:00');
+    const d=new Date(cb);d.setHours(0,0,0,0);
     return d<today;
   });
 }

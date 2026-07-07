@@ -1830,10 +1830,10 @@ function overdueItemRowHtml(m, opts){
   const internalNote=m['Internal Note|text-3']||'';
   const custNote=m['Note to Customer|textarea-1']||'';
   const today=new Date();today.setHours(0,0,0,0);
-  const dueD=cb?new Date(cb.includes('T')?cb:cb+'T00:00:00'):null;
+  const dueD=cb?(()=>{const _d=new Date(cb);_d.setHours(0,0,0,0);return _d;})():null;
   const daysOvd=dueD?Math.ceil((today-dueD)/86400000):0;
   const client=getClientByPid(pid);
-  const fmtD=d=>{if(!d)return'';try{const dt=new Date(d.includes('T')?d:d+'T00:00:00');return isNaN(dt)?d:dt.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});}catch(e){return d;}};
+  const fmtD=d=>{if(!d)return'';try{const dt=new Date(d);dt.setHours(0,0,0,0);return isNaN(dt)?d:dt.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});}catch(e){return d;}};
   const opts2=getMailStatuses();
   const selHtml=opts.checkbox?'<input type="checkbox" class="overdue-chk" data-id="'+esc(mid)+'" onchange="updateOverdueSelCount()" style="width:14px;height:14px;cursor:pointer;flex-shrink:0">':'';
   const statusSel='<select class="status-select" style="font-size:11px;padding:4px 8px;border-radius:7px;border:0.5px solid #C0C0C0;background:#F2F2F2;color:#111;cursor:pointer;font-family:inherit;outline:none" onchange="updateGlobalStatus(\''+esc(mid)+'\',this,\''+esc(pid)+'\')">'
@@ -1942,7 +1942,7 @@ async function sendOverdueNotice(evt, pid){
     if(!ACTIVE_STATUSES.includes(m['Status|hidden-3']||''))return false;
     const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';
     if(!cb)return false;
-    const d=new Date(cb.includes('T')?cb:cb+'T00:00:00');
+    const d=new Date(cb);d.setHours(0,0,0,0);
     return d<today;
   });
   const pendingItems=(mailData||[]).filter(m=>{
@@ -1950,14 +1950,14 @@ async function sendOverdueNotice(evt, pid){
     if(!ACTIVE_STATUSES.includes(m['Status|hidden-3']||''))return false;
     const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';
     if(!cb)return false;
-    const d=new Date(cb.includes('T')?cb:cb+'T00:00:00');
+    const d=new Date(cb);d.setHours(0,0,0,0);
     return d>=today;
   });
 
   // Build email body
-  const fmtD=d=>{if(!d)return'';try{const dt=new Date(d.includes('T')?d:d+'T00:00:00');return isNaN(dt)?d:dt.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});}catch(e){return d;}};
-  const daysOvd=m=>{const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';if(!cb)return 0;const d=new Date(cb.includes('T')?cb:cb+'T00:00:00');return Math.ceil((today-d)/86400000);};
-  const daysLeft=m=>{const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';if(!cb)return 0;const d=new Date(cb.includes('T')?cb:cb+'T00:00:00');return Math.ceil((d-today)/86400000);};
+  const fmtD=d=>{if(!d)return'';try{const dt=new Date(d);dt.setHours(0,0,0,0);return isNaN(dt)?d:dt.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});}catch(e){return d;}};
+  const daysOvd=m=>{const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';if(!cb)return 0;const d=new Date(cb);d.setHours(0,0,0,0);return Math.ceil((today-d)/86400000);};
+  const daysLeft=m=>{const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';if(!cb)return 0;const d=new Date(cb);d.setHours(0,0,0,0);return Math.ceil((d-today)/86400000);};
 
   const fmtND=d=>{if(!d)return'';try{const dt=new Date(d.includes('T')?d:d+'T00:00:00');return isNaN(dt)?'':dt.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});}catch(e){return'';}  };
   let body='Hello '+adminName+',\n\n';

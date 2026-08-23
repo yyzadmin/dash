@@ -766,8 +766,8 @@ function daysInfo(cb, isPending){
 
 function getPending(pid){return mailData.filter(m=>String(m['Plan ID|hidden-5']).trim()===String(pid).trim()&&ACTIVE_STATUSES.includes(m['Status|hidden-3']));}
 function getAllMails(pid){return mailData.filter(m=>String(m['Plan ID|hidden-5']).trim()===String(pid).trim());}
-function getClientByPid(pid){return planData.find(c=>String(c['Plan ID|hidden-5']).trim()===String(pid).trim());}
-function getSearchFields(c){return[c['Recipient Name (1) | Legal Company Name|text-4'],c['Recipient Name (2)|text-1'],c['Recipient Name (3)|text-3'],c['Recipient Name (4)|text-2'],c['Recipient Name (5)|text-9'],c['First Name|name-1-first-name'],c['Last Name|name-1-last-name'],c['Email Address|email-1'],c['Phone|phone-1'],c['(1) Legal Full Name|name-2'],c['(2) Legal Full Name|name-3'],c['(3) Legal Full Name|name-4'],String(c['Plan ID|hidden-5']||'')].map(v=>(v||'').toLowerCase());}
+function getClientByPid(pid){return planData.find(c=>String(c['Plan ID|hidden-1']).trim()===String(pid).trim());}
+function getSearchFields(c){return[c['Recipient Name (1) | Legal Company Name|text-2'],c['Recipient Name (2)|text-4'],c['Recipient Name (3)|text-5'],c['Recipient Name (4)|text-6'],c['Recipient Name (5)|text-7'],c['First Name|name-1-first-name'],c['Last Name|name-1-last-name'],c['Email Address|email-1'],c['Phone|phone-1'],c['(1) Legal Full Name|name-2'],c['(2) Legal Full Name|name-3'],c['(3) Legal Full Name|name-4'],String(c['Plan ID|hidden-1']||'')].map(v=>(v||'').toLowerCase());}
 
 // SEARCH
 function hideStates(){['stateIdle','stateLoading','stateEmpty','stateError'].forEach(id=>document.getElementById(id).style.display='none');}
@@ -787,12 +787,12 @@ function renderResults(q){
   list.innerHTML='<div class="results-label">'+matches.length+' client'+(matches.length>1?'s':'')+' found</div><div class="cards-list" id="cardsContainer"></div>';
   const container=document.getElementById('cardsContainer');
   matches.forEach(client=>{
-    const pid=client['Plan ID|hidden-5'],company=client['Recipient Name (1) | Legal Company Name|text-4']||'\u2014';
+    const pid=client['Plan ID|hidden-1'],company=client['Recipient Name (1) | Legal Company Name|text-2']||'\u2014';
     const admin=((client['First Name|name-1-first-name']||'')+' '+(client['Last Name|name-1-last-name']||'')).trim();
-    const email=client['Email Address|email-1']||'',plan=client['Select Plan|radio-1']||'',status=client['Account Status|hidden-3']||'ACTIVE';
+    const email=client['Email Address|email-1']||'',plan=client['Select Plan|radio-1']||'',status=client['Account Status|hidden-2']||'ACTIVE';
     const pending=getPending(pid);
     const card=document.createElement('div');card.className='client-card';
-    const _rp=[client['Recipient Name (1) | Legal Company Name|text-4'],client['Recipient Name (2)|text-1'],client['Recipient Name (3)|text-3'],client['Recipient Name (4)|text-2'],client['Recipient Name (5)|text-9']].filter(Boolean);
+    const _rp=[client['Recipient Name (1) | Legal Company Name|text-2'],client['Recipient Name (2)|text-4'],client['Recipient Name (3)|text-5'],client['Recipient Name (4)|text-6'],client['Recipient Name (5)|text-7']].filter(Boolean);
     const _rpLine=_rp.length>1?'<div class="client-card-meta" style="margin-top:3px">👥 '+_rp.map(r=>esc(r)).join(' &middot; ')+'</div>':'';
     card.innerHTML='<div class="client-card-body" style="padding-left:0">'+'<div class="client-card-name">'+esc(company)+'</div>'+'<div class="client-card-meta"><span>'+esc(admin)+'</span>\xB7<span>'+esc(email)+'</span>\xB7'+'<span title="Click to copy" onclick="event.stopPropagation();copyId(\''+esc(pid)+'\',\'Plan ID\')" style="cursor:pointer;font-family:monospace;font-weight:700;color:#111;background:#F3F4F6;padding:1px 6px;border-radius:4px;user-select:none">'+esc(pid)+'</span></div>'+_rpLine+'</div>'+'<div class="client-card-right"><span class="badge '+(status==='ACTIVE'?'badge-active':'badge-inactive')+'">'+esc(status)+'</span>'+'<span class="badge badge-plan">'+esc(planLabel(plan))+'</span>'+'<span class="mail-pill'+(pending.length>0?'':' none')+'">'+(pending.length>0?'📬 '+pending.length+' pending':'No pending mail')+'</span></div>';
     card.onclick=()=>openClient(client);container.appendChild(card);
@@ -813,8 +813,8 @@ function openClient(c){
   addRecentClient(c);
 }
 function addRecentClient(c){
-  const pid=String(c['Plan ID|hidden-5']||'');
-  const company=c['Recipient Name (1) | Legal Company Name|text-4']||'—';
+  const pid=String(c['Plan ID|hidden-1']||'');
+  const company=c['Recipient Name (1) | Legal Company Name|text-2']||'—';
   const plan=c['Select Plan|radio-1']||'';
   let recents=JSON.parse(localStorage.getItem('yyzRecentClients')||'[]');
   recents=recents.filter(r=>r.pid!==pid);
@@ -906,11 +906,11 @@ function mailItemHtml(m){
 }
 
 function renderDetail(c){
-  const pid=c['Plan ID|hidden-5'],company=c['Recipient Name (1) | Legal Company Name|text-4']||'\u2014';
+  const pid=c['Plan ID|hidden-1'],company=c['Recipient Name (1) | Legal Company Name|text-2']||'\u2014';
   const adminName=((c['First Name|name-1-first-name']||'')+' '+(c['Last Name|name-1-last-name']||'')).trim();
   const email=c['Email Address|email-1']||'',phone=c['Phone|phone-1']||'',plan=c['Select Plan|radio-1']||'';
-  const status=c['Account Status|hidden-3']||'ACTIVE',isActive=status==='ACTIVE',isForward=(c['Forwarding']||'').toLowerCase()==='yes';
-  const bizDesc=c['Brief Description of Your Business|text-6']||'';
+  const status=c['Account Status|hidden-2']||'ACTIVE',isActive=status==='ACTIVE',isForward=(c['Forwarding']||'').toLowerCase()==='yes';
+  const bizDesc=c['Brief Description of Your Business|text-3']||'';
   const isDelinquent=(c['Delinquent']||'').toLowerCase()==='yes';
   const termDateRaw=c['TerminationDate']||'';
   const termDate=termDateRaw?new Date(termDateRaw.includes('T')?termDateRaw:termDateRaw+'T00:00:00'):null;
@@ -919,7 +919,7 @@ function renderDetail(c){
   const isTerminated=!!(termDate&&termDate<=todayD&&!isActive);
   const termDaysLeft=termDate?Math.ceil((termDate-todayD)/86400000):0;
   const termDateFmt=termDate?termDate.toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric',timeZone:'America/Toronto'}):'';
-  const recipients=[c['Recipient Name (1) | Legal Company Name|text-4'],c['Recipient Name (2)|text-1'],c['Recipient Name (3)|text-3'],c['Recipient Name (4)|text-2'],c['Recipient Name (5)|text-9']].filter(Boolean);
+  const recipients=[c['Recipient Name (1) | Legal Company Name|text-2'],c['Recipient Name (2)|text-4'],c['Recipient Name (3)|text-5'],c['Recipient Name (4)|text-6'],c['Recipient Name (5)|text-7']].filter(Boolean);
   const agents=[adminName,c['(1) Legal Full Name|name-2'],c['(2) Legal Full Name|name-3'],c['(3) Legal Full Name|name-4']].filter(Boolean);
   const allMails=getAllMails(pid);
   const pendingMails=allMails.filter(m=>ACTIVE_STATUSES.includes(m['Status|hidden-3']||''));
@@ -1004,7 +1004,7 @@ function renderDetail(c){
           <div class="detail-sub" style="margin-top:8px">
             <span class="badge ${isActive?'badge-active':'badge-inactive'}">${esc(status)}</span>
             <span class="badge badge-plan">${esc(planLabel(plan))}</span>
-            ${(c['How did you hear about us?|radio-2']||'')?'<span style="font-size:10px;color:var(--muted);background:var(--bg2);padding:2px 9px;border-radius:99px;border:0.5px solid var(--border2)">via '+esc(c['How did you hear about us?|radio-2'])+'</span>':''}
+            ${(c["How'd you find us?|radio-3"]||'')?'<span style="font-size:10px;color:var(--muted);background:var(--bg2);padding:2px 9px;border-radius:99px;border:0.5px solid var(--border2)">via '+esc(c["How'd you find us?|radio-3"])+'</span>':''}
             <span title="Click to copy" onclick="copyId('${esc(pid)}','Plan ID')" style="cursor:pointer;font-family:monospace;font-weight:700;background:#F3F4F6;padding:1px 6px;border-radius:4px;user-select:none">${esc(pid)}</span>&middot;<span>${esc(email)}</span>
           </div>
         </div>
@@ -1062,7 +1062,7 @@ function renderDetail(c){
             ?`${viewIdBtn}${viewIdBtn?sep:''}<button class="btn btn-green btn-sm" onclick="setVerification('Verified')">Approve</button><button class="btn btn-sm" style="border:1px solid #fca5a5;color:#dc2626;background:white;font-family:inherit;font-weight:600;cursor:pointer;border-radius:6px;padding:5px 10px;font-size:11px" onclick="setVerification('ID Not Verifiable')">Reject</button>`
             :isVerified
             ?viewIdBtn
-            :`${viewIdBtn}${viewIdBtn?sep:''}<a href="https://yyzoffices.com/yyz-dashboard-7/?Plan_ID=${esc(pid)}&email=${esc(email)}&Request_Type=ID+Verification+Required&Company_Legal_Name=${encodeURIComponent(c['Recipient Name (1) | Legal Company Name|text-4']||'')}" target="_blank" class="btn btn-ghost btn-sm" style="text-decoration:none">&#128231; Notify Customer</a><button class="btn btn-ghost btn-sm" onclick="document.getElementById('updateIdWrap').style.display=document.getElementById('updateIdWrap').style.display==='none'?'flex':'none'">&#128279; Update ID Link</button>`
+            :`${viewIdBtn}${viewIdBtn?sep:''}<a href="https://yyzoffices.com/yyz-dashboard-7/?Plan_ID=${esc(pid)}&email=${esc(email)}&Request_Type=ID+Verification+Required&Company_Legal_Name=${encodeURIComponent(c['Recipient Name (1) | Legal Company Name|text-2']||'')}" target="_blank" class="btn btn-ghost btn-sm" style="text-decoration:none">&#128231; Notify Customer</a><button class="btn btn-ghost btn-sm" onclick="document.getElementById('updateIdWrap').style.display=document.getElementById('updateIdWrap').style.display==='none'?'flex':'none'">&#128279; Update ID Link</button>`
           )
           :( isPending
             ?'<span style="font-size:11px;color:#92400e;background:#fef3c7;padding:3px 10px;border-radius:6px;font-weight:500">&#9888; Pending verification by Branch Manager</span>'
@@ -1086,10 +1086,10 @@ function renderDetail(c){
       const _rel=getRelatedAccounts(c);
       if(!_rel.length)return '';
       const _pills=_rel.map(({client:r,reasons})=>{
-        const _rpid=String(r['Plan ID|hidden-5']||'');
-        const _rco=esc(r['Recipient Name (1) | Legal Company Name|text-4']||'Unknown');
+        const _rpid=String(r['Plan ID|hidden-1']||'');
+        const _rco=esc(r['Recipient Name (1) | Legal Company Name|text-2']||'Unknown');
         const _rplan=esc(r['planName']||r['Select Plan|radio-1']||'');
-        const _rstat=(r['Account Status|hidden-3']||'ACTIVE')==='ACTIVE';
+        const _rstat=(r['Account Status|hidden-2']||'ACTIVE')==='ACTIVE';
         const _pb=planMeta[r['Select Plan|radio-1']||'']||{bg:'#F3F4F6',color:'#374151'};
         const _tip=esc(reasons.map(x=>x.icon+' '+x.label+(x.confidence==='low'?' (low confidence)':'')).join(', '));
         const _dot='<div style="width:6px;height:6px;border-radius:50%;background:'+(_rstat?'#22c55e':'#d1d5db')+';flex-shrink:0"></div>';
@@ -1124,11 +1124,11 @@ function renderDetail(c){
           <div class="info-item"><div class="info-label">Admin Name</div><div class="info-value">${esc(adminName)||'<span class="empty">\u2014</span>'}</div></div>
           <div class="info-item"><div class="info-label">Email</div><div class="info-value mono">${esc(email)||'<span class="empty">\u2014</span>'}</div></div>
           <div class="info-item"><div class="info-label">Phone</div><div class="info-value mono">${esc(phone)||'<span class="empty">\u2014</span>'}</div></div>
-          <div class="info-item"><div class="info-label">Registered</div><div class="info-value">${(d=>d&&!isNaN(new Date(d))?new Date(d).toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'}):'<span class="empty">&mdash;</span>')(c['Registration Date|hidden-2'])}</div></div>
-          <div class="info-item"><div class="info-label">Anniversary</div><div class="info-value">${(d=>d&&!isNaN(new Date(d))?new Date(d).toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'}):'<span class="empty">&mdash;</span>')(c['Anniversary Date|hidden-4'])}</div></div>
+          <div class="info-item"><div class="info-label">Registered</div><div class="info-value">${(d=>d&&!isNaN(new Date(d))?new Date(d).toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'}):'<span class="empty">&mdash;</span>')(c['Registration Date|hidden-4'])}</div></div>
+          <div class="info-item"><div class="info-label">Anniversary</div><div class="info-value">${(d=>d&&!isNaN(new Date(d))?new Date(d).toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'}):'<span class="empty">&mdash;</span>')(c['Anniversary Date|hidden-5'])}</div></div>
           <div class="info-item"><div class="info-label">Plan</div><div class="info-value">${esc(planLabel(plan))}</div></div>
           ${bizDesc?`<div class="info-item" style="grid-column:1/-1"><div class="info-label">Business Description</div><div class="info-value">${esc(bizDesc)}</div></div>`:''}
-          ${isForward?`<div class="info-item" style="grid-column:1/-1"><div class="info-label">Forwarding Address</div><div class="info-value">${[c['Street Address|address-1-street_address'],c['Apartment, suite, etc|address-1-address_line'],c['City|address-1-city'],c['Province|address-1-state'],c['Postal Code|address-1-zip']].filter(Boolean).map(esc).join(', ')||'<span class="empty">Not set</span>'}</div></div>`:''}
+          ${isForward?`<div class="info-item" style="grid-column:1/-1"><div class="info-label">Forwarding Address</div><div class="info-value">${[c['Street Address|address-1-street_address'],c['Apartment, suite, etc|address-1-address_line'],c['City|address-1-city'],c['State/Province|address-1-state'],c['ZIP / Postal code|address-1-zip']].filter(Boolean).map(esc).join(', ')||'<span class="empty">Not set</span>'}</div></div>`:''}
         </div>
         <div class="divider"></div>
         <div class="info-label" style="margin-bottom:8px">Recipients</div>
@@ -1181,18 +1181,18 @@ ${(()=>{
 
 
 function getRelatedAccounts(c){
-  const pid=String(c['Plan ID|hidden-5']||'').trim();
+  const pid=String(c['Plan ID|hidden-1']||'').trim();
   const email=(c['Email Address|email-1']||'').toLowerCase().trim();
   const phone=(c['Phone|phone-1']||'').replace(/\D/g,'');
-  const ip=(c['UserIP|hidden-1']||'').trim();
+  const ip=(c['UserIP|hidden-3']||'').trim();
   const related=[];
   planData.forEach(r=>{
-    const rpid=String(r['Plan ID|hidden-5']||'').trim();
+    const rpid=String(r['Plan ID|hidden-1']||'').trim();
     if(rpid===pid)return;
     const reasons=[];
     const remail=(r['Email Address|email-1']||'').toLowerCase().trim();
     const rphone=(r['Phone|phone-1']||'').replace(/\D/g,'');
-    const rip=(r['UserIP|hidden-1']||'').trim();
+    const rip=(r['UserIP|hidden-3']||'').trim();
     if(email&&remail&&email===remail)reasons.push({label:'Email match',icon:'📧',confidence:'high'});
     if(phone&&rphone&&phone.length>=7&&rphone.length>=7&&phone===rphone)reasons.push({label:'Phone match',icon:'📞',confidence:'high'});
     if(ip&&rip&&ip===rip&&!reasons.length)reasons.push({label:'IP match',icon:'🌐',confidence:'low'});
@@ -1231,7 +1231,7 @@ async function saveClientNotes(pid){
   if(btn){btn.disabled=true;btn.textContent='Saving…';}
   const _noteSaved=()=>{
     if(currentClient)currentClient['customerNotes']=notes;
-    const row=planData.find(c=>String(c['Plan ID|hidden-5']).trim()===String(pid).trim());
+    const row=planData.find(c=>String(c['Plan ID|hidden-1']).trim()===String(pid).trim());
     if(row)row['customerNotes']=notes;
     showToast('Notes saved ✓','success');
     if(_tag){_tag.style.opacity='1';setTimeout(()=>_tag.style.opacity='0',2500);}
@@ -1303,7 +1303,7 @@ function openTerminationPicker(){
 }
 async function saveTerminationDate(){
   const c=currentClient;if(!c)return;
-  const pid=c['Plan ID|hidden-5'];
+  const pid=c['Plan ID|hidden-1'];
   const date=document.getElementById('termDateInput').value;
   if(!date){document.getElementById('termError').textContent='Please select a date.';return;}
   const btn=document.getElementById('termSaveBtn');if(btn)btn.disabled=true;
@@ -1313,7 +1313,7 @@ async function saveTerminationDate(){
     let ok=false;try{const d=await res.json();ok=d.success;}catch(e){ok=true;}
     if(ok){
       c['TerminationDate']=date;
-      const row=planData.find(r=>String(r['Plan ID|hidden-5']).trim()===String(pid).trim());
+      const row=planData.find(r=>String(r['Plan ID|hidden-1']).trim()===String(pid).trim());
       if(row)row['TerminationDate']=date;
       closeModal('terminationModal');
       showToast('Termination date set ✓','success');
@@ -1325,14 +1325,14 @@ async function saveTerminationDate(){
 }
 async function clearTerminationDate(){
   const c=currentClient;if(!c)return;
-  const pid=c['Plan ID|hidden-5'];
+  const pid=c['Plan ID|hidden-1'];
   try{
     const params=new URLSearchParams({action:'setTerminationDate',planId:pid,date:''});
     const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
     let ok=false;try{const d=await res.json();ok=d.success;}catch(e){ok=true;}
     if(ok){
       c['TerminationDate']='';
-      const row=planData.find(r=>String(r['Plan ID|hidden-5']).trim()===String(pid).trim());
+      const row=planData.find(r=>String(r['Plan ID|hidden-1']).trim()===String(pid).trim());
       if(row)row['TerminationDate']='';
       closeModal('terminationModal');
       showToast('Termination date cleared','success');
@@ -1344,7 +1344,7 @@ async function clearTerminationDate(){
 async function toggleDelinquent(){
   if(!isAdminMode){enterAdminMode();return;}
   const c=currentClient;if(!c)return;
-  const pid=c['Plan ID|hidden-5'];
+  const pid=c['Plan ID|hidden-1'];
   const cur=(c['Delinquent']||'').toLowerCase()==='yes';
   const newDel=!cur;
   const btn=document.getElementById('delinqBtn');if(btn)btn.disabled=true;
@@ -1354,7 +1354,7 @@ async function toggleDelinquent(){
     let ok=false;try{const d=await res.json();ok=d.success;}catch(e){ok=true;}
     if(ok){
       c['Delinquent']=newDel?'Yes':'';
-      const row=planData.find(r=>String(r['Plan ID|hidden-5']).trim()===String(pid).trim());
+      const row=planData.find(r=>String(r['Plan ID|hidden-1']).trim()===String(pid).trim());
       if(row)row['Delinquent']=newDel?'Yes':'';
       showToast(newDel?'Account marked delinquent':'Delinquent status cleared','success');
       renderDetail(c);
@@ -1363,18 +1363,18 @@ async function toggleDelinquent(){
   finally{const b=document.getElementById('delinqBtn');if(b)b.disabled=false;}
 }
 async function toggleStatus(){
-  const c=currentClient,pid=c['Plan ID|hidden-5'],cur=c['Account Status|hidden-3']||'ACTIVE',ns=cur==='ACTIVE'?'INACTIVE':'ACTIVE';
+  const c=currentClient,pid=c['Plan ID|hidden-1'],cur=c['Account Status|hidden-2']||'ACTIVE',ns=cur==='ACTIVE'?'INACTIVE':'ACTIVE';
   const btn=document.getElementById('toggleBtn');btn.disabled=true;
   try{
     const params=new URLSearchParams({action:'toggleStatus',planId:pid,newStatus:ns});
     const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
     const data=await res.json();
     if(data.success){
-      c['Account Status|hidden-3']=ns;
+      c['Account Status|hidden-2']=ns;
       if(data.stamp)c['StatusChangedAt']=data.stamp;
       if(ns==='ACTIVE')c['TerminationDate']='';
-      const row=planData.find(r=>String(r['Plan ID|hidden-5']).trim()===String(pid).trim());
-      if(row){row['Account Status|hidden-3']=ns;if(data.stamp)row['StatusChangedAt']=data.stamp;if(ns==='ACTIVE')row['TerminationDate']='';}
+      const row=planData.find(r=>String(r['Plan ID|hidden-1']).trim()===String(pid).trim());
+      if(row){row['Account Status|hidden-2']=ns;if(data.stamp)row['StatusChangedAt']=data.stamp;if(ns==='ACTIVE')row['TerminationDate']='';}
       showToast('Client '+(ns==='ACTIVE'?'activated':'deactivated')+' ✓','success');
       renderDetail(c);updateTabCounts();updateClientsTabCounts();
     }else{showToast('Error: '+(data.error||'Unknown'),'error');btn.disabled=false;}
@@ -1384,20 +1384,20 @@ async function toggleStatus(){
 // CTA
 function openFwdNotif(){
   const c=currentClient;if(!c){showToast('No client selected','error');return;}
-  const pid=c['Plan ID|hidden-5'],email=c['Email Address|email-1']||'';
-  const parts=[c['Street Address|address-1-street_address']||'',c['Apartment, suite, etc|address-1-address_line']||'',c['City|address-1-city']||'',c['Province|address-1-state']||'',c['Postal Code|address-1-zip']||''].filter(Boolean);
+  const pid=c['Plan ID|hidden-1'],email=c['Email Address|email-1']||'';
+  const parts=[c['Street Address|address-1-street_address']||'',c['Apartment, suite, etc|address-1-address_line']||'',c['City|address-1-city']||'',c['State/Province|address-1-state']||'',c['ZIP / Postal code|address-1-zip']||''].filter(Boolean);
   const url='https://yyzoffices.com/yyz-dashboard-7/?Plan_ID='+encodeURIComponent(pid)+'&email='+encodeURIComponent(email)+'&transaction='+encodeURIComponent('Mail(s) Forwarded')+'&fwd_address='+encodeURIComponent(parts.join(', '));
   window.open(url,'_blank');
 }
 function openMailNotif(){
   const c=currentClient,recip=document.getElementById('mailRecipSel').value;
   if(!recip){showToast('Please select a recipient first','error');return;}
-  window.open(FORMINATOR_URL+'?Plan_ID='+encodeURIComponent(c['Plan ID|hidden-5'])+'&email='+encodeURIComponent(c['Email Address|email-1']||'')+'&Recipient='+encodeURIComponent(recip)+'&Forward='+encodeURIComponent(c['Forwarding']||'No')+'&Scan='+encodeURIComponent(c['Scanning']||'No')+'&virtual_office_location='+encodeURIComponent(c['Virtual Office Location|select-1']||''),'_blank');
+  window.open(FORMINATOR_URL+'?Plan_ID='+encodeURIComponent(c['Plan ID|hidden-1'])+'&email='+encodeURIComponent(c['Email Address|email-1']||'')+'&Recipient='+encodeURIComponent(recip)+'&Forward='+encodeURIComponent(c['Forwarding']||'No')+'&Scan='+encodeURIComponent(c['Scanning']||'No')+'&virtual_office_location='+encodeURIComponent(c['Virtual Office Location|hidden-6']||''),'_blank');
 }
 function openCollNotif(){
   const c=currentClient,agent=document.getElementById('collAgentSel').value;
   if(!agent){showToast('Please select a collection agent first','error');return;}
-  window.open(FORMINATOR_URL+'?Plan_ID='+encodeURIComponent(c['Plan ID|hidden-5'])+'&email='+encodeURIComponent(c['Email Address|email-1']||'')+'&Mail_Collecting_Individual='+encodeURIComponent(agent)+'&virtual_office_location='+encodeURIComponent(c['Virtual Office Location|select-1']||''),'_blank');
+  window.open(FORMINATOR_URL+'?Plan_ID='+encodeURIComponent(c['Plan ID|hidden-1'])+'&email='+encodeURIComponent(c['Email Address|email-1']||'')+'&Mail_Collecting_Individual='+encodeURIComponent(agent)+'&virtual_office_location='+encodeURIComponent(c['Virtual Office Location|hidden-6']||''),'_blank');
 }
 
 // EDIT PROFILE
@@ -1435,12 +1435,12 @@ function openEditModal(){
       <span>Recipients</span>
       <span style="font-size:10px;font-weight:600;padding:2px 9px;border-radius:99px;background:#EFF6FF;color:#1D4ED8;text-transform:none;letter-spacing:0">${maxR} allowed by plan</span>
     </div>
-    ${recipField(1,'ef_r1','Recipient 1 &mdash; Legal Company Name *',esc(c['Recipient Name (1) | Legal Company Name|text-4']||''))}
-    <div class="form-group"><label class="form-label">Business Description</label><input class="form-input" id="ef_biz" value="${esc(c['Brief Description of Your Business|text-6']||'')}"></div>
-    ${recipField(2,'ef_r2','Recipient 2',esc(c['Recipient Name (2)|text-1']||''))}
-    ${recipField(3,'ef_r3','Recipient 3',esc(c['Recipient Name (3)|text-3']||''))}
-    ${recipField(4,'ef_r4','Recipient 4',esc(c['Recipient Name (4)|text-2']||''))}
-    ${recipField(5,'ef_r5','Recipient 5',esc(c['Recipient Name (5)|text-9']||''))}
+    ${recipField(1,'ef_r1','Recipient 1 &mdash; Legal Company Name *',esc(c['Recipient Name (1) | Legal Company Name|text-2']||''))}
+    <div class="form-group"><label class="form-label">Business Description</label><input class="form-input" id="ef_biz" value="${esc(c['Brief Description of Your Business|text-3']||'')}"></div>
+    ${recipField(2,'ef_r2','Recipient 2',esc(c['Recipient Name (2)|text-4']||''))}
+    ${recipField(3,'ef_r3','Recipient 3',esc(c['Recipient Name (3)|text-5']||''))}
+    ${recipField(4,'ef_r4','Recipient 4',esc(c['Recipient Name (4)|text-6']||''))}
+    ${recipField(5,'ef_r5','Recipient 5',esc(c['Recipient Name (5)|text-7']||''))}
     <div class="form-section-title" style="display:flex;align-items:center;justify-content:space-between">
       <span>Authorized Pickup Agents</span>
       ${noMailPlan?'<span style="font-size:10px;font-weight:600;padding:2px 9px;border-radius:99px;background:#FEF3C7;color:#B45309">Not applicable — address-only plan</span>':''}
@@ -1460,26 +1460,26 @@ function openEditModal(){
     <div class="form-group"><label class="form-label">Apt / Suite</label><input class="form-input" id="ef_apt" value="${esc(c['Apartment, suite, etc|address-1-address_line']||'')}"></div>
     <div class="form-grid-2">
       <div class="form-group"><label class="form-label">City</label><input class="form-input" id="ef_city" value="${esc(c['City|address-1-city']||'')}"></div>
-      <div class="form-group"><label class="form-label">Province</label><input class="form-input" id="ef_prov" value="${esc(c['Province|address-1-state']||'')}"></div>
+      <div class="form-group"><label class="form-label">Province</label><input class="form-input" id="ef_prov" value="${esc(c['State/Province|address-1-state']||'')}"></div>
     </div>
-    <div class="form-group"><label class="form-label">Postal Code</label><input class="form-input" id="ef_postal" value="${esc(c['Postal Code|address-1-zip']||'')}"></div>`:''}`;
+    <div class="form-group"><label class="form-label">Postal Code</label><input class="form-input" id="ef_postal" value="${esc(c['ZIP / Postal code|address-1-zip']||'')}"></div>`:''}`;
   openModal('editModal');
 }
 
 async function saveProfile(){
-  const c=currentClient,pid=c['Plan ID|hidden-5'],isFwd=(c['Forwarding']||'').toLowerCase()==='yes';
+  const c=currentClient,pid=c['Plan ID|hidden-1'],isFwd=(c['Forwarding']||'').toLowerCase()==='yes';
   const maxR=parseInt(c['maxRecipients'])||5;
   function recipVal(fieldId,fallbackKey){
     const el=document.getElementById(fieldId);
     return (el&&!el.disabled)?el.value:(c[fallbackKey]||'');
   }
   const updates={
-    'Recipient Name (1) | Legal Company Name|text-4':document.getElementById('ef_r1').value,
-    'Brief Description of Your Business|text-6':document.getElementById('ef_biz').value,
-    'Recipient Name (2)|text-1':recipVal('ef_r2','Recipient Name (2)|text-1'),
-    'Recipient Name (3)|text-3':recipVal('ef_r3','Recipient Name (3)|text-3'),
-    'Recipient Name (4)|text-2':recipVal('ef_r4','Recipient Name (4)|text-2'),
-    'Recipient Name (5)|text-9':recipVal('ef_r5','Recipient Name (5)|text-9'),
+    'Recipient Name (1) | Legal Company Name|text-2':document.getElementById('ef_r1').value,
+    'Brief Description of Your Business|text-3':document.getElementById('ef_biz').value,
+    'Recipient Name (2)|text-4':recipVal('ef_r2','Recipient Name (2)|text-4'),
+    'Recipient Name (3)|text-5':recipVal('ef_r3','Recipient Name (3)|text-5'),
+    'Recipient Name (4)|text-6':recipVal('ef_r4','Recipient Name (4)|text-6'),
+    'Recipient Name (5)|text-7':recipVal('ef_r5','Recipient Name (5)|text-7'),
     '(1) Legal Full Name|name-2':document.getElementById('ef_a1').value,
     '(2) Legal Full Name|name-3':document.getElementById('ef_a2').value,
     '(3) Legal Full Name|name-4':document.getElementById('ef_a3').value,
@@ -1488,7 +1488,7 @@ async function saveProfile(){
     'Email Address|email-1':document.getElementById('ef_email').value,
     'Phone|phone-1':document.getElementById('ef_phone').value
   };
-  if(isFwd){updates['Street Address|address-1-street_address']=document.getElementById('ef_street').value;updates['Apartment, suite, etc|address-1-address_line']=document.getElementById('ef_apt').value;updates['City|address-1-city']=document.getElementById('ef_city').value;updates['Province|address-1-state']=document.getElementById('ef_prov').value;updates['Postal Code|address-1-zip']=document.getElementById('ef_postal').value;}
+  if(isFwd){updates['Street Address|address-1-street_address']=document.getElementById('ef_street').value;updates['Apartment, suite, etc|address-1-address_line']=document.getElementById('ef_apt').value;updates['City|address-1-city']=document.getElementById('ef_city').value;updates['State/Province|address-1-state']=document.getElementById('ef_prov').value;updates['ZIP / Postal code|address-1-zip']=document.getElementById('ef_postal').value;}
   const btn=document.getElementById('saveBtn');btn.disabled=true;btn.textContent='Saving\u2026';
   try{
     const params=new URLSearchParams({action:'editProfile',planId:pid,updates:JSON.stringify(updates)});
@@ -1519,7 +1519,7 @@ function overdueRowHtml(m){
   const nd=m['Notification Date|hidden-1']||'',cur=m['Status|hidden-3']||'Pending';
   const note=m['Internal Note|text-3']||'';
   const client=getClientByPid(pid);
-  const company=client?(client['Recipient Name (1) | Legal Company Name|text-4']||'Unknown'):'ID:'+pid;
+  const company=client?(client['Recipient Name (1) | Legal Company Name|text-2']||'Unknown'):'ID:'+pid;
   const today=new Date();today.setHours(0,0,0,0);
   const dt=new Date(cb);dt.setHours(0,0,0,0);
   const daysOvd=isNaN(dt.getTime())?'?':Math.round((today-dt)/86400000);
@@ -1599,7 +1599,7 @@ function exportOverduePDF(){
     const hdr='<tr><td colspan="7" style="background:#1a1a2e;color:white;font-weight:700;font-size:12px;padding:8px 12px">&#128205; '+esc(loc)+'</td></tr>';
     const irows=groups[loc].map(m=>{
       const client=getClientByPid(String(m['Plan ID|hidden-5']||''));
-      const co=client?(client['Recipient Name (1) | Legal Company Name|text-4']||''):'ID:'+m['Plan ID|hidden-5'];
+      const co=client?(client['Recipient Name (1) | Legal Company Name|text-2']||''):'ID:'+m['Plan ID|hidden-5'];
       const dt=new Date(m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'');
       dt.setHours(0,0,0,0);
       const dOvd=isNaN(dt.getTime())?'-':Math.round((today-dt)/86400000)+'d';
@@ -1643,7 +1643,7 @@ function globalMailHtml(m,showOverdue){
   const nd=m['Notification Date|hidden-1']||'',cur=m['Status|hidden-3']||'Pending';
   const internalNote=m['Internal Note|text-3']||'',custNote=m['Note to Customer|textarea-1']||'';
   const client=getClientByPid(pid);
-  const company=client?(client['Recipient Name (1) | Legal Company Name|text-4']||'Unknown'):'Plan ID: '+pid;
+  const company=client?(client['Recipient Name (1) | Legal Company Name|text-2']||'Unknown'):'Plan ID: '+pid;
   const opts=getMailStatuses().map(s=>'<option value="'+esc(s)+'"'+(cur===s?' selected':'')+'>'+esc(s)+'</option>').join('');
   const days=showOverdue?(()=>{const today=new Date();today.setHours(0,0,0,0);const dt=new Date(cb);dt.setHours(0,0,0,0);const d=Math.round((today-dt)/86400000);return '<span class="overdue-badge">'+d+'d overdue</span>';})():daysInfo(cb,true);
   const notes=(internalNote?'<div style="font-size:11px;margin-top:5px;padding:5px 8px;background:#fef3c7;border-radius:5px;color:#92400e">\u{1F4CB} <strong>Internal:</strong> '+esc(internalNote)+'</div>':'')+(custNote?'<div style="font-size:11px;margin-top:4px;padding:5px 8px;background:#f0f9ff;border-radius:5px;color:#0369a1">\u{1F4AC} <strong>Note to client:</strong> '+esc(custNote)+'</div>':'');
@@ -1932,7 +1932,7 @@ async function sendOverdueNotice(evt, pid){
   const email=client['Email Address|email-1']||'';
   const adminName=client['Admin Name|text-2']||client['Company Legal Name|text-1']||'';
   const company=client['Company Legal Name|text-1']||adminName||'';
-  const planId=client['Plan ID|hidden-5']||'';
+  const planId=client['Plan ID|hidden-1']||'';
   if(!email){showToast('No email on file for this client','error');return;}
 
   // Get their overdue items
@@ -2015,10 +2015,10 @@ function renderClientsStatsStrip(){
   if(!strip||!planData||!planData.length)return;
   const today=new Date();today.setHours(0,0,0,0);
   const total=planData.length;
-  const active=planData.filter(c=>(c['Account Status|hidden-3']||'ACTIVE')==='ACTIVE').length;
-  const inactive=planData.filter(c=>(c['Account Status|hidden-3']||'ACTIVE')==='INACTIVE').length;
+  const active=planData.filter(c=>(c['Account Status|hidden-2']||'ACTIVE')==='ACTIVE').length;
+  const inactive=planData.filter(c=>(c['Account Status|hidden-2']||'ACTIVE')==='INACTIVE').length;
   const terminated=planData.filter(c=>{
-    if((c['Account Status|hidden-3']||'ACTIVE')!=='INACTIVE')return false;
+    if((c['Account Status|hidden-2']||'ACTIVE')!=='INACTIVE')return false;
     const td=c['TerminationDate']||'';
     if(!td)return false;
     const d=new Date(td.includes('T')?td:td+'T00:00:00');
@@ -2029,7 +2029,7 @@ function renderClientsStatsStrip(){
     const td=c['TerminationDate']||'';
     if(!td)return false;
     const d=new Date(td.includes('T')?td:td+'T00:00:00');
-    return !isNaN(d)&&d>today&&(c['Account Status|hidden-3']||'ACTIVE')==='ACTIVE';
+    return !isNaN(d)&&d>today&&(c['Account Status|hidden-2']||'ACTIVE')==='ACTIVE';
   }).length;
   const pendingReview=planData.filter(c=>!(c['Verified']||'')).length;
   const chip=(bg,color,text)=>'<span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;background:'+bg+';color:'+color+';white-space:nowrap">'+text+'</span>';
@@ -2098,7 +2098,7 @@ function updateClientsTabCounts(){
   const ac=document.getElementById('ctab-all-cnt');if(ac){ac.textContent=tot;ac.style.display='inline';}
   const dc=document.getElementById('ctab-delinquent-cnt');if(dc){dc.textContent=del;dc.style.display=del>0?'inline':'none';}
   const pc=document.getElementById('ctab-pending-cnt');if(pc){pc.textContent=pend;pc.style.display=pend>0?'inline':'none';}
-  const term=allClientsCache.filter(c=>c['TerminationDate']&&(c['Account Status|hidden-3']||'ACTIVE')==='ACTIVE').length;
+  const term=allClientsCache.filter(c=>c['TerminationDate']&&(c['Account Status|hidden-2']||'ACTIVE')==='ACTIVE').length;
   const tc=document.getElementById('ctab-terminating-cnt');if(tc){tc.textContent=term;tc.style.display=term>0?'inline':'none';}
 
 }
@@ -2109,21 +2109,21 @@ function filterClientsTable(q){
   const filtered=allClientsCache.filter(c=>{
     if(_clientsActiveTab==='delinquent'&&(c['Delinquent']||'').toLowerCase()!=='yes')return false;
     if(_clientsActiveTab==='pending'&&(c['Verified']||''))return false;
-    if(_clientsActiveTab==='terminating'&&!(c['TerminationDate']&&(c['Account Status|hidden-3']||'ACTIVE')==='ACTIVE'))return false;
-    const statusMatch=statusF==='ASSOCIATED'?getRelatedAccounts(c).length>0:(!statusF||(c['Account Status|hidden-3']||'ACTIVE').toUpperCase()===statusF);
+    if(_clientsActiveTab==='terminating'&&!(c['TerminationDate']&&(c['Account Status|hidden-2']||'ACTIVE')==='ACTIVE'))return false;
+    const statusMatch=statusF==='ASSOCIATED'?getRelatedAccounts(c).length>0:(!statusF||(c['Account Status|hidden-2']||'ACTIVE').toUpperCase()===statusF);
     const planMatch=!planF||(c['planName']||'').trim()===planF;
     const fn=(c['First Name|name-1-first-name']||'').toLowerCase();
     const ln=(c['Last Name|name-1-last-name']||'').toLowerCase();
     const searchFields=[
-      c['Recipient Name (1) | Legal Company Name|text-4'],
-      c['Recipient Name (2)|text-1'],
-      c['Recipient Name (3)|text-3'],
-      c['Recipient Name (4)|text-2'],
-      c['Recipient Name (5)|text-9'],
-      c['Brief Description of Your Business|text-6'],
+      c['Recipient Name (1) | Legal Company Name|text-2'],
+      c['Recipient Name (2)|text-4'],
+      c['Recipient Name (3)|text-5'],
+      c['Recipient Name (4)|text-6'],
+      c['Recipient Name (5)|text-7'],
+      c['Brief Description of Your Business|text-3'],
       c['Email Address|email-1'],
       String(c['Phone|phone-1']||''),
-      String(c['Plan ID|hidden-5']||''),
+      String(c['Plan ID|hidden-1']||''),
       fn+' '+ln,
     ].map(v=>(v||'').toLowerCase());
     const textMatch=!q||searchFields.some(f=>f.includes(q));
@@ -2145,19 +2145,19 @@ function renderClientsTable(clients){
   const _delFirst=_clientsActiveTab==='all'?[...clients].sort((a,b)=>{
     const ad=(a['Delinquent']||'').toLowerCase()==='yes';
     const bd=(b['Delinquent']||'').toLowerCase()==='yes';
-    const at2=!!(a['TerminationDate']&&(a['Account Status|hidden-3']||'ACTIVE')==='ACTIVE');
-    const bt2=!!(b['TerminationDate']&&(b['Account Status|hidden-3']||'ACTIVE')==='ACTIVE');
+    const at2=!!(a['TerminationDate']&&(a['Account Status|hidden-2']||'ACTIVE')==='ACTIVE');
+    const bt2=!!(b['TerminationDate']&&(b['Account Status|hidden-2']||'ACTIVE')==='ACTIVE');
     if(ad!==bd)return ad?-1:1;
     if(at2!==bt2)return at2?-1:1;
     return 0;
   }):clients;
   const sorted=[..._delFirst].sort((a,b)=>{
     if(sortBy==='recent'){
-      const da=new Date(a['Registration Date|hidden-2']||0),db=new Date(b['Registration Date|hidden-2']||0);
+      const da=new Date(a['Registration Date|hidden-4']||0),db=new Date(b['Registration Date|hidden-4']||0);
       return db-da;
     }
     if(sortBy==='plan'){return (a['Select Plan|radio-1']||'').localeCompare(b['Select Plan|radio-1']||'');}
-    if(sortBy==='pending'){return getPending(b['Plan ID|hidden-5']).length-getPending(a['Plan ID|hidden-5']).length;}
+    if(sortBy==='pending'){return getPending(b['Plan ID|hidden-1']).length-getPending(a['Plan ID|hidden-1']).length;}
     if(sortBy==='usage'){
       const ua=parseFloat(a['mailsAllowed'])||0,ub=parseFloat(b['mailsAllowed'])||0;
       const pctA=ua>0?(parseFloat(a['mailsUsed'])||0)/ua:0;
@@ -2165,9 +2165,9 @@ function renderClientsTable(clients){
       return pctB-pctA;
     }
     if(sortBy==='period'){return new Date(a['Current Period End']||0)-new Date(b['Current Period End']||0);}
-    const sa=a['Account Status|hidden-3']||'ACTIVE',sb=b['Account Status|hidden-3']||'ACTIVE';
+    const sa=a['Account Status|hidden-2']||'ACTIVE',sb=b['Account Status|hidden-2']||'ACTIVE';
     if(sa!==sb)return sa==='ACTIVE'?-1:1;
-    return (a['Recipient Name (1) | Legal Company Name|text-4']||'').localeCompare(b['Recipient Name (1) | Legal Company Name|text-4']||'');
+    return (a['Recipient Name (1) | Legal Company Name|text-2']||'').localeCompare(b['Recipient Name (1) | Legal Company Name|text-2']||'');
   });
 
   const fmtReg=d=>{if(!d)return '';try{return new Date(d).toLocaleDateString('en-CA',{month:'short',day:'numeric'});}catch(e){return String(d);}};
@@ -2201,20 +2201,20 @@ function renderClientsTable(clients){
   </div>`;
 
   const cards=sorted.map(c=>{
-    const pid=c['Plan ID|hidden-5'],company=c['Recipient Name (1) | Legal Company Name|text-4']||'—';
+    const pid=c['Plan ID|hidden-1'],company=c['Recipient Name (1) | Legal Company Name|text-2']||'—';
     const admin=((c['First Name|name-1-first-name']||'')+' '+(c['Last Name|name-1-last-name']||'')).trim();
     const email=c['Email Address|email-1']||'',phone=String(c['Phone|phone-1']||'');
-    const plan=c['Select Plan|radio-1']||'',status=c['Account Status|hidden-3']||'ACTIVE';
+    const plan=c['Select Plan|radio-1']||'',status=c['Account Status|hidden-2']||'ACTIVE';
     const isActive=status==='ACTIVE';
     const pending=getPending(pid).length;
-    const extraRecipients=[c['Recipient Name (2)|text-1'],c['Recipient Name (3)|text-3'],c['Recipient Name (4)|text-2'],c['Recipient Name (5)|text-9']].filter(Boolean);
+    const extraRecipients=[c['Recipient Name (2)|text-4'],c['Recipient Name (3)|text-5'],c['Recipient Name (4)|text-6'],c['Recipient Name (5)|text-7']].filter(Boolean);
     const mailsAllowed=parseFloat(c['mailsAllowed'])||0,mailsUsed=parseFloat(c['mailsUsed'])||0;
     const parcelsAllowed=parseFloat(c['parcelsAllowed'])||0,parcelsUsed=parseFloat(c['parcelsUsed'])||0;
     const mailPct=mailsAllowed>0?Math.min(100,Math.round((mailsUsed/mailsAllowed)*100)):0;
     const overQuota=mailPct>=100&&mailsAllowed>0;
     const nearQuota=mailPct>=80&&mailPct<100&&mailsAllowed>0;
     const periodEnd=c['Current Period End']?new Date(c['Current Period End']).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):'—';
-    const regDate=fmtReg(c['Registration Date|hidden-2']);
+    const regDate=fmtReg(c['Registration Date|hidden-4']);
     const pm=planMeta[plan]||{label:plan,bg:'#F3F4F6',color:'#374151'};
     const cardBorder=overQuota?'#FCA5A5':nearQuota?'#FCD34D':'#E5E7EB';
     const cardBase=overQuota?'#FEF2F2':nearQuota?'#FFFBEB':'#FFFFFF';
@@ -2278,18 +2278,18 @@ function renderClientsTable(clients){
   const _PG=25,_cpEl=document.getElementById('clientsPage'),_cp=_cpEl?parseInt(_cpEl.value||0):0;
   const _tot=sorted.length,_tpg=Math.ceil(_tot/_PG)||1,_cp2=Math.min(_cp,_tpg-1);
   const _pageCards=sorted.slice(_cp2*_PG,(_cp2+1)*_PG).map(c=>{
-    const pid=c['Plan ID|hidden-5'],company=c['Recipient Name (1) | Legal Company Name|text-4']||'—';
+    const pid=c['Plan ID|hidden-1'],company=c['Recipient Name (1) | Legal Company Name|text-2']||'—';
     const admin=((c['First Name|name-1-first-name']||'')+' '+(c['Last Name|name-1-last-name']||'')).trim();
     const email=c['Email Address|email-1']||'',phone=String(c['Phone|phone-1']||'');
-    const plan=c['Select Plan|radio-1']||'',status=c['Account Status|hidden-3']||'ACTIVE';
+    const plan=c['Select Plan|radio-1']||'',status=c['Account Status|hidden-2']||'ACTIVE';
     const isActive=status==='ACTIVE',pending=getPending(pid).length;
-    const extraRecipients=[c['Recipient Name (2)|text-1'],c['Recipient Name (3)|text-3'],c['Recipient Name (4)|text-2'],c['Recipient Name (5)|text-9']].filter(Boolean);
+    const extraRecipients=[c['Recipient Name (2)|text-4'],c['Recipient Name (3)|text-5'],c['Recipient Name (4)|text-6'],c['Recipient Name (5)|text-7']].filter(Boolean);
     const mailsAllowed=parseFloat(c['mailsAllowed'])||0,mailsUsed=parseFloat(c['mailsUsed'])||0;
     const parcelsAllowed=parseFloat(c['parcelsAllowed'])||0,parcelsUsed=parseFloat(c['parcelsUsed'])||0;
     const mailPct=mailsAllowed>0?Math.min(100,Math.round((mailsUsed/mailsAllowed)*100)):0;
     const overQuota=mailPct>=100&&mailsAllowed>0,nearQuota=mailPct>=80&&mailPct<100&&mailsAllowed>0;
     const periodEnd=c['Current Period End']?new Date(c['Current Period End']).toLocaleDateString('en-CA',{month:'short',day:'numeric'}):'—';
-    const regDate=fmtReg(c['Registration Date|hidden-2']);
+    const regDate=fmtReg(c['Registration Date|hidden-4']);
     const pm=planMeta[plan]||{label:plan||'—',bg:'#F3F4F6',color:'#374151'};
     const cb=overQuota?'#FCA5A5':nearQuota?'#FCD34D':'#E5E7EB',bg=overQuota?'#FEF2F2':nearQuota?'#FFFBEB':'#FFFFFF';
     const cbh=overQuota?'#F87171':nearQuota?'#F59E0B':'#D1D5DB',bgh=overQuota?'#FEE2E2':nearQuota?'#FEF3C7':'#F9FAFB';
@@ -2297,7 +2297,7 @@ function renderClientsTable(clients){
     const isDelCard=(c['Delinquent']||'').toLowerCase()==='yes';
     const delTag=isDelCard?'<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:99px;background:#fee2e2;color:#991b1b;border:0.5px solid #fca5a5;display:inline-block">&#9888; Delinquent</span>':'';
     const cTermDate=c['TerminationDate']||'';
-    const cTermActive=(c['Account Status|hidden-3']||'ACTIVE')==='ACTIVE';
+    const cTermActive=(c['Account Status|hidden-2']||'ACTIVE')==='ACTIVE';
     const cTermTag=cTermDate&&cTermActive?(()=>{
       const td=new Date(cTermDate);const tod=new Date();tod.setHours(0,0,0,0);
       const days=Math.ceil((td-tod)/86400000);
@@ -2316,17 +2316,17 @@ function renderClientsTable(clients){
   const _pgbar=_tpg>1?`<div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px"><div style="display:flex;gap:6px">${_pgB('&laquo;',0,_cp2===0)}${_pgB('&lsaquo;',_cp2-1,_cp2===0)}${_pgB('&rsaquo;',_cp2+1,_cp2>=_tpg-1)}${_pgB('&raquo;',_tpg-1,_cp2>=_tpg-1)}</div><span style="font-size:11px;color:#9CA3AF">Page ${_cp2+1} of ${_tpg} &middot; ${_tot} clients</span></div>`:''
   wrap.innerHTML=`<div style="padding:14px 16px"><input type="hidden" id="clientsPage" value="${_cp2}">${header}${_pageCards}${_pgbar||`<div style="padding-top:6px;font-size:11px;color:#9CA3AF;text-align:right">${_tot} client${_tot!==1?'s':''} shown</div>`}</div>`;
 }
-window.goMailDetailPage=function(page,pid){window['mailPg_'+pid]=page;if(currentClient&&String(currentClient['Plan ID|hidden-5'])===String(pid))renderDetail(currentClient);};
+window.goMailDetailPage=function(page,pid){window['mailPg_'+pid]=page;if(currentClient&&String(currentClient['Plan ID|hidden-1'])===String(pid))renderDetail(currentClient);};
 function exportClientsCSV(){
   if(!planData.length){showToast('No data to export','error');return;}
   const cols=[
-    'Plan ID|hidden-5','Account Status|hidden-3','Registration Date|hidden-2','Anniversary Date|hidden-4',
-    'Select Plan|radio-1','Recipient Name (1) | Legal Company Name|text-4','Brief Description of Your Business|text-6',
-    'Recipient Name (2)|text-1','Recipient Name (3)|text-3','Recipient Name (4)|text-2','Recipient Name (5)|text-9',
+    'Plan ID|hidden-1','Account Status|hidden-2','Registration Date|hidden-4','Anniversary Date|hidden-5',
+    'Select Plan|radio-1','Recipient Name (1) | Legal Company Name|text-2','Brief Description of Your Business|text-3',
+    'Recipient Name (2)|text-4','Recipient Name (3)|text-5','Recipient Name (4)|text-6','Recipient Name (5)|text-7',
     'First Name|name-1-first-name','Last Name|name-1-last-name','Email Address|email-1','Phone|phone-1',
-    'Street Address|address-1-street_address','City|address-1-city','Province|address-1-state','Postal Code|address-1-zip',
+    'Street Address|address-1-street_address','City|address-1-city','State/Province|address-1-state','ZIP / Postal code|address-1-zip',
     '(1) Legal Full Name|name-2','(2) Legal Full Name|name-3','(3) Legal Full Name|name-4',
-    'How did you hear about us?|radio-2','Grand Total|calculation-8','stripe-ocs|stripe-ocs-1',
+    "How'd you find us?|radio-3",'Grand Total|calculation-3','stripe-ocs|stripe-ocs-1',
     'Government Issued ID|upload-1','Verified','planName','Term','grandTotal','mailsAllowed','parcelsAllowed',
     'mailsUsed','parcelsUsed','maxRecipients','Forwarding','Scanning','customerNotes'
   ];
@@ -2370,8 +2370,8 @@ function renderStatsTab(forceRefresh){
 }
 
 function buildStats(){
-  const active=planData.filter(c=>(c['Account Status|hidden-3']||'ACTIVE')==='ACTIVE');
-  const inactive=planData.filter(c=>(c['Account Status|hidden-3']||'')!=='ACTIVE');
+  const active=planData.filter(c=>(c['Account Status|hidden-2']||'ACTIVE')==='ACTIVE');
+  const inactive=planData.filter(c=>(c['Account Status|hidden-2']||'')!=='ACTIVE');
 
   function parseGrandTotal(v){const n=parseFloat(v);if(!isNaN(n))return n;const m=String(v).match(/,([\d.]+)\)\s*$/);return m?parseFloat(m[1]):0;}
   const fmtCAD=v=>'$'+v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
@@ -2385,11 +2385,11 @@ function buildStats(){
   // New clients this month vs last
   const now=new Date(),thisMonth=now.getMonth(),thisYear=now.getFullYear();
   const lastMonth=thisMonth===0?11:thisMonth-1,lastYear=thisMonth===0?thisYear-1:thisYear;
-  const newThisMonth=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-2']||'');return !isNaN(d)&&d.getMonth()===thisMonth&&d.getFullYear()===thisYear;}).length;
-  const newLastMonth=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-2']||'');return !isNaN(d)&&d.getMonth()===lastMonth&&d.getFullYear()===lastYear;}).length;
+  const newThisMonth=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-4']||'');return !isNaN(d)&&d.getMonth()===thisMonth&&d.getFullYear()===thisYear;}).length;
+  const newLastMonth=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-4']||'');return !isNaN(d)&&d.getMonth()===lastMonth&&d.getFullYear()===lastYear;}).length;
   const newDiff=newThisMonth-newLastMonth;
-  const newThisYear=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-2']||'');return !isNaN(d)&&d.getFullYear()===thisYear;}).length;
-  const newLastYear=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-2']||'');return !isNaN(d)&&d.getFullYear()===thisYear-1;}).length;
+  const newThisYear=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-4']||'');return !isNaN(d)&&d.getFullYear()===thisYear;}).length;
+  const newLastYear=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-4']||'');return !isNaN(d)&&d.getFullYear()===thisYear-1;}).length;
   const yearDiff=newThisYear-newLastYear;
   const unverified=planData.filter(c=>!(c['Verified']||'')).length;
   const pendingMailItems=mailData.filter(m=>ACTIVE_STATUSES.includes(m['Status|hidden-3']||'')&&(m['Item Type|radio-1']||'')==='Mail').length;
@@ -2435,7 +2435,7 @@ function buildStats(){
 
   // How did you hear
   const sourceMap={};
-  planData.forEach(c=>{const s=(c['How did you hear about us?|radio-2']||'').trim();if(s)sourceMap[s]=(sourceMap[s]||0)+1;});
+  planData.forEach(c=>{const s=(c["How'd you find us?|radio-3"]||'').trim();if(s)sourceMap[s]=(sourceMap[s]||0)+1;});
   const sourceTotal=Object.values(sourceMap).reduce((a,b)=>a+b,0);
   const pal=['#2563eb','#8C1424','#7c3aed','#16a34a','#d97706','#0891b2','#be185d','#4f46e5'];
   const sourceRows=Object.entries(sourceMap).sort((a,b)=>b[1]-a[1]).map(([name,count],i)=>{
@@ -2536,7 +2536,7 @@ function loadStatsInsights(){
   body.style.display='block';
 
   try{
-    const active=planData.filter(c=>(c['Account Status|hidden-3']||'ACTIVE')==='ACTIVE');
+    const active=planData.filter(c=>(c['Account Status|hidden-2']||'ACTIVE')==='ACTIVE');
     const fmtD=d=>{if(!d)return '';try{return new Date(d).toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'});}catch(e){return '';}};
 
     // Top mail recipients
@@ -2544,7 +2544,7 @@ function loadStatsInsights(){
     mailData.forEach(m=>{const pid=String(m['Plan ID|hidden-5']||'');mailByPid[pid]=(mailByPid[pid]||0)+1;});
     const topMail=Object.entries(mailByPid).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([pid,cnt])=>{
       const c=getClientByPid(pid);
-      const name=c?c['Recipient Name (1) | Legal Company Name|text-4']||pid:pid;
+      const name=c?c['Recipient Name (1) | Legal Company Name|text-2']||pid:pid;
       const plan=c?c['planName']||'':'';
       return '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:0.5px solid var(--border2)">'
         +'<span style="font-size:12px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;cursor:pointer" onclick="jumpToClient(\''+esc(pid)+'\')">'+esc(name)+(plan?' ('+esc(plan)+')':'')+'</span>'
@@ -2553,12 +2553,12 @@ function loadStatsInsights(){
     }).join('');
 
     // Longest standing clients
-    const withDates=planData.filter(c=>c['Registration Date|hidden-2']).map(c=>{
-      const d=new Date(c['Registration Date|hidden-2']);return{c,d,ms:isNaN(d)?0:Date.now()-d.getTime()};
+    const withDates=planData.filter(c=>c['Registration Date|hidden-4']).map(c=>{
+      const d=new Date(c['Registration Date|hidden-4']);return{c,d,ms:isNaN(d)?0:Date.now()-d.getTime()};
     }).filter(x=>x.ms>0).sort((a,b)=>b.ms-a.ms).slice(0,5);
     const fmtTenure=ms=>{const days=Math.floor(ms/86400000),y=Math.floor(days/365),mo=Math.floor((days%365)/30);return y>0?y+' yr'+(mo>0?' '+mo+' mo':''):mo>0?mo+' mo':days+' day'+(days!==1?'s':'');};
     const topOldest=withDates.map(({c,ms})=>{
-      const pid=c['Plan ID|hidden-5'],name=c['Recipient Name (1) | Legal Company Name|text-4']||pid;
+      const pid=c['Plan ID|hidden-1'],name=c['Recipient Name (1) | Legal Company Name|text-2']||pid;
       const plan=c['planName']||'';
       return '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:0.5px solid var(--border2)">'
         +'<span style="font-size:12px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;cursor:pointer" onclick="jumpToClient(\''+esc(String(pid))+'\')">'+esc(name)+(plan?' ('+esc(plan)+')':'')+'</span>'
@@ -2589,10 +2589,10 @@ function loadStatsInsights(){
     // Growth this month vs last
     const now=new Date(),tm=now.getMonth(),ty=now.getFullYear();
     const lm=tm===0?11:tm-1,ly=tm===0?ty-1:ty;
-    const newThis=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-2']||'');return !isNaN(d)&&d.getMonth()===tm&&d.getFullYear()===ty;}).length;
-    const newLast=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-2']||'');return !isNaN(d)&&d.getMonth()===lm&&d.getFullYear()===ly;}).length;
-    const newThisYear=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-2']||'');return !isNaN(d)&&d.getFullYear()===ty;}).length;
-    const newLastYear=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-2']||'');return !isNaN(d)&&d.getFullYear()===ty-1;}).length;
+    const newThis=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-4']||'');return !isNaN(d)&&d.getMonth()===tm&&d.getFullYear()===ty;}).length;
+    const newLast=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-4']||'');return !isNaN(d)&&d.getMonth()===lm&&d.getFullYear()===ly;}).length;
+    const newThisYear=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-4']||'');return !isNaN(d)&&d.getFullYear()===ty;}).length;
+    const newLastYear=planData.filter(c=>{const d=new Date(c['Registration Date|hidden-4']||'');return !isNaN(d)&&d.getFullYear()===ty-1;}).length;
     const yearDiff=newThisYear-newLastYear;
 
     // Mail volume past 12 months
@@ -2605,7 +2605,7 @@ function loadStatsInsights(){
     // Signups past 12 months
     const signupMonths={};
     Object.keys(mailMonths).forEach(k=>signupMonths[k]=0);
-    planData.forEach(c=>{const d=new Date(c['Registration Date|hidden-2']||'');if(isNaN(d))return;const key=d.getFullYear()+'-'+(d.getMonth()+1);if(signupMonths[key]!==undefined)signupMonths[key]++;});
+    planData.forEach(c=>{const d=new Date(c['Registration Date|hidden-4']||'');if(isNaN(d))return;const key=d.getFullYear()+'-'+(d.getMonth()+1);if(signupMonths[key]!==undefined)signupMonths[key]++;});
     const signupVals=Object.values(signupMonths),maxSignup=Math.max(...signupVals,1);
 
     const barChart=(vals,labels,color,maxH=80)=>'<div style="display:flex;align-items:flex-end;gap:5px;height:'+(maxH+24)+'px">'
@@ -2726,7 +2726,7 @@ function togglePendingReviewFilter(){
     const planF=document.getElementById('clientsPlanFilter').value||'';
     const filtered=allClientsCache.filter(c=>{
       const planMatch=!planF||(c['planName']||'').trim()===planF;
-      const searchFields=[c['Recipient Name (1) | Legal Company Name|text-4'],c['Recipient Name (2)|text-1'],c['Recipient Name (3)|text-3'],c['Recipient Name (4)|text-2'],c['Recipient Name (5)|text-9'],c['Brief Description of Your Business|text-6'],c['Email Address|email-1'],String(c['Phone|phone-1']||''),(c['First Name|name-1-first-name']||'')+' '+(c['Last Name|name-1-last-name']||'')].map(v=>(v||'').toLowerCase());
+      const searchFields=[c['Recipient Name (1) | Legal Company Name|text-2'],c['Recipient Name (2)|text-4'],c['Recipient Name (3)|text-5'],c['Recipient Name (4)|text-6'],c['Recipient Name (5)|text-7'],c['Brief Description of Your Business|text-3'],c['Email Address|email-1'],String(c['Phone|phone-1']||''),(c['First Name|name-1-first-name']||'')+' '+(c['Last Name|name-1-last-name']||'')].map(v=>(v||'').toLowerCase());
       const textMatch=!q||searchFields.some(f=>f.includes(q));
       return !(c['Verified']||'')&&planMatch&&textMatch;
     });
@@ -2735,7 +2735,7 @@ function togglePendingReviewFilter(){
 }
 
 async function setVerification(newStatus){
-  const c=currentClient,pid=c['Plan ID|hidden-5'];
+  const c=currentClient,pid=c['Plan ID|hidden-1'];
   try{
     const params=new URLSearchParams({action:'updateVerification',planId:pid,newStatus});
     const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
@@ -2754,7 +2754,7 @@ async function setVerification(newStatus){
 }
 
 async function saveAndApprove(){
-  const c=currentClient,pid=c['Plan ID|hidden-5'];
+  const c=currentClient,pid=c['Plan ID|hidden-1'];
   const url=document.getElementById('newIdUrl').value.trim();
   if(!url){showToast('Please paste a URL first','error');return;}
   try{
@@ -2811,18 +2811,18 @@ function verifyAdminPwd(){
 function generateProofOfAddress(){
   const c=currentClient;
   if(!c){showToast('No client selected','error');return;}
-  const company=c['Recipient Name (1) | Legal Company Name|text-4']||'—';
+  const company=c['Recipient Name (1) | Legal Company Name|text-2']||'—';
   const adminName=((c['First Name|name-1-first-name']||'')+' '+(c['Last Name|name-1-last-name']||'')).trim()||'—';
   const email=c['Email Address|email-1']||'—';
   const planKey=c['Select Plan|radio-1']||'';
   const term=c['Term']||'Monthly';
   const grandTotal=parseFloat(c['grandTotal'])||0;
-  const regDate=c['Registration Date|hidden-2']||'—';
-  const anniversaryDate=c['Anniversary Date|hidden-4']||'—';
-  const pid=c['Plan ID|hidden-5']||'—';
+  const regDate=c['Registration Date|hidden-4']||'—';
+  const anniversaryDate=c['Anniversary Date|hidden-5']||'—';
+  const pid=c['Plan ID|hidden-1']||'—';
   const stripeId=c['stripe-ocs|stripe-ocs-1']||'—';
   const address='448 Gibraltar Dr., Mississauga, ON L5T 2N8';
-  const status=c['Account Status|hidden-3']||'ACTIVE';
+  const status=c['Account Status|hidden-2']||'ACTIVE';
 
   const fmtDate=d=>{if(!d||d==='—')return '—';try{const dt=new Date(d);return isNaN(dt)?String(d):dt.toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'});}catch(e){return String(d);}};
   const today=new Date();
@@ -2837,11 +2837,11 @@ function generateProofOfAddress(){
   const hasScanning=(planRow['Scanning']||'').toLowerCase()==='yes';
 
   const recipFields=[
-    ['Recipient 1 — Legal Company Name',c['Recipient Name (1) | Legal Company Name|text-4']],
-    ['Recipient 2',c['Recipient Name (2)|text-1']],
-    ['Recipient 3',c['Recipient Name (3)|text-3']],
-    ['Recipient 4',c['Recipient Name (4)|text-2']],
-    ['Recipient 5',c['Recipient Name (5)|text-9']],
+    ['Recipient 1 — Legal Company Name',c['Recipient Name (1) | Legal Company Name|text-2']],
+    ['Recipient 2',c['Recipient Name (2)|text-4']],
+    ['Recipient 3',c['Recipient Name (3)|text-5']],
+    ['Recipient 4',c['Recipient Name (4)|text-6']],
+    ['Recipient 5',c['Recipient Name (5)|text-7']],
   ];
   const filledRecips=recipFields.filter(([,v])=>v);
   const emptyCount=recipFields.length-filledRecips.length;
@@ -2965,7 +2965,7 @@ function renderDocsTab(forceRefresh){
       const status=d['status|hidden-4']||'Pending';
       const isPending=status==='Pending';
       const client=getClientByPid(pid);
-      const company=client?(client['Recipient Name (1) | Legal Company Name|text-4']||'—'):'—';
+      const company=client?(client['Recipient Name (1) | Legal Company Name|text-2']||'—'):'—';
       const statusBadge=isPending
         ?'<span style="font-size:10px;font-weight:600;padding:2px 9px;border-radius:99px;background:#faeeda;color:#854f0b">Pending</span>'
         :'<span style="font-size:10px;font-weight:600;padding:2px 9px;border-radius:99px;background:#dcfce7;color:#166534">Reviewed</span>';
@@ -3087,7 +3087,7 @@ function filterMailbox(q){
     if(!q)return true;
     const pid=String(m['Plan ID|hidden-5']||'');
     const client=getClientByPid(pid);
-    const company=client?(client['Recipient Name (1) | Legal Company Name|text-4']||''):'';
+    const company=client?(client['Recipient Name (1) | Legal Company Name|text-2']||''):'';
     return [company,m['Recipient Name|text-1']||'',m['Sender Name|text-2']||'',pid,m['Mail ID|hidden-4']||'',m['Location of Mail|text-4']||'',m['Internal Note|text-3']||'',m['Note to Customer|textarea-1']||''].some(f=>f.toLowerCase().includes(q));
   });
   renderMailboxTable(filtered);
@@ -3110,7 +3110,7 @@ function renderMailboxTable(allItems){
   const sortBy=(document.getElementById('mailboxSortBy')||{value:'date_desc'}).value||'date_desc';
   const sorted=[...items].sort((a,b)=>{
     if(sortBy==='overdue'){const da=new Date(a['Mail must be collected by|date-1']||a['Parcel must be collected by|date-3']||'9999');const db=new Date(b['Mail must be collected by|date-1']||b['Parcel must be collected by|date-3']||'9999');return da-db;}
-    if(sortBy==='company'){const ca=getClientByPid(String(a['Plan ID|hidden-5']||''));const cb2=getClientByPid(String(b['Plan ID|hidden-5']||''));return (ca?ca['Recipient Name (1) | Legal Company Name|text-4']||'':'').localeCompare(cb2?cb2['Recipient Name (1) | Legal Company Name|text-4']||'':'');}
+    if(sortBy==='company'){const ca=getClientByPid(String(a['Plan ID|hidden-1']||''));const cb2=getClientByPid(String(b['Plan ID|hidden-1']||''));return (ca?ca['Recipient Name (1) | Legal Company Name|text-2']||'':'').localeCompare(cb2?cb2['Recipient Name (1) | Legal Company Name|text-2']||'':'');}
     const da=new Date(a['Notification Date|hidden-1']||0);const db=new Date(b['Notification Date|hidden-1']||0);
     return sortBy==='date_asc'?da-db:db-da;
   });
@@ -3157,7 +3157,7 @@ function renderMailboxTable(allItems){
     const note=m['Internal Note|text-3']||'',cnote=m['Note to Customer|textarea-1']||'';
     const status=m['Status|hidden-3']||'';
     const client=getClientByPid(pid);
-    const company=client?(client['Recipient Name (1) | Legal Company Name|text-4']||'Unknown'):'Plan ID: '+pid;
+    const company=client?(client['Recipient Name (1) | Legal Company Name|text-2']||'Unknown'):'Plan ID: '+pid;
     const ac=TC[itype]||'#9CA3AF',bs=TB[itype]||'background:#F3F4F6;color:#374151',bl=TL[itype]||itype;
     const fmtD=d=>{if(!d)return '';try{return new Date(d).toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'});}catch(e){return String(d);}};
     const loc=m['Location of Mail|text-4']||'';

@@ -659,7 +659,7 @@ select:not(.mbx-status-sel):not(.cta-select){-webkit-appearance:none;-moz-appear
     <div class="tab-pane" id="pane-mailbox">
       <div style="background:var(--white);border-radius:12px;border:1px solid var(--border);overflow:hidden">
         <div style="padding:14px 16px 0;border-bottom:1px solid var(--border2)">
-          <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:8px;align-items:center;margin-bottom:12px">
+          <div style="display:grid;grid-template-columns:1fr auto auto auto auto;gap:8px;align-items:center;margin-bottom:12px">
             <input id="mailboxFilter" type="text" placeholder="Search company, sender, recipient, ID…" autocomplete="off"
               style="padding:8px 12px;border:0.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;background:var(--bg2);color:var(--text);width:100%"
               oninput="filterMailbox(this.value)">
@@ -669,6 +669,12 @@ select:not(.mbx-status-sel):not(.cta-select){-webkit-appearance:none;-moz-appear
               <option value="Mail">Mail</option>
               <option value="Confidential Mail">Confidential</option>
               <option value="Parcel">Parcel</option>
+            </select>
+            <select id="mailboxClientStatusFilter" onchange="filterMailbox(document.getElementById('mailboxFilter').value)"
+              style="padding:8px 10px;border:0.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:12px;outline:none;background-color:var(--bg2);color:var(--text);cursor:pointer">
+              <option value="">All clients</option>
+              <option value="active">Active clients only</option>
+              <option value="inactive">Inactive clients only</option>
             </select>
             <select id="mailboxSortBy" onchange="filterMailbox(document.getElementById('mailboxFilter').value)"
               style="padding:8px 10px;border:0.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:12px;outline:none;background-color:var(--bg2);color:var(--text);cursor:pointer">
@@ -1286,8 +1292,8 @@ function renderDetail(c){
         <div class="detail-header-left" style="width:100%">
           <div class="detail-title" title="${esc(company)}">${esc(company)}</div>
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px;padding-bottom:4px">
-            <button class="btn btn-ghost btn-sm" onclick="generateProofOfAddress()" style="border-color:var(--border)"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-doc"/></svg> Proof of Address</button>
-            ${hasLegalHandling?'<button class="btn btn-ghost btn-sm" onclick="generateLegalReceipt()" style="border-color:var(--border)"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-scales"/></svg> Legal Receipt</button>':''}
+            <button class="btn btn-ghost btn-sm" ${isActive?'onclick="generateProofOfAddress()"':'disabled title="Account is inactive — document unavailable"'} style="border-color:var(--border)${isActive?'':';opacity:.45;cursor:not-allowed'}"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-doc"/></svg> Proof of Address</button>
+            ${hasLegalHandling?'<button class="btn btn-ghost btn-sm" '+(isActive?'onclick="generateLegalReceipt()"':'disabled title="Account is inactive — document unavailable"')+' style="border-color:var(--border)'+(isActive?'':';opacity:.45;cursor:not-allowed')+'"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-scales"/></svg> Legal Receipt</button>':''}
             ${isAdminMode?'<a class="btn btn-ghost btn-sm" href="https://yyzoffices.com/yyz-dashboard-7/?Plan_ID='+esc(pid)+'&email='+encodeURIComponent(email)+'&Company_Legal_Name='+encodeURIComponent(company)+'" target="_blank" style="text-decoration:none"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-gear"/></svg> Admin Action</a>':''}
             ${isAdminMode?'<button class="btn btn-outline btn-sm" onclick="promptAdminPwd()"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-pencil"/></svg> Edit Profile</button>':''}
             ${isAdminMode?'<button class="btn btn-sm '+(isActive?'btn-danger':'btn-green')+'" id="toggleBtn" onclick="toggleStatus()">'+(isActive?'<svg class="ic ic-muted" aria-hidden="true"><use href="#i-pause"/></svg> Deactivate':'&#9654; Activate')+'</button>':''}
@@ -3595,6 +3601,7 @@ function verifyAdminPwd(){
 function generateProofOfAddress(){
   const c=currentClient;
   if(!c){showToast('No client selected','error');return;}
+  if((c['Account Status|hidden-2']||'ACTIVE')!=='ACTIVE'){showToast('Account is inactive — document unavailable','error');return;}
   const company=c['Recipient Name (1) | Legal Company Name|text-2']||'—';
   const adminName=((c['First Name|name-1-first-name']||'')+' '+(c['Last Name|name-1-last-name']||'')).trim()||'—';
   const email=c['Email Address|email-1']||'—';
@@ -3607,11 +3614,14 @@ function generateProofOfAddress(){
   const stripeId=c['stripe-ocs|stripe-ocs-1']||'—';
   const address='9- 448 Gibraltar Dr., Mississauga, ON L5T 2N8';
   const status=c['Account Status|hidden-2']||'ACTIVE';
+  const maxR=parseInt(c['maxRecipients'])||5;
 
   const fmtDate=d=>{if(!d||d==='—')return '—';try{const dt=new Date(d);return isNaN(dt)?String(d):dt.toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'});}catch(e){return String(d);}};
   const today=new Date();
   const issuedDate=today.toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'});
+  const fileDate=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
   const docId='POA-'+pid+'-'+today.getFullYear()+String(today.getMonth()+1).padStart(2,'0')+String(today.getDate()).padStart(2,'0');
+  const fileName=pid+'_POA_'+fileDate;
 
   const planRow=planSetupData.find(p=>p['planName']===planKey)||{};
   const planFriendly=planRow['friendlyName']||planKey||'—';
@@ -3628,23 +3638,27 @@ function generateProofOfAddress(){
     ['Recipient 5',c['Recipient Name (5)|text-7']],
   ];
   const filledRecips=recipFields.filter(([,v])=>v);
-  const emptyCount=recipFields.length-filledRecips.length;
+  const filledCount=filledRecips.length;
 
-  const recipRows=filledRecips.map(([label,val])=>`<tr><td style="padding:5px 0;width:220px;color:#666;border-bottom:1px solid #f0eded;font-size:12px">${label}</td><td style="padding:5px 0;font-weight:600;color:#111;border-bottom:1px solid #f0eded;font-size:12px">${val}</td></tr>`).join('')
-    +(emptyCount>0?`<tr><td colspan="2" style="padding:5px 0;font-size:11px;color:#aaa;font-style:italic">Recipient${emptyCount>1?'s':''} ${filledRecips.length+1}${emptyCount>1?' – '+(filledRecips.length+emptyCount):''} not registered</td></tr>`:'');
+  const recipRows=filledRecips.map(([label,val])=>`<tr><td style="padding:5px 0;width:220px;color:#666;border-bottom:1px solid #f0eded;font-size:12px">${label}</td><td style="padding:5px 0;font-weight:600;color:#111;border-bottom:1px solid #f0eded;font-size:12px">${val}</td></tr>`).join('');
 
-  const parcelNote=planParcels>0?` Parcel acceptance is included on this plan.`:'';
+  const legalEligible=(planRow['legalHandling']||'').toLowerCase()==='yes';
+  const legalApproved=(c['legalHandlingStatus']||'').trim().toLowerCase()==='approved';
+  const legalParas=legalEligible&&legalApproved
+    ?'<p class="address-note">For eligible plans, YYZ Offices accepts legal documents, government correspondence, regulatory notices, and service of process as an administrative receipt and forwarding service. YYZ Offices does not provide legal advice, act as legal counsel or representative, monitor legal deadlines, or assume responsibility for the client\'s legal or regulatory obligations.</p><p class="address-note">Identified legal documents are logged and the client is notified by email. YYZ Offices\' responsibility for the legal document ends when that notification is sent, subject to the terms of the Legal Document Receipt and Forwarding Addendum.</p>'
+    :'<p class="address-note">This account is not authorized to accept legal or court documents on behalf of the client.</p>';
+  const parcelPara=planParcels>0?'<p class="address-note">Parcel acceptance is included within the applicable plan limits.</p>':'';
   const extraServices=[];
   if(hasForwarding)extraServices.push('Mail Forwarding');
   if(hasScanning)extraServices.push('Mail Scanning');
 
   const html=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<title>Proof of Address — ${company}</title>
+<title>${fileName}</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,Helvetica,sans-serif;color:#111;font-size:12px;line-height:1.45;background:#fff}
-.page{max-width:720px;margin:0 auto;padding:24px 32px}
-@media print{body{margin:0}.page{padding:18px 24px;max-width:100%}@page{margin:0.8cm 1cm;size:A4}}
+.page{max-width:720px;margin:0 auto;padding:20px 24px}
+@media print{body{margin:0}.page{padding:12px 16px;max-width:100%}@page{margin:0.4cm 0.6cm;size:A4}}
 table{border-collapse:collapse;width:100%}
 td{vertical-align:top}
 .section-title{font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:0.08em;color:#1e3a5f;margin-bottom:6px;margin-top:12px}
@@ -3691,11 +3705,12 @@ tr:last-child td{border-bottom:none}
   <div style="font-size:16px;font-weight:bold;color:#111;margin-bottom:4px">${address}</div>
   <div style="font-size:10px;color:#888">Canada</div>
 </div>
-<p class="address-note">This is a staffed virtual mailing address located at a physical building. Mail and parcels are received and managed on-site by YYZ Offices staff; however, YYZ Offices does not act as a registered or legal agent and does not accept service of process or other legal documents on behalf of clients.${parcelNote}</p>
+<p class="address-note">This is a staffed virtual mailing address located at a physical commercial building. Mail and parcels are received and managed on-site by YYZ Offices staff.</p>
+${legalParas}
+${parcelPara}
 
-<div class="section-title">Registered Recipients</div>
+<div class="section-title">Registered Recipients <span style="text-transform:none;font-weight:normal;letter-spacing:0;color:#999">(${filledCount} of ${maxR} used)</span></div>
 <table>${recipRows}</table>
-<p class="note">Mail addressed to unlisted names may be refused or subject to a $5.00 name addition fee.</p>
 
 <div class="section-title">Service Confirmation</div>
 <table>
@@ -3705,6 +3720,7 @@ tr:last-child td{border-bottom:none}
     <td style="width:25%;padding:6px 8px;border-bottom:1px solid #f5f5f7;vertical-align:top"><div style="font-size:11px;color:#666;margin-bottom:3px">Parcel Items / Period</div><div style="font-weight:600">${planParcels>0?planParcels:'<span style="color:#aaa;font-weight:400;font-style:italic">Not included</span>'}</div></td>
     <td style="width:25%;padding:6px 0 6px 8px;border-bottom:1px solid #f5f5f7;vertical-align:top"><div style="font-size:11px;color:#666;margin-bottom:3px">Transaction ID</div><div style="font-weight:400;font-family:monospace;font-size:11px">${stripeId&&stripeId!=='—'?stripeId:'<span style="color:#aaa;font-style:italic">N/A</span>'}</div></td>
   </tr>
+  <tr><td colspan="4" style="padding:6px 0"><span style="font-size:11px;color:#666">Recipients Registered: </span><span style="font-weight:600">${filledCount} / ${maxR}</span></td></tr>
   ${extraServices.length?`<tr><td colspan="4" style="padding:6px 0"><span style="font-size:11px;color:#666">Additional Services: </span><span style="font-weight:600">${extraServices.join(', ')}</span></td></tr>`:''}
 </table>
 
@@ -3714,11 +3730,12 @@ tr:last-child td{border-bottom:none}
 
 <table style="border-top:1px solid #ede8e8;padding-top:12px;margin-top:4px"><tr>
   <td style="font-size:10px;color:#aaa">YYZ Offices &nbsp;&middot;&nbsp; yyzoffices.com &nbsp;&middot;&nbsp; support@yyzoffices.com &nbsp;&middot;&nbsp; (416) 781-9826</td>
-  <td style="text-align:right;font-size:10px;color:#aaa">Issued: ${issuedDate}</td>
 </tr></table>
 
 </div></body></html>`;
 
+  navigator.clipboard.writeText(fileName).catch(()=>{});
+  showToast('Filename <svg class="ic ic-muted" aria-hidden="true"><use href="#i-clipboard"/></svg> copied — paste it into the save dialog','success');
   const win=window.open('','_blank','width=800,height=900');
   win.document.write(html);
   win.document.close();
@@ -3731,6 +3748,7 @@ tr:last-child td{border-bottom:none}
 function generateLegalReceipt(){
   const c=currentClient;
   if(!c){showToast('No client selected','error');return;}
+  if((c['Account Status|hidden-2']||'ACTIVE')!=='ACTIVE'){showToast('Account is inactive — document unavailable','error');return;}
   if((c['legalHandlingStatus']||'').trim().toLowerCase()!=='approved'){showToast('Legal handling not approved for this client','error');return;}
   const _esc=s=>String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const company=c['Recipient Name (1) | Legal Company Name|text-2']||'\u2014';
@@ -3746,6 +3764,8 @@ function generateLegalReceipt(){
   // Certificate ID: Plan ID + Stripe transaction ID (falls back to date-stamp if no stripe id)
   const certSuffix=stripeId||('LR'+today.getFullYear()+String(today.getMonth()+1).padStart(2,'0')+String(today.getDate()).padStart(2,'0'));
   const certId=pid+'-'+certSuffix;
+  const fileDate=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  const fileName=pid+'_LDR_'+fileDate;
 
   // Registered recipients (skip empties) -> chips
   const recips=[
@@ -3762,9 +3782,9 @@ function generateLegalReceipt(){
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Legal Document Receipt \u2014 YYZ Offices</title>
+<title>${fileName}</title>
 <style>
-  @page { size: legal; margin: 0.5in; }
+  @page { size: legal; margin: 0.3in; }
   html, body { margin: 0; padding: 0; }
   * { box-sizing: border-box; }
   .sheet {
@@ -3772,7 +3792,7 @@ function generateLegalReceipt(){
     max-width: 800px;
     margin: 0 auto;
     color: #14171d;
-    padding: 18px 24px;
+    padding: 14px 18px;
   }
   @media print {
     .sheet { padding: 0; max-width: 100%; page-break-inside: avoid; }
@@ -3783,7 +3803,7 @@ function generateLegalReceipt(){
 <body>
 <div class="sheet">
 <div style="background: #ffffff; border: 1px solid #14171d; border-radius: 14px; padding: 6px;">
-<div style="border: 1px solid #dfe2e7; border-radius: 10px; padding: 22px 44px;">
+<div style="border: 1px solid #dfe2e7; border-radius: 10px; padding: 20px 26px;">
 <div style="text-align: center; margin-bottom: 14px;">
 <div style="font-size: 13px; font-weight: bold; letter-spacing: 0.3em; color: #14171d;">YYZ OFFICES</div>
 <div style="width: 26px; height: 1px; background: #14171d; margin: 9px auto 0;"> </div>
@@ -3846,15 +3866,14 @@ function generateLegalReceipt(){
 </body>
 </html>`;
 
+  navigator.clipboard.writeText(fileName).catch(()=>{});
+  showToast('Filename <svg class="ic ic-muted" aria-hidden="true"><use href="#i-clipboard"/></svg> copied — paste it into the save dialog','success');
   const win=window.open('','_blank','width=800,height=900');
   win.document.write(html);
   win.document.close();
   win.focus();
   setTimeout(()=>win.print(),400);
 }
-
-
-// DOC REQUESTS TAB
 function renderDocsTab(forceRefresh){
   const body=document.getElementById('docsBody');
   body.innerHTML='<div class="state-box"><div class="spinner"></div><div class="state-label">Loading\u2026</div></div>';
@@ -3989,6 +4008,7 @@ function renderMailboxTab(forceRefresh){
     mailboxCache=mailData;
     document.getElementById('mailboxFilter').value='';
     document.getElementById('mailboxTypeFilter').value='';
+    document.getElementById('mailboxClientStatusFilter').value='';
     document.getElementById('mailboxSortBy').value='date_desc';
     const _mbxPending=mailboxCache.filter(m=>ACTIVE_STATUSES.includes(m['Status|hidden-3']||'')).length;
     document.getElementById('mailboxCount').textContent=_mbxPending||'\u2014';
@@ -4001,10 +4021,17 @@ function renderMailboxTab(forceRefresh){
 
 function filterMailbox(q){
   const typeF=(document.getElementById('mailboxTypeFilter')||{value:''}).value||'';
+  const statusF=(document.getElementById('mailboxClientStatusFilter')||{value:''}).value||'';
   q=(q||'').toLowerCase().trim();
   const allMail=mailData;
   const filtered=allMail.filter(m=>{
     if(typeF&&(m['Item Type|radio-1']||'')!==typeF)return false;
+    if(statusF){
+      const client=getClientByPid(String(m['Plan ID|hidden-5']||''));
+      const isActiveClient=!client||(client['Account Status|hidden-2']||'ACTIVE')==='ACTIVE';
+      if(statusF==='active'&&!isActiveClient)return false;
+      if(statusF==='inactive'&&isActiveClient)return false;
+    }
     if(!q)return true;
     const pid=String(m['Plan ID|hidden-5']||'');
     const client=getClientByPid(pid);
@@ -4082,6 +4109,8 @@ function renderMailboxTable(allItems){
     const status=m['Status|hidden-3']||'';
     const client=getClientByPid(pid);
     const company=client?(client['Recipient Name (1) | Legal Company Name|text-2']||'Unknown'):'Plan ID: '+pid;
+    const clientInactive=!!(client&&(client['Account Status|hidden-2']||'ACTIVE')!=='ACTIVE');
+    const inactiveBadge=clientInactive?'<span style="font-size:10px;font-weight:600;padding:2px 9px;border-radius:99px;background:#fee2e2;color:#991b1b">Inactive</span>':'';
     const ac=TC[itype]||'#9CA3AF',bs=TB[itype]||'background:#F3F4F6;color:#374151',bl=TL[itype]||itype;
     const fmtD=d=>{if(!d)return '';try{return new Date(d).toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'});}catch(e){return String(d);}};
     const loc=m['Location of Mail|text-4']||'';
@@ -4104,6 +4133,7 @@ function renderMailboxTable(allItems){
         +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'
         +'<span style="font-size:10px;font-weight:600;padding:2px 9px;border-radius:6px;'+bs+'">'+bl+'</span>'
         +'<span style="font-size:13px;font-weight:700;color:#111">'+esc(company)+'</span>'
+        +inactiveBadge
         +(recip?'<span style="font-size:12px;color:#333">\u2192 '+esc(recip)+'</span>':'')
         +'</div>'
         +'<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
@@ -4132,6 +4162,7 @@ function renderMailboxTable(allItems){
       +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap">'
       +'<span style="font-size:10px;font-weight:600;padding:2px 9px;border-radius:6px;'+bs+'">'+bl+'</span>'
       +'<span style="font-size:14px;font-weight:700;color:#111">'+esc(company)+'</span>'
+      +inactiveBadge
       +(recip?'<span style="font-size:13px;color:#333">\u2192 '+esc(recip)+'</span>':'')
       +(sender?'<span style="font-size:12px;color:#555">from '+esc(sender)+'</span>':'')
       +'</div>'
@@ -4184,6 +4215,9 @@ function renderMailboxGrouped(items,rowHtmlByMid){
   ordered.forEach((g,gi)=>{
     const client=getClientByPid(g.pid);
     const company=client?(client['Recipient Name (1) | Legal Company Name|text-2']||'Unknown'):'Plan ID: '+g.pid;
+    const adminFull=client?((client['First Name|name-1-first-name']||'')+' '+(client['Last Name|name-1-last-name']||'')).trim():'';
+    const grpInactive=!!(client&&(client['Account Status|hidden-2']||'ACTIVE')!=='ACTIVE');
+    const grpInactiveBadge=grpInactive?'<span style="font-size:10px;font-weight:600;padding:2px 9px;border-radius:99px;background:#fee2e2;color:#991b1b;flex-shrink:0">Inactive</span>':'';
     const n=g.items.length;
     const overdueCount=g.items.filter(m=>_overdueDays(m)>0).length;
     const rowsHtml=g.items.map(m=>rowHtmlByMid[m['Mail ID|hidden-4']]||'').join('');
@@ -4194,8 +4228,10 @@ function renderMailboxGrouped(items,rowHtmlByMid){
       +'<div onclick="toggleMbxGroupRow('+gi+')" onmouseover="this.style.background=\'#fafbfc\'" onmouseout="this.style.background=\'#fff\'" style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:#fff;cursor:pointer;user-select:none;transition:background .12s">'
         +'<div style="display:flex;align-items:center;gap:11px;min-width:0">'
           +'<svg class="ic" id="mbxGrpChev'+gi+'" aria-hidden="true" style="width:13px;height:13px;stroke:#c0c0c5;transition:transform .18s;flex-shrink:0"><use href="#i-arrow-right"/></svg>'
-          +'<span style="font-size:15px;font-weight:700;color:#111;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(company)+'</span>'
           +'<span style="font-size:11px;color:#9CA3AF;font-family:monospace;flex-shrink:0">'+esc(g.pid)+'</span>'
+          +'<span style="font-size:15px;font-weight:700;color:#111;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(company)+'</span>'
+          +(adminFull?'<span style="font-size:12px;color:#9CA3AF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">('+esc(adminFull)+')</span>':'')
+          +grpInactiveBadge
         +'</div>'
         +'<div style="display:flex;align-items:center;gap:12px;flex-shrink:0">'+overdueTxt
           +'<span style="font-size:13px;color:#8e8e93">'+n+'</span>'

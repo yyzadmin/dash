@@ -271,6 +271,100 @@ select:not(.mbx-status-sel):not(.cta-select){-webkit-appearance:none;-moz-appear
 .ic{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .ic-green{stroke:#16a34a}.ic-red{stroke:#dc2626}.ic-amber{stroke:#d97706}.ic-blue{stroke:#2563eb}.ic-muted{stroke:currentColor;opacity:.7}
 .ic-dot-red{fill:#dc2626;stroke:none}.ic-dot{fill:currentColor;stroke:none}
+
+/* ===== AFFILIATES & REFERRALS (namespaced aff-) ===== */
+.aff-wrap{max-width:1120px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(48px + env(safe-area-inset-bottom,0px))}
+.aff-topbar{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:12px}
+.aff-topbar h1{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.02em}
+.aff-topbar .sub{font-size:12px;color:var(--muted);margin-top:2px}
+.aff-statrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.aff-strip{display:flex;flex-wrap:wrap;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:12px}
+.aff-cell{flex:1;min-width:108px;padding:11px 16px;border-right:1px solid var(--border2)}
+.aff-cell:last-child{border-right:0}
+.aff-cell .n{font-size:21px;font-weight:700;color:var(--ink);line-height:1}
+.aff-cell .l{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
+.aff-cell.warn{background:var(--amber-bg)}.aff-cell.warn .n,.aff-cell.warn .l{color:var(--amber)}
+.aff-stat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:96px}
+.aff-stat .n{font-size:19px;font-weight:700;color:var(--ink)}
+.aff-stat .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:1px}
+.aff-stat.warn{background:#FEF3C7;border-color:#FDE68A}.aff-stat.warn .n,.aff-stat.warn .l{color:var(--amber)}
+.aff-srcwrap{margin-top:12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:11px 14px}
+.aff-srcwrap .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.aff-bar{display:flex;height:12px;border-radius:99px;overflow:hidden;background:var(--border2)}
+.aff-bar>div{height:100%}
+.aff-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:9px}
+.aff-legend span{font-size:11.5px;color:var(--ink2);display:inline-flex;align-items:center;gap:6px}
+.aff-legend i{width:9px;height:9px;border-radius:2px;flex:none}
+.aff-legend b{color:var(--ink)}
+.aff-note{background:var(--amber-bg);border:1px solid #f0dcae;color:var(--amber);font-size:12px;padding:8px 12px;border-radius:10px;margin-bottom:12px;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+.aff-sample{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);background:var(--amber-bg);padding:1px 6px;border-radius:99px}
+.aff-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.aff-search{flex:1;min-width:200px;position:relative}
+.aff-search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted)}
+.aff-search input{width:100%;border:1px solid var(--border);border-radius:10px;padding:9px 12px 9px 34px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--white)}
+.aff-chips{display:flex;gap:6px;flex-wrap:wrap}
+.aff-chip{font-size:12px;font-weight:600;color:var(--muted);background:var(--white);border:1px solid var(--border);border-radius:99px;padding:7px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.aff-chip.on{background:var(--red);color:#fff;border-color:var(--red)}
+.aff-chip .c{font-size:10px;background:var(--bg2,#F3F4F6);color:var(--muted);border-radius:99px;padding:0 6px;font-weight:700}
+.aff-chip.on .c{background:rgba(255,255,255,.25);color:#fff}
+.aff-filters{display:flex;gap:10px 12px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.aff-fgrp{display:flex;align-items:center;gap:6px}
+.aff-flabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.aff-fsel{position:relative;display:inline-flex}
+.aff-fsel select{appearance:none;-webkit-appearance:none;border:1px solid var(--border);background:var(--white);border-radius:99px;padding:7px 30px 7px 12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2);cursor:pointer;max-width:200px}
+.aff-fsel .aff-caret{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--muted);pointer-events:none}
+#fSetupChip{cursor:pointer}
+.aff-split{display:grid;grid-template-columns:320px 1fr;gap:12px;align-items:start}
+.aff-list{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;max-height:660px;overflow-y:auto}
+.aff-li{padding:11px 13px;border-bottom:1px solid var(--border2);cursor:pointer;display:flex;align-items:center;gap:10px}
+.aff-li:hover{background:var(--bg)}.aff-li.sel{background:var(--red-light)}
+.aff-avatar{width:32px;height:32px;border-radius:9px;background:var(--red-light);color:var(--red);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex:none}
+.aff-name{font-size:14px;font-weight:700;color:var(--ink)}
+.aff-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.aff-code{font-family:'DM Mono',monospace;font-weight:600}
+.aff-dot{width:7px;height:7px;border-radius:50%;flex:none}.dot-pend{background:var(--amber)}.dot-setup{background:var(--rose)}
+.aff-detail{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;min-height:340px}
+/* friendlier detail */
+.aff-dhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}
+.aff-rolechip{display:inline-block;font-size:11px;font-weight:600;color:var(--red);background:var(--red-light);border-radius:99px;padding:2px 9px;margin-top:5px}
+.aff-hero{border:1px solid var(--border);background:var(--red-light);border-radius:12px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.aff-hero .code{font-family:'DM Mono',monospace;font-weight:700;font-size:20px;color:var(--ink);letter-spacing:.02em}
+.aff-hero .url{font-family:'DM Mono',monospace;font-size:11.5px;color:var(--muted);margin-top:3px;word-break:break-all}
+.aff-hero .lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--red);margin-bottom:4px}
+.aff-hero-pending{border-color:#f0dcae;background:var(--amber-bg)}.aff-hero-pending .lbl{color:var(--amber)}
+.aff-sec{margin-bottom:16px}
+.aff-sec-h{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.aff-inforows{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px 18px}
+.aff-inforow{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--ink);min-width:0}
+.aff-inforow .ic{color:var(--red);flex:none}
+.aff-inforow .v{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.aff-inforow .k{color:var(--muted)}
+.aff-quote{background:var(--bg);border-left:3px solid var(--red);border-radius:0 10px 10px 0;padding:11px 14px;font-size:13px;color:var(--ink2);line-height:1.55;font-style:italic}
+.aff-block{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:16px}
+.aff-block .h{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.aff-refrow{padding:12px 14px;border:1px solid var(--border2);border-radius:10px;margin-top:9px;background:var(--bg)}
+.aff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:6px 16px;font-size:12.5px;color:var(--ink2)}
+.aff-grid .k{color:var(--muted)}
+.aff-actions{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 16px}
+.aff-approve{background:var(--green);color:#fff;border:1px solid var(--green)}.aff-approve:hover{filter:brightness(.94)}
+.aff-reject{background:var(--white);color:var(--rose);border:1px solid #f3b6c1}.aff-reject:hover{background:var(--rose-bg)}
+.aff-copy{border:1px solid var(--border);background:var(--white);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:12px;font-weight:600;color:var(--ink2);display:inline-flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.aff-copy:hover{border-color:#9CA3AF}
+.aff-copy.mini{padding:3px 8px;font-size:11px;font-weight:500;color:var(--muted)}
+.aff-setupbanner{background:var(--amber-bg);border:1px solid #f0dcae;color:var(--amber);border-radius:10px;padding:10px 13px;font-size:12.5px;margin-bottom:14px;display:flex;gap:8px;align-items:center;line-height:1.5}
+.aff-badge-rejected{background:var(--rose-bg);color:var(--rose)}.aff-badge-muted{background:var(--border2);color:var(--muted)}
+.aff-input{width:100%;border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--white)}
+.aff-input.mono{font-family:'DM Mono',monospace}
+select.aff-input{appearance:none}
+.aff-lbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:12px 0 6px}
+.aff-ov{position:fixed;inset:0;background:rgba(17,24,39,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:200}
+.aff-ov.on{display:flex}
+.aff-modal{background:var(--white);border-radius:16px;max-width:460px;width:100%;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.25);max-height:90vh;overflow-y:auto}
+.aff-modal h3{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.aff-urlbox{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 12px;font-family:'DM Mono',monospace;font-size:10.5px;color:var(--ink2);word-break:break-all;line-height:1.6;margin-top:8px;display:none}
+.aff-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 16px;border-radius:12px;font-size:12.5px;max-width:640px;width:calc(100% - 32px);opacity:0;transition:.25s;z-index:300;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.aff-toast.on{opacity:1;transform:translateX(-50%) translateY(0)}.aff-toast a{color:#a7f3d0}
+@media(max-width:760px){.aff-split{grid-template-columns:1fr}.aff-list{max-height:none}}
 </style>
 </head>
 <body>
@@ -400,7 +494,7 @@ select:not(.mbx-status-sel):not(.cta-select){-webkit-appearance:none;-moz-appear
         <svg class="ic ic-muted" aria-hidden="true"><use href="#i-chart"/></svg> Stats
       </button>
       <button class="tab-btn" onclick="switchTab('referrals')" id="tab-referrals">
-        <svg class="ic ic-muted" aria-hidden="true"><use href="#i-users"/></svg> Referrals
+        <svg class="ic ic-muted" aria-hidden="true"><use href="#i-users"/></svg> Affiliates
       </button>
     </div>
   </div>
@@ -553,12 +647,6 @@ select:not(.mbx-status-sel):not(.cta-select){-webkit-appearance:none;-moz-appear
 
     <!-- REFERRALS TAB -->
     <div class="tab-pane" id="pane-referrals">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px">
-        <input id="referralsFilter" type="text" placeholder="Search code, client, email&#8230;" autocomplete="off"
-          style="padding:8px 12px;border:0.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;background:var(--bg2);color:var(--text);flex:1;max-width:360px"
-          oninput="filterReferrals(this.value)">
-        <button class="btn btn-ghost btn-sm" onclick="renderReferralsTab(true)"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-refresh"/></svg> Refresh</button>
-      </div>
       <div id="referralsContent"><div class="state-box"><div class="spinner"></div><div class="state-label">Loading&#8230;</div></div></div>
     </div>
 
@@ -1004,6 +1092,7 @@ async function loadAllData(){
   planData=plan;mailData=mail;collectionData=coll;planSetupData=setup;docReqData=docs;dataLoaded=true;
   fetchSheet('staffNotes').then(n=>{briefNotes=n;}).catch(()=>{});
   fetchSheet('returnedMail').then(r=>{returnsData=r;}).catch(()=>{});
+  Promise.all([fetchSheet('affiliateProgram'),fetchSheet('planRegistryRAW')]).then(([a,r])=>{affApplicants=a;affRawClients=r;affLoaded=true;}).catch(()=>{});
   document.getElementById('headerTime').textContent='Loaded '+new Date().toLocaleTimeString('en-CA',{timeZone:'America/Toronto'});
   updateTabCounts();
 }
@@ -2772,113 +2861,339 @@ function renderStatsTab(forceRefresh){
 }
 
 // ===== REFERRALS TAB =====
-let referralRawData=null; // cache of planRegistryRAW rows
-let referralGroups=[];    // computed groups for filtering
-function _rf(c,key){return c[key]!=null?String(c[key]).trim():'';}
-async function loadReferralRaw(){
-  referralRawData=await fetchSheet('planRegistryRAW');
-  return referralRawData;
+// ===== AFFILIATES & REFERRALS TAB =====
+let affApplicants=null, affRawClients=null, affLoaded=false;
+let affList=[];
+let affSel=null, affFilter='ALL', affQ='', affSort='action';
+let affFPay='ALL', affFRole='ALL', affFClients='ALL', affFSetup=false, affEditPay=false, affEditProfile=false;
+let affDAff=null, affDMode=null;
+const AFF_PAL=['#1e3a5f','#16a34a','#d97706','#2563eb','#7c3aed','#e11d48','#0891b2','#6B7280'];
+const AFF_MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const AFF_REF_BASE='https://yyzoffices.com/setup/?ref=';
+
+function affG(o,k){return o&&o[k]!=null?String(o[k]).trim():'';}
+function affFmtDate(s){if(!s||s==='—')return '—';const m=String(s).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);return m?AFF_MO[(+m[1])-1]+' '+(+m[2])+', '+m[3]:s;}
+function affCleanMemo(s){return String(s||'').replace(/[\r\n\t]+/g,' ').replace(/\s{2,}/g,' ').trim();}
+function affLiveCode(el){el.value=el.value.toUpperCase().replace(/[^A-Z0-9-]/g,'').replace(/-{2,}/g,'-').slice(0,20);}
+function affFmtCode(s){return String(s||'').toUpperCase().replace(/[^A-Z0-9-]/g,'').replace(/-{2,}/g,'-').replace(/^-+|-+$/g,'').slice(0,20);}
+function affInitials(n){return (n||'?').split(' ').filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();}
+function affRefUrl(code){return AFF_REF_BASE+code;}
+function affNormStatus(s){const v=String(s||'').trim().toUpperCase();return (v==='APPROVED'||v==='REJECTED')?v:'PENDING';}
+function affClientCount(a){return a.clients?a.clients.length:0;}
+function affNeedsSetup(a){if(a.codeOnly||a.status==='REJECTED')return false;const p=a.pay;if(!p||p==='Setup Later')return true;if(p==='Interac E-Transfer'&&!a.interacEmail)return true;if(p==='Direct Deposit'&&!a.ddLink)return true;if(p==='Credit my YYZ Offices account'&&!a.yyzEmail)return true;return false;}
+function affPrio(a){if(a.status==='PENDING')return 0;if(affNeedsSetup(a))return 1;return 2;}
+function affStBadge(s){const c={PENDING:'badge-pending',APPROVED:'badge-active',REJECTED:'aff-badge-rejected',ACTIVE:'badge-active',INACTIVE:'aff-badge-muted'}[s]||'badge';return '<span class="badge '+c+'">'+esc(s)+'</span>';}
+
+async function affLoad(){
+  const [apps,raw]=await Promise.all([fetchSheet('affiliateProgram'),fetchSheet('planRegistryRAW')]);
+  affApplicants=apps; affRawClients=raw; affLoaded=true;
 }
-function buildReferralGroups(){
-  const rows=(referralRawData||[]).filter(c=>_rf(c,'Affiliate Code|radio-4')!=='');
-  const map={};
-  rows.forEach(c=>{
-    const code=_rf(c,'Affiliate Code|radio-4');
-    if(!map[code])map[code]={code,clients:[],rates:new Set()};
-    const rate=_rf(c,'Affiliate Discount Rate|calculation-4');
-    if(rate)map[code].rates.add(rate);
-    map[code].clients.push(c);
+function affBuildModel(){
+  const byCode={};
+  (affRawClients||[]).forEach(c=>{const code=affG(c,'Affiliate Code|radio-4');if(!code)return;(byCode[code]=byCode[code]||[]).push(c);});
+  const used=new Set();
+  const list=(affApplicants||[]).filter(a=>affG(a,'Affiliate ID|hidden-5')!=='').map(a=>{
+    const code=affG(a,'Affiliate Code');
+    const clients=(code&&byCode[code])?byCode[code]:[];
+    if(code&&byCode[code])used.add(code);
+    const name=((affG(a,'First Name|name-1-first-name')+' '+affG(a,'Last Name|name-1-last-name')).trim())||'(no name)';
+    return {_raw:a,
+      id:affG(a,'Affiliate ID|hidden-5'), name:name,
+      first:affG(a,'First Name|name-1-first-name'), last:affG(a,'Last Name|name-1-last-name'),
+      company:affG(a,'Company / Business Name (optional)|text-7'),
+      email:affG(a,'Email Address|email-1'), phone:affG(a,'Phone|phone-1'),
+      state:affG(a,'State/Province|address-1-state'), country:affG(a,'Country|address-1-country'),
+      role:affG(a,'Which best describes your affiliate role?|select-1'),
+      howHeard:affG(a,'How did you hear about us?|radio-3'),
+      refPlan:affG(a,'How do you plan to refer clients to YYZ Offices?|text-8'),
+      pay:affG(a,'Preferred Payment Method|radio-6'),
+      interacEmail:affG(a,'Interac E-Transfer Email|email-2'),
+      yyzEmail:affG(a,'Email on your YYZ Offices account|email-3'),
+      ddLink:affG(a,'Direct Deposit Form|upload-1'),
+      prefCode:affG(a,'Preferred Referral Code (Pending Approval)|text-6'),
+      code:code, status:affNormStatus(affG(a,'Account Status|hidden-3')),
+      reg:affG(a,'Registration Date|hidden-2'),
+      memo:affG(a,'Decision Memo'), decisionDate:affG(a,'Decision Date'),
+      clients:clients};
   });
-  referralGroups=Object.values(map).sort((a,b)=>b.clients.length-a.clients.length);
-  return referralGroups;
+  Object.keys(byCode).forEach(code=>{if(used.has(code))return;list.push({codeOnly:true,id:'code_'+code,name:'Unclaimed code',company:'',email:'',code:code,status:'APPROVED',reg:'',clients:byCode[code]});});
+  affList=list;
 }
-function fmtRate(r){ // 0.4 -> "40% off"
-  const n=parseFloat(r);
-  if(isNaN(n))return esc(r||'—');
-  return (n<=1?Math.round(n*100):Math.round(n))+'% off';
-}
+
 function renderReferralsTab(forceRefresh){
   const el=document.getElementById('referralsContent');
-  el.innerHTML='<div class="state-box"><div class="spinner"></div><div class="state-label">Loading…</div></div>';
-  const run=()=>{
-    try{buildReferralGroups();paintReferrals(referralGroups);}
-    catch(e){console.error('referrals error:',e);el.innerHTML='<div class="state-box"><div class="state-icon"><svg class="ic ic-amber" aria-hidden="true"><use href="#i-warn"/></svg></div><div class="state-label">Referrals error</div><div class="state-sub">'+esc(String(e))+'</div></div>';}
-  };
-  if(!referralRawData||forceRefresh){
-    loadReferralRaw().then(run).catch(e=>{el.innerHTML='<div class="state-box"><div class="state-icon"><svg class="ic ic-amber" aria-hidden="true"><use href="#i-warn"/></svg></div><div class="state-label">Error loading data</div><div class="state-sub">'+esc(e.message)+'</div></div>';});
-  }else run();
+  el.innerHTML='<div class="state-box"><div class="spinner"></div><div class="state-label">Loading&#8230;</div></div>';
+  const run=()=>{ try{affBuildModel();affPaintShell();affRenderStats();affRefreshLists();}
+    catch(e){console.error('affiliates error:',e);el.innerHTML='<div class="state-box"><div class="state-icon"><svg class="ic ic-amber" aria-hidden="true"><use href="#i-warn"/></svg></div><div class="state-label">Affiliates error</div><div class="state-sub">'+esc(String(e))+'</div></div>';} };
+  if(!affLoaded||forceRefresh){ affLoad().then(run).catch(e=>{el.innerHTML='<div class="state-box"><div class="state-icon"><svg class="ic ic-amber" aria-hidden="true"><use href="#i-warn"/></svg></div><div class="state-label">Error loading data</div><div class="state-sub">'+esc(e.message)+'</div></div>';}); }
+  else run();
 }
-function paintReferrals(groups){
+
+function affPaintShell(){
   const el=document.getElementById('referralsContent');
-  if(!groups.length){el.innerHTML='<div class="empty-mail"><div class="empty-mail-icon"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-users"/></svg></div>No referral codes used yet.</div>';return;}
-  const totalRef=groups.reduce((s,g)=>s+g.clients.length,0);
-  let html='<div style="display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap">'
-    +'<div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px 16px"><div style="font-size:22px;font-weight:700;color:var(--ink)">'+groups.length+'</div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Referral codes</div></div>'
-    +'<div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px 16px"><div style="font-size:22px;font-weight:700;color:var(--ink)">'+totalRef+'</div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Referred clients</div></div>'
-    +'</div>';
-  groups.forEach((g,gi)=>{
-    const active=g.clients.filter(c=>(_rf(c,'Account Status|hidden-2')||'ACTIVE')==='ACTIVE').length;
-    const rates=[...g.rates].map(fmtRate).join(', ')||'—';
-    html+='<div class="referral-group" data-code="'+esc(g.code.toLowerCase())+'" style="background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden">'
-      +'<div onclick="toggleReferralGroup('+gi+')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;user-select:none">'
-        +'<div style="display:flex;align-items:center;gap:12px">'
-          +'<svg class="ic ic-muted" id="refChevron'+gi+'" aria-hidden="true" style="transition:transform .15s"><use href="#i-arrow-right"/></svg>'
-          +'<div><div style="font-size:15px;font-weight:700;color:var(--ink);font-family:monospace">'+esc(g.code)+'</div>'
-          +'<div style="font-size:11px;color:var(--muted);margin-top:2px">'+g.clients.length+' client'+(g.clients.length!==1?'s':'')+' &middot; '+active+' active &middot; '+esc(rates)+'</div></div>'
-        +'</div>'
-        +'<span class="badge" style="background:var(--purple-bg);color:var(--purple)">'+g.clients.length+'</span>'
-      +'</div>'
-      +'<div id="refBody'+gi+'" style="display:none;border-top:1px solid var(--border2)">'
-        +g.clients.map(c=>referralClientRow(c)).join('')
-      +'</div>'
-    +'</div>';
-  });
-  el.innerHTML=html;
+  el.innerHTML=''
+  +'<div class="aff-topbar"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">'
+    +'<div><h1 style="font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.02em">Affiliates &amp; Referrals</h1><div style="font-size:12px;color:var(--muted);margin-top:2px">Applicants, approvals, and who&rsquo;s referring whom.</div></div>'
+    +'<button class="btn btn-ghost btn-sm" onclick="renderReferralsTab(true)"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-refresh"/></svg> Refresh</button></div>'
+    +'<div id="affStats"></div>'
+    +'<div class="aff-srcwrap"><div class="l">How affiliates found us</div><div class="aff-bar" id="affBar"></div><div class="aff-legend" id="affLegend"></div></div>'
+  +'</div>'
+  +'<div class="aff-toolbar"><div class="aff-search"><svg aria-hidden="true"><use href="#i-search"/></svg><input id="affQ" placeholder="Search name, code, email, company, client&hellip;" autocomplete="off" oninput="affDoSearch(this.value)"></div></div>'
+  +'<div class="aff-chips" id="affChips" style="margin-bottom:12px"></div>'
+  +'<div class="aff-filters">'
+    +'<div class="aff-fgrp"><span class="aff-flabel">Sort</span><div class="aff-fsel"><select id="affSort" onchange="affSel=null;affSort=this.value;affRefreshLists()"><option value="action">Needs action first</option><option value="clients">Most clients</option><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="name">Name A&ndash;Z</option><option value="approved">Recently approved</option></select></div></div>'
+    +'<div class="aff-fgrp"><span class="aff-flabel">Payout</span><div class="aff-fsel"><select id="affPay" onchange="affSel=null;affFPay=this.value;affRefreshLists()"><option value="ALL">Any</option><option>Interac E-Transfer</option><option>Direct Deposit</option><option>Credit my YYZ Offices account</option><option>Setup Later</option></select></div></div>'
+    +'<div class="aff-fgrp"><span class="aff-flabel">Role</span><div class="aff-fsel"><select id="affRole" onchange="affSel=null;affFRole=this.value;affRefreshLists()"><option value="ALL">Any</option><option>Content Creator / Influencer</option><option>Accountant or bookkeeper</option><option>Lawyer</option><option>Business consultant or broker</option><option>Other</option></select></div></div>'
+    +'<div class="aff-fgrp"><span class="aff-flabel">Clients</span><div class="aff-fsel"><select id="affCli" onchange="affSel=null;affFClients=this.value;affRefreshLists()"><option value="ALL">Any</option><option value="HAS">Has clients</option><option value="NONE">None yet</option></select></div></div>'
+    +'<div class="aff-chip" id="affSetupChip" onclick="affSel=null;affFSetup=!affFSetup;affRefreshLists()"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg> Needs setup</div>'
+    +'<button class="aff-copy mini" onclick="affClearFilters()"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg> Clear</button>'
+  +'</div>'
+  +'<div class="aff-split"><div class="aff-list" id="affListBox"></div><div class="aff-detail" id="affDetail"></div></div>'
+  +affModalHtml();
 }
-function referralClientRow(c){
-  const company=_rf(c,'Recipient Name (1) | Legal Company Name|text-2')||'—';
-  const name=(_rf(c,'First Name|name-1-first-name')+' '+_rf(c,'Last Name|name-1-last-name')).trim()||'—';
-  const email=_rf(c,'Email Address|email-1')||'—';
-  const phone=_rf(c,'Phone|phone-1')||'—';
-  const plan=_rf(c,'Select Plan|radio-1')||'—';
-  const pid=_rf(c,'Plan ID|hidden-1')||'—';
-  const reg=_rf(c,'Registration Date|hidden-4')||'—';
-  const rate=fmtRate(_rf(c,'Affiliate Discount Rate|calculation-4'));
-  const status=(_rf(c,'Account Status|hidden-2')||'ACTIVE');
-  const stBadge='<span class="badge '+(status==='ACTIVE'?'badge-active':'badge-inactive')+'">'+esc(status)+'</span>';
-  return '<div style="padding:12px 16px 12px 44px;border-bottom:1px solid var(--border2)">'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px">'
-      +'<div style="font-size:13px;font-weight:700;color:var(--ink)">'+esc(company)+'</div>'
-      +'<div style="display:flex;gap:6px;align-items:center">'+stBadge+'<span class="badge badge-plan">'+esc(plan)+'</span></div>'
-    +'</div>'
-    +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:4px 16px;font-size:11.5px;color:var(--text)">'
-      +'<div><span style="color:var(--muted)">Plan ID:</span> <strong>'+esc(pid)+'</strong></div>'
-      +'<div><span style="color:var(--muted)">Contact:</span> '+esc(name)+'</div>'
-      +'<div><span style="color:var(--muted)">Email:</span> '+esc(email)+'</div>'
-      +'<div><span style="color:var(--muted)">Phone:</span> '+esc(phone)+'</div>'
-      +'<div><span style="color:var(--muted)">Registered:</span> '+esc(reg)+'</div>'
-      +'<div><span style="color:var(--muted)">Discount:</span> '+esc(rate)+'</div>'
-    +'</div>'
+function affModalHtml(){
+  return '<div class="aff-ov" id="affOv"><div class="aff-modal">'
+    +'<h3 id="affMTitle">Approve</h3><div id="affMSub" style="font-size:13px;color:var(--muted)"></div>'
+    +'<div id="affCodeWrap"><div class="aff-lbl">Affiliate code (required, max 20)</div><input class="aff-input mono" id="affCode" placeholder="e.g. YYZRAVI10" oninput="affLiveCode(this)"><div id="affCodeHint" style="font-size:11px;color:var(--muted);margin-top:5px"></div></div>'
+    +'<div class="aff-lbl" id="affMemoLbl">Memo</div><input class="aff-input" id="affMemo" placeholder="One short line — shown in the email"><div style="font-size:11px;color:var(--muted);margin-top:5px">Kept to one line, no line breaks.</div>'
+    +'<div class="aff-lbl">What happens</div><div style="font-size:12.5px;color:var(--ink2);line-height:1.6" id="affExplain"></div>'
+    +'<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button class="btn btn-ghost" onclick="affCloseDecision()">Cancel</button><button class="btn" id="affConfirm">Confirm</button></div>'
+  +'</div></div>';
+}
+
+function affRenderStats(){
+  const pend=affList.filter(a=>a.status==='PENDING').length;
+  const appr=affList.filter(a=>a.status==='APPROVED'&&!a.codeOnly).length;
+  const setup=affList.filter(a=>affNeedsSetup(a)).length;
+  const tot=affList.reduce((s,a)=>s+affClientCount(a),0);
+  document.getElementById('affStats').innerHTML='<div class="aff-strip">'+affCell(pend,'Pending')+affCell(appr,'Approved')+affCell(tot,'Referred clients')+(setup?'<div class="aff-cell warn"><div class="n">'+setup+'</div><div class="l">Need setup</div></div>':'')+'</div>';
+  const src={};affList.forEach(a=>{if(a.codeOnly||!a.howHeard)return;src[a.howHeard]=(src[a.howHeard]||0)+1;});
+  const ents=Object.entries(src).sort((a,b)=>b[1]-a[1]);const total=ents.reduce((s,e)=>s+e[1],0)||1;
+  let bar='',leg='';ents.forEach(([k,v],i)=>{const p=Math.round(v/total*100);const col=AFF_PAL[i%AFF_PAL.length];bar+='<div style="width:'+(v/total*100)+'%;background:'+col+'" title="'+esc(k)+' '+p+'%"></div>';leg+='<span><i style="background:'+col+'"></i>'+esc(k)+' <b>'+p+'%</b></span>';});
+  document.getElementById('affBar').innerHTML=bar||'<div style="width:100%;background:var(--border2)"></div>';
+  document.getElementById('affLegend').innerHTML=leg;
+}
+function affCell(n,l){return '<div class="aff-cell"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>';}
+
+function affRenderChips(){
+  const cnt=k=>k==='ALL'?affList.length:k==='UNCLAIMED'?affList.filter(a=>a.codeOnly).length:affList.filter(a=>a.status===k&&!a.codeOnly).length;
+  const defs=[['ALL','All'],['PENDING','Pending'],['APPROVED','Approved'],['REJECTED','Rejected'],['UNCLAIMED','Unclaimed']];
+  document.getElementById('affChips').innerHTML=defs.map(d=>'<div class="aff-chip '+(affFilter===d[0]?'on':'')+'" onclick="affSel=null;affFilter=\''+d[0]+'\';affRefreshLists()">'+d[1]+' <span class="c">'+cnt(d[0])+'</span></div>').join('');
+  const sc=document.getElementById('affSetupChip');if(sc)sc.classList.toggle('on',affFSetup);
+}
+function affMatches(a){if(!affQ)return true;const t=affQ.toLowerCase();const base=[a.name,a.company,a.email,a.code,a.prefCode,a.role].join(' ').toLowerCase();const cl=(a.clients||[]).map(c=>[affG(c,'Recipient Name (1) | Legal Company Name|text-2'),affG(c,'First Name|name-1-first-name'),affG(c,'Last Name|name-1-last-name'),affG(c,'Email Address|email-1'),affG(c,'Plan ID|hidden-1')].join(' ')).join(' ').toLowerCase();return base.includes(t)||cl.includes(t);}
+function affVisible(){
+  const AFF_SORTS={action:(x,y)=>affPrio(x)-affPrio(y),clients:(x,y)=>affClientCount(y)-affClientCount(x),newest:(x,y)=>affPd(y.reg)-affPd(x.reg),oldest:(x,y)=>affPd(x.reg)-affPd(y.reg),name:(x,y)=>(x.name||'').localeCompare(y.name||''),approved:(x,y)=>affPd(y.decisionDate)-affPd(x.decisionDate)};
+  const list=affList.filter(a=>{
+    const sc=affFilter==='ALL'?true:affFilter==='UNCLAIMED'?a.codeOnly:(a.status===affFilter&&!a.codeOnly);
+    if(!sc||!affMatches(a))return false;
+    if(affFPay!=='ALL'&&(a.codeOnly||a.pay!==affFPay))return false;
+    if(affFRole!=='ALL'&&(a.codeOnly||a.role!==affFRole))return false;
+    if(affFSetup&&!affNeedsSetup(a))return false;
+    if(affFClients!=='ALL'){const n=affClientCount(a);if(affFClients==='HAS'&&n===0)return false;if(affFClients==='NONE'&&n>0)return false;}
+    return true;
+  });
+  list.sort(AFF_SORTS[affSort]||AFF_SORTS.action);
+  return list;
+}
+function affPd(s){const m=String(s||'').match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);return m?new Date(+m[3],+m[1]-1,+m[2]).getTime():0;}
+function affDoSearch(v){affQ=v;affSel=null;affRefreshLists();}
+function affClearFilters(){affSort='action';affFPay='ALL';affFRole='ALL';affFClients='ALL';affFSetup=false;affQ='';
+  const g=id=>document.getElementById(id);
+  if(g('affSort'))g('affSort').value='action';if(g('affPay'))g('affPay').value='ALL';if(g('affRole'))g('affRole').value='ALL';if(g('affCli'))g('affCli').value='ALL';if(g('affQ'))g('affQ').value='';
+  affSel=null;affRefreshLists();}
+function affRefreshLists(){affRenderChips();affRenderList();affRenderDetail();}
+
+function affRenderList(){
+  const list=affVisible();let h='';
+  const cur=affList.find(a=>a.id===affSel);
+  if(!affSel||!list.some(a=>a.id===affSel))affSel=list[0]?list[0].id:null;
+  list.forEach(a=>{const ns=affNeedsSetup(a);const dot=a.status==='PENDING'?'<span class="aff-dot dot-pend" title="Pending"></span>':ns?'<span class="aff-dot dot-setup" title="Needs setup"></span>':'';
+    h+='<div class="aff-li '+(a.id===affSel?'sel':'')+'" onclick="affSel=\''+a.id+'\';affEditPay=false;affEditProfile=false;affRenderList();affRenderDetail()">'
+      +'<div class="aff-avatar">'+esc(affInitials(a.codeOnly?a.code:a.name))+'</div>'
+      +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(a.codeOnly?a.code:a.name)+'</div>'
+      +'<div class="aff-meta">'+(a.code?'<span class="aff-code">'+esc(a.code)+'</span> · ':'')+affClientCount(a)+' clients</div></div>'+dot+affStBadge(a.status)+'</div>';});
+  document.getElementById('affListBox').innerHTML=h||'<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">No matches</div>';
+}
+
+function affInforow(icon,k,v){return '<div class="aff-inforow"><svg class="ic" aria-hidden="true"><use href="#'+icon+'"/></svg><div class="v"><span class="k">'+k+':</span> '+v+'</div></div>';}
+function affPayoutView(a){
+  let d='';
+  if(a.pay==='Interac E-Transfer')d=a.interacEmail?'<div style="margin-top:4px">Interac email: <strong>'+esc(a.interacEmail)+'</strong></div>':'<div style="margin-top:4px;color:var(--amber)">Interac email missing</div>';
+  else if(a.pay==='Credit my YYZ Offices account')d=a.yyzEmail?'<div style="margin-top:4px">YYZ account email: <strong>'+esc(a.yyzEmail)+'</strong></div>':'<div style="margin-top:4px;color:var(--amber)">Account email missing</div>';
+  else if(a.pay==='Direct Deposit')d=a.ddLink?'<div style="margin-top:4px">Direct deposit form: <a href="'+esc(a.ddLink)+'" target="_blank" rel="noopener">View form</a></div>':'<div style="margin-top:4px;color:var(--amber)">No form on file</div>';
+  else if(a.pay==='Setup Later')d='<div style="margin-top:4px;color:var(--amber)">Not set up yet</div>';
+  const edit=isAdminMode?'<button class="aff-copy mini" onclick="affEditPay=true;affEditProfile=false;affRenderDetail()"><svg class="ic" aria-hidden="true"><use href="#i-pencil"/></svg> Edit</button>':'';
+  return '<div class="aff-block"><div class="h">Payout '+edit+'</div><div style="font-size:13px;color:var(--ink)"><strong>'+esc(a.pay||'—')+'</strong>'+d+'</div></div>';
+}
+function affPayoutEdit(a){
+  const opts=['Interac E-Transfer','Direct Deposit','Credit my YYZ Offices account','Setup Later'];
+  return '<div class="aff-block"><div class="h">Edit payout</div><select class="aff-input" id="affPayMethod" onchange="affRenderDetail(true)">'+opts.map(o=>'<option'+(a.pay===o?' selected':'')+'>'+o+'</option>').join('')+'</select><div id="affPaySub">'+affPaySub(a)+'</div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-primary btn-sm" id="affSavePayBtn" onclick="affSavePayout()">Save payout</button><button class="btn btn-ghost btn-sm" onclick="affEditPay=false;affRenderDetail()">Cancel</button></div></div>';
+}
+function affPaySub(a){const m=(document.getElementById('affPayMethod')&&document.getElementById('affPayMethod').value)||a.pay;
+  if(m==='Interac E-Transfer')return '<div class="aff-lbl">Interac e-Transfer email</div><input class="aff-input" id="affPayVal" value="'+esc(a.interacEmail||'')+'" placeholder="email for e-transfer">';
+  if(m==='Credit my YYZ Offices account')return '<div class="aff-lbl">YYZ Offices account email</div><input class="aff-input" id="affPayVal" value="'+esc(a.yyzEmail||'')+'" placeholder="account email">';
+  if(m==='Direct Deposit')return '<div class="aff-lbl">Direct deposit form link</div><input class="aff-input" id="affPayVal" value="'+esc(a.ddLink||'')+'" placeholder="https://link-to-form">';
+  return '<div style="font-size:12px;color:var(--muted);margin-top:8px">No extra details for this method.</div>';}
+async function affSavePayout(){
+  const a=affList.find(x=>x.id===affSel);if(!a)return;
+  const btn=document.getElementById('affSavePayBtn');if(btn&&btn.dataset.busy)return;
+  const m=document.getElementById('affPayMethod').value;const v=(document.getElementById('affPayVal')||{}).value||'';
+  const interac=m==='Interac E-Transfer'?v:'', yyz=m==='Credit my YYZ Offices account'?v:'', dd=m==='Direct Deposit'?v:'';
+  const need={'Interac E-Transfer':'Interac e-Transfer email','Direct Deposit':'Direct deposit form link','Credit my YYZ Offices account':'YYZ Offices account email'};
+  if(need[m]&&!v.trim()){showToast(need[m]+' is required','error');const _pv=document.getElementById('affPayVal');if(_pv)_pv.focus();return;}
+  if(btn){btn.dataset.busy='1';btn.disabled=true;btn.textContent='Saving…';}
+  try{
+    const params=new URLSearchParams({action:'setAffiliatePayout',affiliateId:a.id,method:m,interacEmail:interac,yyzEmail:yyz,ddLink:dd});
+    const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
+    let ok=false,err='';try{const j=await res.json();ok=j.success;err=j.error||'';}catch(e){ok=false;}
+    if(!ok){if(btn){btn.dataset.busy='';btn.disabled=false;btn.textContent='Save payout';}showToast('Could not save payout'+(err?': '+err:'')+' — try again','error');return;}
+    a._raw['Preferred Payment Method|radio-6']=m;a._raw['Interac E-Transfer Email|email-2']=interac;a._raw['Email on your YYZ Offices account|email-3']=yyz;a._raw['Direct Deposit Form|upload-1']=dd;
+    affEditPay=false;affBuildModel();affRenderStats();affRefreshLists();showToast('Payout updated','success');
+  }catch(e){if(btn){btn.dataset.busy='';btn.disabled=false;btn.textContent='Save payout';}showToast('Network error — try again','error');}
+}
+
+function affRoleOtherToggle(){const s=document.getElementById('apR'),o=document.getElementById('apROther');if(!s||!o)return;const show=s.value==='Other';o.style.display=show?'block':'none';if(show)o.focus();}
+function affProfileEdit(a){
+  const g2='display:grid;grid-template-columns:1fr 1fr;gap:10px';
+  const roles=['Content Creator / Influencer','Accountant or bookkeeper','Lawyer','Business consultant or broker','Other'];
+  let ropts=roles.map(r=>'<option'+(a.role===r?' selected':'')+'>'+esc(r)+'</option>').join('');
+  if(a.role&&roles.indexOf(a.role)<0)ropts='<option selected>'+esc(a.role)+'</option>'+ropts;
+  return '<div class="aff-block"><div class="h">Edit details</div>'
+    +'<div style="'+g2+'"><div><div class="aff-lbl">First name</div><input class="aff-input" id="apF" value="'+esc(a.first||'')+'"></div>'
+    +'<div><div class="aff-lbl">Last name</div><input class="aff-input" id="apL" value="'+esc(a.last||'')+'"></div></div>'
+    +'<div class="aff-lbl">Email</div><input class="aff-input" id="apE" value="'+esc(a.email||'')+'" placeholder="required">'
+    +'<div class="aff-lbl">Phone</div><input class="aff-input" id="apP" value="'+esc(a.phone||'')+'">'
+    +'<div class="aff-lbl">Company / business</div><input class="aff-input" id="apC" value="'+esc(a.company||'')+'">'
+    +'<div style="'+g2+'"><div><div class="aff-lbl">Province / state</div><input class="aff-input" id="apS" value="'+esc(a.state||'')+'"></div>'
+    +'<div><div class="aff-lbl">Country</div><input class="aff-input" id="apCo" value="'+esc(a.country||'')+'"></div></div>'
+    +'<div class="aff-lbl">Role</div><select class="aff-input" id="apR" onchange="affRoleOtherToggle()">'+ropts+'</select>'
+    +'<input class="aff-input" id="apROther" placeholder="Please specify their role" style="margin-top:8px;display:'+(a.role==='Other'?'block':'none')+'">'
+    +'<div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-primary btn-sm" id="apSave" onclick="affSaveProfile()">Save details</button><button class="btn btn-ghost btn-sm" onclick="affEditProfile=false;affRenderDetail()">Cancel</button></div>'
   +'</div>';
 }
-function toggleReferralGroup(gi){
-  const body=document.getElementById('refBody'+gi);
-  const chev=document.getElementById('refChevron'+gi);
-  if(!body)return;
-  const open=body.style.display!=='none';
-  body.style.display=open?'none':'block';
-  if(chev)chev.style.transform=open?'':'rotate(90deg)';
+async function affSaveProfile(){
+  const a=affList.find(x=>x.id===affSel);if(!a)return;
+  const btn=document.getElementById('apSave');if(btn&&btn.dataset.busy)return;
+  const g=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
+  const first=g('apF'),last=g('apL'),email=g('apE'),phone=g('apP'),company=g('apC'),state=g('apS'),country=g('apCo');
+  let role=g('apR');
+  if(role==='Other'){const oth=g('apROther');if(!oth){showToast('Please specify their role','error');document.getElementById('apROther').focus();return;}role=oth;}
+  if(!first&&!last){showToast('Name can\u2019t be empty','error');document.getElementById('apF').focus();return;}
+  if(!email){showToast('Email is required','error');document.getElementById('apE').focus();return;}
+  if(btn){btn.dataset.busy='1';btn.disabled=true;btn.textContent='Saving…';}
+  try{
+    const params=new URLSearchParams({action:'setAffiliateProfile',affiliateId:a.id,firstName:first,lastName:last,email:email,phone:phone,company:company,state:state,country:country,role:role});
+    const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
+    let ok=false,err='';try{const j=await res.json();ok=j.success;err=j.error||'';}catch(e){ok=false;}
+    if(!ok){if(btn){btn.dataset.busy='';btn.disabled=false;btn.textContent='Save details';}showToast('Could not save'+(err?': '+err:'')+' — try again','error');return;}
+    a._raw['First Name|name-1-first-name']=first;a._raw['Last Name|name-1-last-name']=last;a._raw['Email Address|email-1']=email;a._raw['Phone|phone-1']=phone;a._raw['Company / Business Name (optional)|text-7']=company;a._raw['State/Province|address-1-state']=state;a._raw['Country|address-1-country']=country;a._raw['Which best describes your affiliate role?|select-1']=role;
+    affEditProfile=false;affBuildModel();affRenderStats();affRefreshLists();showToast('Details updated','success');
+  }catch(e){if(btn){btn.dataset.busy='';btn.disabled=false;btn.textContent='Save details';}showToast('Network error — try again','error');}
 }
-function filterReferrals(q){
-  q=(q||'').trim().toLowerCase();
-  if(!referralGroups.length)return;
-  if(!q){paintReferrals(referralGroups);return;}
-  const filtered=referralGroups.map(g=>{
-    if(g.code.toLowerCase().includes(q))return g;
-    const cl=g.clients.filter(c=>[_rf(c,'Recipient Name (1) | Legal Company Name|text-2'),_rf(c,'Email Address|email-1'),_rf(c,'First Name|name-1-first-name'),_rf(c,'Last Name|name-1-last-name'),_rf(c,'Plan ID|hidden-1')].join(' ').toLowerCase().includes(q));
-    return cl.length?{...g,clients:cl}:null;
-  }).filter(Boolean);
-  paintReferrals(filtered);
+
+function affClientRow(c){
+  const company=affG(c,'Recipient Name (1) | Legal Company Name|text-2')||'—';
+  const name=((affG(c,'First Name|name-1-first-name')+' '+affG(c,'Last Name|name-1-last-name')).trim())||'—';
+  const email=affG(c,'Email Address|email-1')||'—';
+  const plan=affG(c,'Select Plan|radio-1')||'—';
+  const pid=affG(c,'Plan ID|hidden-1')||'—';
+  const reg=affG(c,'Registration Date|hidden-4')||'—';
+  const rate=affG(c,'Affiliate Discount Rate|calculation-4');
+  const rateTxt=(function(r){const n=parseFloat(r);if(isNaN(n))return esc(r||'—');return (n<=1?Math.round(n*100):Math.round(n))+'% off';})(rate);
+  const status=(affG(c,'Account Status|hidden-2')||'ACTIVE').toUpperCase();
+  return '<div class="aff-refrow"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px"><div style="font-size:13px;font-weight:700;color:var(--ink)">'+esc(company)+'</div><div style="display:flex;gap:6px">'+affStBadge(status)+'<span class="badge badge-plan">'+esc(plan)+'</span></div></div>'
+    +'<div class="aff-grid" style="margin-bottom:8px"><div><span class="k">Plan ID:</span> <strong>'+esc(pid)+'</strong></div><div><span class="k">Contact:</span> '+esc(name)+'</div><div><span class="k">Email:</span> '+esc(email)+'</div><div><span class="k">Discount:</span> '+esc(rateTxt)+'</div><div><span class="k">Registered:</span> '+esc(affFmtDate(reg))+'</div></div>'
+    +'<button class="btn btn-ghost btn-sm" onclick="affViewClient(\''+esc(pid)+'\')"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-user"/></svg> View client</button></div>';
+}
+function affViewClient(pid){if(!pid||pid==='—')return;if(typeof getClientByPid==='function'&&!getClientByPid(pid)){showToast('Client not loaded — open the Clients tab first','error');return;}switchTab('clients');setTimeout(function(){try{openClientFromList(pid);}catch(e){showToast('Could not open client','error');}},60);}
+
+function affRenderDetail(subOnly){
+  if(subOnly){const s=document.getElementById('affPaySub');if(s)s.innerHTML=affPaySub(affList.find(x=>x.id===affSel));return;}
+  const a=affList.find(x=>x.id===affSel);const d=document.getElementById('affDetail');
+  if(!a){d.innerHTML='<div style="color:var(--muted);font-size:13px">Select someone from the list.</div>';return;}
+  const cl=a.clients||[];const ns=affNeedsSetup(a);let h='';
+  if(ns)h+='<div class="aff-setupbanner"><svg class="ic ic-amber" aria-hidden="true" style="flex:none"><use href="#i-warn"/></svg><div><strong>Payout setup incomplete.</strong> Add their payout details before they can be paid.</div></div>';
+  h+='<div class="aff-dhead"><div style="display:flex;align-items:flex-start;gap:12px"><div class="aff-avatar" style="width:44px;height:44px;font-size:15px">'+esc(affInitials(a.codeOnly?a.code:a.name))+'</div>'
+    +'<div><div class="aff-name" style="font-size:18px">'+esc(a.codeOnly?'Unclaimed code':a.name)+'</div><div class="aff-meta" style="font-size:12.5px">'+esc(a.company||a.email||'—')+'</div>'
+    +(a.codeOnly?'':'<span class="aff-rolechip">'+esc(a.role||'Affiliate')+'</span>')+'</div></div>'+affStBadge(a.status)+'</div>';
+  if(isAdminMode&&!a.codeOnly&&!affEditProfile)h+='<div style="margin:2px 0 10px"><button class="aff-copy mini" onclick="affEditProfile=true;affEditPay=false;affRenderDetail()"><svg class="ic" aria-hidden="true"><use href="#i-pencil"/></svg> Edit details</button></div>';
+  if(a.code){
+    h+='<div class="aff-hero"><div style="min-width:0"><div class="lbl">Referral link</div><div class="code">'+esc(a.code)+'</div><div class="url">'+esc(affRefUrl(a.code).replace('https://',''))+'</div></div>'
+      +'<button class="aff-copy" onclick="affCopyRef(\''+esc(a.code)+'\')"><svg class="ic" aria-hidden="true"><use href="#i-link"/></svg> Copy link</button></div>';
+  } else if(!a.codeOnly){
+    h+='<div class="aff-hero aff-hero-pending"><div><div class="lbl">Referral link</div><div style="font-size:13px;color:var(--amber)">Assigned when you approve'+(a.prefCode?' — requested <span class="aff-code">'+esc(a.prefCode)+'</span>':'')+'</div></div></div>';
+  }
+  if(!a.codeOnly){
+    if(affEditProfile){ h+=affProfileEdit(a); }
+    else {
+    h+='<div class="aff-sec"><div class="aff-sec-h"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg> Contact</div><div class="aff-inforows">'
+      +affInforow('i-mail','Email',esc(a.email||'—'))+affInforow('i-phone','Phone',esc(a.phone||'—'))+affInforow('i-globe','Location',esc([a.state,a.country].filter(Boolean).join(', ')||'—'))+'</div></div>';
+    h+='<div class="aff-sec"><div class="aff-sec-h"><svg class="ic" aria-hidden="true"><use href="#i-star"/></svg> About</div><div class="aff-inforows">'
+      +affInforow('i-calendar','Applied',esc(affFmtDate(a.reg)))+affInforow('i-search','Found us via',esc(a.howHeard||'—'))+'</div>'
+      +(a.refPlan?'<div class="aff-quote" style="margin-top:10px">&ldquo;'+esc(a.refPlan)+'&rdquo;</div>':'')
+      +(a.status==='REJECTED'&&a.memo?'<div style="margin-top:10px;font-size:12.5px;color:var(--rose)"><strong>Rejected:</strong> '+esc(a.memo)+'</div>':'')
+      +'</div>';
+    }
+    h+=affEditPay?affPayoutEdit(a):affPayoutView(a);
+  }
+  if(a.status==='PENDING'&&isAdminMode){
+    h+='<div class="aff-actions"><button class="btn aff-approve btn-sm" onclick="affOpenDecision(\''+esc(a.id)+'\',\'approve\')"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> Approve</button><button class="btn aff-reject btn-sm" onclick="affOpenDecision(\''+esc(a.id)+'\',\'reject\')"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg> Reject</button></div>';
+  }
+  h+='<div class="aff-sec-h" style="margin:6px 0 4px"><svg class="ic" aria-hidden="true"><use href="#i-users"/></svg> Referred clients ('+cl.length+')</div>';
+  h+=cl.length?cl.map(affClientRow).join(''):'<div style="font-size:12.5px;color:var(--muted)">No referred clients yet.</div>';
+  d.innerHTML=h;
+}
+function affCopyRef(code){const url=affRefUrl(code);try{navigator.clipboard.writeText(url).then(function(){showToast('Copied referral link','success');}).catch(function(){showToast('Copy: '+esc(url));});}catch(e){showToast('Copy: '+esc(url));}}
+
+function affOpenDecision(id,mode){
+  affDAff=affList.find(a=>a.id===id);affDMode=mode;if(!affDAff)return;
+  document.getElementById('affMTitle').textContent=(mode==='approve'?'Approve':'Reject')+' — '+affDAff.name;
+  document.getElementById('affMSub').textContent=affDAff.email;
+  document.getElementById('affCodeWrap').style.display=mode==='approve'?'block':'none';
+  document.getElementById('affCode').value=affDAff.prefCode||'';
+  document.getElementById('affCodeHint').innerHTML=affDAff.prefCode?'Pre-filled with their requested code — keep or change it.':'They didn\'t request a code — enter one.';
+  document.getElementById('affMemo').value='';
+  document.getElementById('affMemoLbl').textContent=mode==='approve'?'Memo (optional)':'Reason (required)';
+  const status=mode==='approve'?'Completed':'Rejected';
+  document.getElementById('affExplain').innerHTML='Sets this affiliate to <strong>'+(mode==='approve'?'APPROVED':'REJECTED')+'</strong>, saves code &amp; memo to their row, then opens your email form with <strong>Request Status = '+status+'</strong>.';
+  const btn=document.getElementById('affConfirm');btn.className='btn '+(mode==='approve'?'aff-approve':'aff-reject');btn.textContent=mode==='approve'?'Approve & open form':'Reject & open form';btn.dataset.busy='';btn.disabled=false;btn.onclick=affConfirmDecision;
+  document.getElementById('affOv').classList.add('on');
+}
+function affCloseDecision(){document.getElementById('affOv').classList.remove('on');}
+function affBuildUrl(a,mode,code,memo){
+  const p=new URLSearchParams();
+  p.set('Request_Type','Affiliate Program');
+  p.set('Request_Status',mode==='approve'?'Completed':'Rejected');
+  p.set('email',a.email||'');
+  p.set('Company_Legal_Name',a.company||a.name||'');
+  if(mode==='approve'){p.set('affiliate_code',code||'');if(memo)p.set('memo_optional',memo);}
+  else{if(memo)p.set('memo_reason',memo);}
+  return FORMINATOR_URL+'/?'+p.toString();
+}
+async function affConfirmDecision(){
+  const btn=document.getElementById('affConfirm');if(btn.dataset.busy)return;
+  const memo=affCleanMemo(document.getElementById('affMemo').value);
+  let code='';
+  if(affDMode==='approve'){code=affFmtCode(document.getElementById('affCode').value);if(!code){showToast('Enter a valid affiliate code first','error');document.getElementById('affCode').focus();return;}document.getElementById('affCode').value=code;
+    const taken=affList.filter(x=>x.id!==affDAff.id&&x.code).map(x=>x.code.toUpperCase());
+    if(taken.indexOf(code.toUpperCase())>=0){showToast('Code \u201c'+code+'\u201d is already in use — pick another','error');document.getElementById('affCode').focus();return;}
+  }
+  if(affDMode==='reject'&&!memo){showToast('Add a reason before rejecting','error');document.getElementById('affMemo').focus();return;}
+  const a=affDAff,mode=affDMode;const decision=mode==='approve'?'APPROVED':'REJECTED';
+  const old=btn.innerHTML;btn.dataset.busy='1';btn.disabled=true;btn.textContent='Working…';
+  try{
+    const params=new URLSearchParams({action:'setAffiliateDecision',affiliateId:a.id,decision:decision,code:(mode==='approve'?code:''),memo:memo});
+    const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
+    let ok=false,err='';try{const j=await res.json();ok=j.success;err=j.error||'';}catch(e){ok=false;}
+    if(!ok){btn.dataset.busy='';btn.disabled=false;btn.innerHTML=old;showToast('Could not save decision'+(err?': '+err:'')+' — try again','error');return;}
+    a._raw['Account Status|hidden-3']=decision;if(mode==='approve')a._raw['Affiliate Code']=code;a._raw['Decision Memo']=memo;
+    const url=affBuildUrl(a,mode,code,memo);
+    window.open(url,'_blank');
+    affCloseDecision();
+    affBuildModel();affRenderStats();affRefreshLists();
+    showToast((mode==='approve'?'Approved':'Rejected')+' '+esc(a.name)+' — email form opened','success');
+  }catch(e){btn.dataset.busy='';btn.disabled=false;btn.innerHTML=old;showToast('Network error — try again','error');}
 }
 
 // ===== BRIEF / STAFF NOTES TAB =====

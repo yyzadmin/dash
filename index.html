@@ -57,6 +57,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 .header-logo span{color:var(--red)}
 .header-right{display:flex;align-items:center;gap:12px}
 .header-time{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}
+.header-q{font-size:11px;font-weight:700;color:var(--red);background:var(--red-light);border-radius:6px;padding:2px 8px;font-family:'DM Sans',sans-serif}
 .btn-hdr{font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:none;cursor:pointer;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .15s}
 .btn-hdr:hover{color:var(--ink);border-color:#9CA3AF}
 
@@ -164,6 +165,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 
 /* INFO */
 .info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.info-item{min-width:0}
 .info-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:3px}
 .info-value{font-size:13px;color:var(--ink);font-weight:500}
 .info-value.mono{font-family:'DM Mono',monospace;font-size:12px}
@@ -365,6 +367,54 @@ select.aff-input{appearance:none}
 .aff-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 16px;border-radius:12px;font-size:12.5px;max-width:640px;width:calc(100% - 32px);opacity:0;transition:.25s;z-index:300;box-shadow:0 10px 30px rgba(0,0,0,.3)}
 .aff-toast.on{opacity:1;transform:translateX(-50%) translateY(0)}.aff-toast a{color:#a7f3d0}
 @media(max-width:760px){.aff-split{grid-template-columns:1fr}.aff-list{max-height:none}}
+
+/* ===== FEEDBACK (bugs & improvements) ===== */
+.fb-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.fb-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.fb-chip{font-size:12px;font-weight:600;padding:5px 12px;border-radius:99px;border:1px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer}
+.fb-chip.on{background:var(--red);color:#fff;border-color:var(--red)}
+.fb-b-bug{background:var(--rose-bg);color:var(--rose)}
+.fb-b-imp{background:var(--blue-bg);color:var(--blue)}
+.fb-b-hi{background:var(--rose-bg);color:var(--rose)}
+.fb-b-med{background:var(--amber-bg);color:var(--amber)}
+.fb-b-lo{background:var(--border2);color:var(--muted)}
+.fb-b-prog{background:var(--purple-bg);color:var(--purple)}
+.fb-ri{border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:10px;background:var(--white)}
+.fb-ri-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;cursor:pointer}
+.fb-ri-title{font-size:13.5px;font-weight:600;flex:1;min-width:0;color:var(--ink)}
+.fb-ri-meta{font-size:11.5px;color:var(--muted);margin-top:5px}
+.fb-ri-details{font-size:12.5px;color:var(--ink2);margin-top:9px;padding-top:9px;border-top:1px solid var(--border2);display:none;white-space:pre-wrap}
+.fb-ri.open .fb-ri-details{display:block}
+.fb-sel{font-size:11px;border:1px solid var(--border);border-radius:7px;padding:4px 8px;background:var(--white);color:var(--ink2);cursor:pointer}
+.fb-trash{border:1px solid var(--rose-bg);background:var(--white);color:var(--rose);width:28px;height:28px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.fb-trash .ic{width:15px;height:15px}
+.fb-notetxt{background:var(--amber-bg);color:var(--amber);border-radius:7px;padding:7px 10px;font-size:12px;margin-top:6px;white-space:pre-wrap}
+.fb-note{width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:12.5px;min-height:52px;resize:vertical;margin-top:4px;color:var(--ink);background:var(--white)}
+.fb-actions{display:flex;gap:8px;margin-top:9px}
+.fb-lbl{font-size:11px;font-weight:600;color:var(--ink2);margin:12px 0 5px}
+.fb-ov{position:fixed;inset:0;background:rgba(17,24,39,.45);display:none;align-items:center;justify-content:center;padding:24px 16px;z-index:1000;overflow:auto}
+.fb-ov.on{display:flex}
+.fb-modal{width:100%;max-width:440px;border-radius:14px;background:var(--white);padding:18px;margin:auto}
+.fb-modal h3{font-size:15px;font-weight:700;color:var(--ink)}
+.fb-seg{display:inline-flex;background:var(--border2);border-radius:9px;padding:3px;gap:3px}
+.fb-seg b{font-size:12px;font-weight:600;padding:6px 15px;border-radius:7px;color:var(--muted);cursor:pointer}
+.fb-seg b.sel{background:var(--white);color:var(--red);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.fb-inp{width:100%;border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--white)}
+textarea.fb-inp{min-height:70px;resize:vertical}
+.fb-two{display:flex;gap:10px}
+.fb-two>div{flex:1}
+.fb-err{font-size:11px;color:var(--rose);margin-top:5px;display:none}
+
+
+/* ===== NOTICE BANNER ===== */
+.notice-banner{display:flex;align-items:center;gap:10px;padding:11px 18px;font-size:13.5px;font-weight:600;background:var(--amber-bg);color:#b45309;border-bottom:1px solid #fde68a}
+.notice-banner .ic{width:17px;height:17px;flex:none}
+.nb-switch{position:relative;display:inline-block;width:44px;height:25px;flex:none}
+.nb-switch input{opacity:0;width:0;height:0;position:absolute}
+.nb-slider{position:absolute;inset:0;background:#cbd5e1;border-radius:99px;transition:.15s;cursor:pointer}
+.nb-slider:before{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;background:#fff;border-radius:50%;transition:.15s}
+.nb-switch input:checked+.nb-slider{background:var(--red)}
+.nb-switch input:checked+.nb-slider:before{transform:translateX(19px)}
 </style>
 </head>
 <body>
@@ -394,6 +444,10 @@ select.aff-input{appearance:none}
 <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M16.2 4.3a2 2 0 0 1 2.8 0l.7.7a2 2 0 0 1 0 2.8L8.5 19 4 20l1-4.5Z"/><path d="M14.5 6 18 9.5"/></symbol>
 <symbol id="i-chat" viewBox="0 0 24 24"><path d="M6 5h12a2.5 2.5 0 0 1 2.5 2.5v6A2.5 2.5 0 0 1 18 16H10l-4.5 3.8V7.5A2.5 2.5 0 0 1 6 5Z"/></symbol>
 <symbol id="i-link" viewBox="0 0 24 24"><path d="M9 15l6-6M8.3 10.8 6.5 12.5a3.7 3.7 0 0 0 5.2 5.2l1.7-1.7M15.7 13.2l1.8-1.7a3.7 3.7 0 0 0-5.2-5.2l-1.7 1.7"/></symbol>
+<symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-archive" viewBox="0 0 24 24"><path d="M4 7h16M5 7l1 12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1l1-12M4 7l1.5-3h13L20 7M10 12h4"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-1.6 3.5L16 11H5"/></symbol>
 <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5.5 4h3l1.6 5-2.1 1.6a11.5 11.5 0 0 0 5.4 5.4L15 13.9l5 1.6v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 3.5 6.2 2 2 0 0 1 5.5 4Z"/></symbol>
 <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.6 2.6 14.4 0 17M12 3.5c-2.6 2.6-2.6 14.4 0 17"/></symbol>
 <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
@@ -457,13 +511,17 @@ select.aff-input{appearance:none}
     <div class="header-logo">YYZ <span>Offices</span> &mdash; Staff Portal</div>
     <div class="header-right">
       <div class="header-time" id="headerTime"></div>
+      <span class="header-q" id="headerQ"></span>
       <button id="adminModePill" onclick="enterAdminMode()" style="font-size:11px;font-weight:600;padding:5px 13px;border-radius:99px;cursor:pointer;background:#F3F4F6;color:#666;border:1px solid #ddd"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg> Staff</button>
       <div style="display:flex;align-items:center;gap:2px;background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;padding:3px">
-        <button class="hdr-iconbtn" onclick="openModal('settingsModal')" title="Settings"><svg class="ic" aria-hidden="true" style="width:17px;height:17px"><use href="#i-sliders"/></svg></button>
+        <button class="hdr-iconbtn" onclick="window.open('https://yyzoffices.com/yyz-dashboard-7','_blank')" title="Open Dashboard"><svg class="ic" aria-hidden="true" style="width:17px;height:17px"><use href="#i-external"/></svg></button>
+        <button class="hdr-iconbtn" onclick="openModal('settingsModal');fillBannerSettings()" title="Settings"><svg class="ic" aria-hidden="true" style="width:17px;height:17px"><use href="#i-sliders"/></svg></button>
         <button class="hdr-iconbtn" onclick="lockPortal()" title="Lock"><svg class="ic" aria-hidden="true" style="width:16px;height:16px"><use href="#i-lock"/></svg></button>
       </div>
     </div>
   </div>
+
+  <div id="noticeBanner" class="notice-banner" style="display:none"></div>
 
   <div class="tabs-bar">
     <button class="tab-btn active" onclick="switchTab('search')" id="tab-search"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-search"/></svg> Client Search</button>
@@ -481,6 +539,9 @@ select.aff-input{appearance:none}
     </button>
     <button class="tab-btn" onclick="switchTab('returns')" id="tab-returns">
       <svg class="ic ic-muted" aria-hidden="true"><use href="#i-outbox"/></svg> Returns
+    </button>
+    <button class="tab-btn" onclick="switchTab('feedback')" id="tab-feedback">
+      <svg class="ic ic-muted" aria-hidden="true"><use href="#i-flag"/></svg> Feedback <span class="tab-badge" id="feedbackCount">&#8212;</span>
     </button>
     <span style="flex:1;min-width:12px"></span>
     <div class="tab-admin-group">
@@ -744,6 +805,11 @@ select.aff-input{appearance:none}
     </div>
 
     <!-- MAILBOX TAB -->
+    <!-- FEEDBACK TAB -->
+    <div class="tab-pane" id="pane-feedback">
+      <div id="feedbackContent"><div class="state-box"><div class="spinner"></div><div class="state-label">Loading&#8230;</div></div></div>
+    </div>
+
     <div class="tab-pane" id="pane-mailbox">
       <div style="background:var(--white);border-radius:12px;border:1px solid var(--border);overflow:hidden">
         <div style="padding:14px 16px 0;border-bottom:1px solid var(--border2)">
@@ -923,6 +989,22 @@ select.aff-input{appearance:none}
           <button class="btn btn-ghost" onclick="document.getElementById('changeAdminPwdForm').style.display='none'">Cancel</button>
         </div>
       </div>
+      <div class="settings-row" id="bannerSettingsRow" style="display:none">
+        <div style="width:100%">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div><div class="settings-label">Notice banner</div><div class="settings-sub">Shows a message across the top for all staff</div></div>
+            <label class="nb-switch"><input type="checkbox" id="bannerToggle"><span class="nb-slider"></span></label>
+          </div>
+          <div style="margin-top:12px">
+            <label class="form-label">Message</label>
+            <input class="form-input" id="bannerMsg" maxlength="200" placeholder="e.g. Office closed Friday for maintenance" oninput="var c=document.getElementById('bannerCount');if(c)c.textContent=this.value.length+' / 200';">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+              <span class="settings-sub" id="bannerCount"></span>
+              <button class="btn btn-red btn-sm" id="bannerSaveBtn" onclick="saveBanner()">Save banner</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="settings-row">
         <div><div class="settings-label">Lock Portal</div><div class="settings-sub">Returns to PIN entry screen</div></div>
         <button class="btn btn-danger btn-sm" onclick="lockPortal()">Lock Now</button>
@@ -1072,6 +1154,7 @@ function switchTab(name){
   if(name==='referrals')renderReferralsTab();
   if(name==='brief')renderBriefTab();
   if(name==='returns')renderReturnsTab();
+  if(name==='feedback')renderFeedbackTab();
 }
 
 // DATA
@@ -1093,6 +1176,7 @@ async function loadAllData(){
   fetchSheet('staffNotes').then(n=>{briefNotes=n;}).catch(()=>{});
   fetchSheet('returnedMail').then(r=>{returnsData=r;}).catch(()=>{});
   Promise.all([fetchSheet('affiliateProgram'),fetchSheet('planRegistryRAW')]).then(([a,r])=>{affApplicants=a;affRawClients=r;affLoaded=true;}).catch(()=>{});
+  fetchSheet('feedback').then(r=>{feedbackData=Array.isArray(r)?r:[];feedbackLoaded=true;try{fbModel();fbSetBadge();}catch(e){}}).catch(()=>{});
   document.getElementById('headerTime').textContent='Loaded '+new Date().toLocaleTimeString('en-CA',{timeZone:'America/Toronto'});
   updateTabCounts();
 }
@@ -1123,6 +1207,7 @@ function updateTabCounts(){
 // HELPERS
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function planLabel(v){return{Economy:'Economy',Core:'Core',Forward:'Plus Forward',Scan:'Plus Scan'}[v]||v;}
+function emailTrunc(e,mx){e=e||'';if(!e)return '<span class="empty">\u2014</span>';return '<span title="'+esc(e)+'" style="display:inline-block;max-width:'+(mx||180)+'px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom">'+esc(e)+'</span>';}
 function statusClass(s){return{'pending':'badge-pending','picked up':'badge-pickedup','scanned':'badge-scanned','forwarded':'badge-forwarded','discarded':'badge-discarded'}[(s||'').toLowerCase()]||'badge-pending';}
 function typeIcon(t){return t==='Parcel'?'<svg class="ic ic-muted" aria-hidden="true"><use href="#i-package"/></svg>':t==='Confidential Mail'?'<svg class="ic ic-muted" aria-hidden="true"><use href="#i-lock"/></svg>':'<svg class="ic ic-muted" aria-hidden="true"><use href="#i-mail"/></svg>';}
 
@@ -1238,6 +1323,8 @@ function goBack(){
   }
 }
 
+function fmtPhone(v){if(v==null)return '';var raw=String(v).trim();var d=raw.replace(/\D/g,'');if(d.length===10)return '('+d.slice(0,3)+') '+d.slice(3,6)+'-'+d.slice(6);if(d.length===11&&d.charAt(0)==='1')return '+1 ('+d.slice(1,4)+') '+d.slice(4,7)+'-'+d.slice(7);return raw;}
+function stampLabel(status){return {'Picked Up':'Collected','Scanned':'Scanned','Forwarded':'Forwarded','Discarded':'Discarded'}[status]||'Updated';}
 function mailItemHtml(m){
   const mid=m['Mail ID|hidden-4'],itype=m['Item Type|radio-1']||'',recip=m['Recipient Name|text-1']||'';
   const loc=m['Location of Mail|text-4']||'',cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';
@@ -1268,7 +1355,7 @@ function mailItemHtml(m){
   if(!isPending){
     const HIST_STYLE={'Picked Up':'background:#dcfce7;color:#15803d','Scanned':'background:#dbeafe;color:#1d4ed8','Forwarded':'background:#ede9fe;color:#6d28d9','Discarded':'background:#F3F4F6;color:#6B7280'};
     const hstyle=HIST_STYLE[cur]||'background:#F3F4F6;color:#555';
-    const collLine=collectedAt?'<div style="font-size:11px;margin-top:4px;padding:4px 8px;background:#f0fdf4;border-radius:5px;color:#15803d;display:inline-block"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-calendar"/></svg> Collected: '+fmtD2(collectedAt)+'</div>':'';
+    const collLine=collectedAt?'<div style="font-size:11px;margin-top:4px;padding:4px 8px;background:#f0fdf4;border-radius:5px;color:#15803d;display:inline-block"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-calendar"/></svg> '+stampLabel(cur)+': '+fmtD2(collectedAt)+'</div>':'';
     return '<div class="mail-item resolved" id="mi_'+esc(mid)+'">'
       +'<div class="mail-item-icon">'+typeIcon(itype)+'</div>'
       +'<div class="mail-item-body">'
@@ -1393,7 +1480,7 @@ function renderDetail(c){
             <span class="badge ${isActive?'badge-active':'badge-inactive'}">${esc(status)}</span>
             <span class="badge badge-plan">${esc(planLabel(plan))}</span>
             ${(c["How'd you find us?|radio-3"]||'')?'<span style="font-size:10px;color:var(--muted);background:var(--bg2);padding:2px 9px;border-radius:99px;border:0.5px solid var(--border2)">via '+esc(c["How'd you find us?|radio-3"])+'</span>':''}
-            <span title="Click to copy" onclick="copyId('${esc(pid)}','Plan ID')" style="cursor:pointer;font-family:monospace;font-weight:700;background:#F3F4F6;padding:1px 6px;border-radius:4px;user-select:none">${esc(pid)}</span>&middot;<span>${esc(email)}</span>
+            <span title="Click to copy" onclick="copyId('${esc(pid)}','Plan ID')" style="cursor:pointer;font-family:monospace;font-weight:700;background:#F3F4F6;padding:1px 6px;border-radius:4px;user-select:none">${esc(pid)}</span>&middot;${emailTrunc(email,240)}
           </div>
         </div>
       </div>
@@ -1469,6 +1556,7 @@ function renderDetail(c){
         </div>`;
       })()}
     </div>
+    ${(isAdminMode&&!(c['Verified']||''))?renderClientAffiliateCard(c,pid):''}
     ${hasLegalHandling?`<div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
         <div>
@@ -1530,8 +1618,8 @@ function renderDetail(c){
       <div class="section-body">
         <div class="info-grid">
           <div class="info-item"><div class="info-label">Admin Name</div><div class="info-value">${esc(adminName)||'<span class="empty">\u2014</span>'}</div></div>
-          <div class="info-item"><div class="info-label">Email</div><div class="info-value mono">${esc(email)||'<span class="empty">\u2014</span>'}</div></div>
-          <div class="info-item"><div class="info-label">Phone</div><div class="info-value mono">${esc(phone)||'<span class="empty">\u2014</span>'}</div></div>
+          <div class="info-item"><div class="info-label">Email</div><div class="info-value mono">${email?('<span title="'+esc(email)+'" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(email)+'</span>'):'<span class="empty">\u2014</span>'}</div></div>
+          <div class="info-item"><div class="info-label">Phone</div><div class="info-value mono">${esc(fmtPhone(phone))||'<span class="empty">\u2014</span>'}</div></div>
           <div class="info-item"><div class="info-label">Registered</div><div class="info-value">${(d=>d&&!isNaN(new Date(d))?new Date(d).toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'}):'<span class="empty">&mdash;</span>')(c['Registration Date|hidden-4'])}</div></div>
           <div class="info-item"><div class="info-label">Anniversary</div><div class="info-value">${(d=>d&&!isNaN(new Date(d))?new Date(d).toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'}):'<span class="empty">&mdash;</span>')(c['Anniversary Date|hidden-5'])}</div></div>
           <div class="info-item"><div class="info-label">Plan</div><div class="info-value">${esc(planLabel(plan))}</div></div>
@@ -2445,7 +2533,7 @@ async function sendOverdueNotice(evt, pid){
   const daysOvd=m=>{const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';if(!cb)return 0;const d=new Date(cb);d.setHours(0,0,0,0);return Math.ceil((today-d)/86400000);};
   const daysLeft=m=>{const cb=m['Mail must be collected by|date-1']||m['Parcel must be collected by|date-3']||'';if(!cb)return 0;const d=new Date(cb);d.setHours(0,0,0,0);return Math.ceil((d-today)/86400000);};
 
-  const fmtND=d=>{if(!d)return'';try{const dt=new Date(d.includes('T')?d:d+'T00:00:00');return isNaN(dt)?'':dt.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Toronto'});}catch(e){return'';}  };
+  const fmtND=d=>{if(!d)return'';try{const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];let dt;if(d instanceof Date){dt=d;}else{const s=String(d).trim();if(!s)return'';if(s.indexOf('/')>-1){const p=s.split('/').map(Number);if(!p[0]||!p[1]||!p[2])return'';dt=new Date(p[2],p[0]-1,p[1]);}else if(s.indexOf('T')>-1){dt=new Date(s);}else{dt=new Date(s+'T00:00:00');}}return isNaN(dt)?'':MON[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();}catch(e){return'';}};
   let body='Hello '+adminName+',\n\n';
   body+='This is a notice regarding your mailbox. The following items are overdue for pickup and will be discarded within 7 days if no arrangements are made.\n\n';
   body+='\u26a0\ufe0f OVERDUE ITEMS \u2014 Pending Discard\n\n';
@@ -2456,7 +2544,7 @@ async function sendOverdueNotice(evt, pid){
     const recip=m['Recipient Name|text-1']||'';
     const nd=m['Notification Date|hidden-1']||'';
     const days=daysOvd(m);
-    body+='    \u2022 '+itype+' \u2014 ID: '+mid+(recip?' \u2014 for '+recip:'')+(sender?' \u2014 from '+sender:'')+(nd?' \u2014 Received: '+fmtND(nd):'')+' \u2014 '+days+' days overdue\n';
+    body+='    \u2022 '+itype+' \u2014 ID: '+mid+(recip?' \u2014 for '+recip:'')+(sender?' \u2014 from '+sender:'')+(fmtND(nd)?' \u2014 Received: '+fmtND(nd):'')+' \u2014 '+days+' days overdue\n';
   });
   if(pendingItems.length){
     body+='\n\n\ud83d\udcec You also have the following mail awaiting pickup:\n\n';
@@ -2467,7 +2555,7 @@ async function sendOverdueNotice(evt, pid){
       const recip=m['Recipient Name|text-1']||'';
       const nd=m['Notification Date|hidden-1']||'';
       const days=daysLeft(m);
-      body+='    \u2022 '+itype+' \u2014 ID: '+mid+(recip?' \u2014 for '+recip:'')+(sender?' \u2014 from '+sender:'')+(nd?' \u2014 Received: '+fmtND(nd):'')+' \u2014 '+days+' day'+(days!==1?'s':'')+' remaining\n';
+      body+='    \u2022 '+itype+' \u2014 ID: '+mid+(recip?' \u2014 for '+recip:'')+(sender?' \u2014 from '+sender:'')+(fmtND(nd)?' \u2014 Received: '+fmtND(nd):'')+' \u2014 '+days+' day'+(days!==1?'s':'')+' remaining\n';
     });
     body+='\n';
   }
@@ -2747,7 +2835,7 @@ function renderClientsTable(clients){
       <div style="min-width:0;padding-right:12px">
         <div style="font-size:12px;font-weight:500;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px">${esc(admin)||'—'}</div>
         <div style="font-size:11px;color:#6B7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'DM Mono',monospace;margin-bottom:1px">${esc(email)||'—'}</div>
-        ${phone?`<div style="font-size:11px;color:#9CA3AF;font-family:'DM Mono',monospace">${esc(phone)}</div>`:''}
+        ${phone?`<div style="font-size:11px;color:#9CA3AF;font-family:'DM Mono',monospace">${esc(fmtPhone(phone))}</div>`:''}
       </div>
 
       <!-- Usage -->
@@ -2798,7 +2886,7 @@ function renderClientsTable(clients){
     return `<div onclick="openClientFromList('${esc(String(pid))}')" style="display:grid;grid-template-columns:130px minmax(0,2fr) minmax(0,1.5fr) 200px 90px;align-items:center;padding:12px 14px;background:${bg};border:1px solid ${cb};border-radius:10px;cursor:pointer;transition:all .12s;margin-bottom:5px" onmouseover="this.style.background='${bgh}';this.style.borderColor='${cbh}'" onmouseout="this.style.background='${bg}';this.style.borderColor='${cb}'">
       <div style="display:flex;flex-direction:column;gap:4px;padding-right:8px"><span style="font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;background:${pm.bg};color:${pm.color};display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:112px" title="${pm.label}">${pm.label}</span>${getRelatedAccounts(c).length>0?'<div style="font-size:9px;color:#92400e;margin-top:2px;display:flex;align-items:center;gap:3px"><span style="width:5px;height:5px;border-radius:50%;background:#f59e0b;display:inline-block"></span>Associated</div>':''}<div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:${isActive?'#22C55E':'#D1D5DB'};flex-shrink:0"></div><span style="font-size:11px;color:${isActive?'#15803D':'#6B7280'};font-weight:500">${isActive?'Active':'Inactive'}</span></div>${delTag}${cTermTag}${qTag}</div>
       <div style="min-width:0;padding-right:12px"><div style="font-size:13px;font-weight:600;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px">${esc(company)}</div>${extraRecipients.length?`<div style="font-size:11px;color:#6B7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px">${extraRecipients.slice(0,2).map(esc).join(' · ')}</div>`:''}<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span style="font-size:10px;color:#9CA3AF">Joined ${regDate||'—'} · ID ${esc(String(pid))}</span>${vTag}</div></div>
-      <div style="min-width:0;padding-right:12px"><div style="font-size:12px;font-weight:500;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px">${esc(admin)||'—'}</div><div style="font-size:11px;color:#6B7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'DM Mono',monospace;margin-bottom:1px">${esc(email)||'—'}</div>${phone?`<div style="font-size:11px;color:#9CA3AF;font-family:'DM Mono',monospace">${esc(phone)}</div>`:''}</div>
+      <div style="min-width:0;padding-right:12px"><div style="font-size:12px;font-weight:500;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px">${esc(admin)||'—'}</div><div style="font-size:11px;color:#6B7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'DM Mono',monospace;margin-bottom:1px">${esc(email)||'—'}</div>${phone?`<div style="font-size:11px;color:#9CA3AF;font-family:'DM Mono',monospace">${esc(fmtPhone(phone))}</div>`:''}</div>
       <div style="display:flex;flex-direction:column;gap:5px;padding:0 12px"><div style="font-size:10px;color:#6B7280;font-weight:500;margin-bottom:1px">Renews ${esc(periodEnd)}</div>${usageRow(mailsUsed,mailsAllowed,'Mail')}${usageRow(parcelsUsed,parcelsAllowed,'Parcels')}</div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">${pending>0?`<span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;background:#FEF3C7;color:#B45309;white-space:nowrap">${pending} pending</span>`:`<span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px;background:#F3F4F6;color:#6B7280">Clear</span>`}</div>
     </div>`;
@@ -2861,6 +2949,155 @@ function renderStatsTab(forceRefresh){
 }
 
 // ===== REFERRALS TAB =====
+// ===== NOTICE BANNER =====
+let bannerActive=false, bannerMessage='';
+function renderNoticeBanner(){var el=document.getElementById('noticeBanner');if(!el)return;if(bannerActive&&bannerMessage){el.innerHTML='<svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg><span>'+esc(bannerMessage)+'</span>';el.style.display='';}else{el.style.display='none';el.innerHTML='';}}
+function loadBanner(){fetchSheet('settings').then(function(rows){if(Array.isArray(rows)){var kv={};rows.forEach(function(r){if(r&&r.Key!=null)kv[String(r.Key).trim()]=r.Value;});bannerActive=String(kv.bannerActive||'').toLowerCase()==='yes';bannerMessage=String(kv.bannerMessage||'').trim();}renderNoticeBanner();}).catch(function(){});}
+function fillBannerSettings(){var row=document.getElementById('bannerSettingsRow');if(row)row.style.display=isAdminMode?'block':'none';var t=document.getElementById('bannerToggle');var m=document.getElementById('bannerMsg');var c=document.getElementById('bannerCount');if(t)t.checked=bannerActive;if(m)m.value=bannerMessage;if(c)c.textContent=(bannerMessage.length)+' / 200';}
+async function saveBanner(){var t=document.getElementById('bannerToggle');var m=document.getElementById('bannerMsg');var active=(t&&t.checked)?'yes':'';var message=(m?m.value:'').trim();var btn=document.getElementById('bannerSaveBtn');if(btn&&btn.dataset.busy)return;if(btn){btn.dataset.busy='1';btn.disabled=true;btn.textContent='Saving\u2026';}
+  try{var res=await fetch(APPS_SCRIPT_URL+'?'+new URLSearchParams({action:'setBanner',active:active,message:message}),{redirect:'follow'});var ok=false;try{ok=(await res.json()).success;}catch(e){ok=false;}
+    if(!ok){if(btn){btn.dataset.busy='';btn.disabled=false;btn.textContent='Save banner';}showToast('Could not save banner \u2014 try again','error');return;}
+    bannerActive=(active==='yes');bannerMessage=message;renderNoticeBanner();if(btn){btn.dataset.busy='';btn.disabled=false;btn.textContent='Save banner';}showToast(bannerActive?'Banner updated':'Banner turned off','success');
+  }catch(e){if(btn){btn.dataset.busy='';btn.disabled=false;btn.textContent='Save banner';}showToast('Network error \u2014 try again','error');}
+}
+
+// ===== FEEDBACK (bugs & improvements) TAB =====
+let feedbackData=null, feedbackLoaded=false;
+let fbList=[], fbFilter='active', fbType='Bug', fbArchiving=false;
+const FB_STATUSES=['Open','In progress','Done',"Won't do"];
+const FB_CHIPS=[['active','Active'],['all','All'],['Open','Open'],['In progress','In progress'],['Done','Done'],["Won't do","Won't do"],['Bug','Bugs'],['Improvement','Improvements']];
+function fbG(o,k){return o&&o[k]!=null?String(o[k]).trim():'';}
+function fbStClass(s){return {'Open':'badge-pending','In progress':'fb-b-prog','Done':'badge-active',"Won't do":'aff-badge-muted'}[s]||'badge';}
+function fbStRank(s){var r={'Open':0,'In progress':1,'Done':2,"Won't do":3};return r[s]!=null?r[s]:0;}
+function fbPd(s){var t=Date.parse(String(s||'').replace(' ','T'));return isNaN(t)?0:t;}
+function fbNowLocal(){var d=new Date(),p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());}
+function fbFmtDate(s){if(!s)return '';var str=String(s).trim();if(/^\d{4}-\d{2}-\d{2}$/.test(str))str+='T00:00:00';var t=Date.parse(str);if(isNaN(t))t=Date.parse(str.replace(' ','T'));if(isNaN(t))return str;return new Date(t).toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'});}
+async function fbLoad(){let r;try{r=await fetchSheet('feedback');}catch(e){r=null;}feedbackData=Array.isArray(r)?r:[];feedbackLoaded=true;}
+function fbModel(){
+  fbList=(feedbackData||[]).filter(r=>fbG(r,'Feedback ID')!==''&&fbG(r,'Archived').toLowerCase()!=='yes').map(r=>({
+    id:fbG(r,'Feedback ID'),date:fbG(r,'Date'),type:fbG(r,'Type')||'Bug',title:fbG(r,'Title'),
+    details:fbG(r,'Details'),area:fbG(r,'Area'),prio:fbG(r,'Priority'),by:fbG(r,'Reporter'),
+    status:fbG(r,'Status')||'Open',note:fbG(r,'Admin Note'),resolved:fbG(r,'Resolved Date')
+  }));
+}
+function fbOpenCount(){return fbList.filter(d=>d.status!=='Done'&&d.status!=="Won't do").length;}
+function fbSetBadge(){const el=document.getElementById('feedbackCount');if(el)el.textContent=fbOpenCount()||'\u2014';}
+
+function renderFeedbackTab(forceRefresh){
+  const el=document.getElementById('feedbackContent');
+  el.innerHTML='<div class="state-box"><div class="spinner"></div><div class="state-label">Loading&#8230;</div></div>';
+  const run=()=>{try{fbModel();fbPaintShell();fbRender();fbSetBadge();}catch(e){el.innerHTML='<div class="state-box"><div class="state-icon"><svg class="ic ic-amber" aria-hidden="true"><use href="#i-warn"/></svg></div><div class="state-label">Feedback error</div><div class="state-sub">'+esc(String(e))+'</div></div>';}};
+  if(!feedbackLoaded||forceRefresh){fbLoad().then(run).catch(e=>{el.innerHTML='<div class="state-box"><div class="state-icon"><svg class="ic ic-amber" aria-hidden="true"><use href="#i-warn"/></svg></div><div class="state-label">Error loading feedback</div><div class="state-sub">'+esc(e&&e.message||e)+'</div></div>';});}
+  else run();
+}
+function fbPaintShell(){
+  const el=document.getElementById('feedbackContent');
+  el.innerHTML=''
+  +'<div class="fb-head"><div><h1 style="font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.02em">Bugs &amp; improvements</h1><div style="font-size:12px;color:var(--muted);margin-top:2px" id="fbRoleNote"></div></div>'
+    +'<div style="display:flex;gap:8px"><button class="btn btn-ghost btn-sm" onclick="renderFeedbackTab(true)"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-refresh"/></svg> Refresh</button>'
+    +'<button class="btn btn-red btn-sm" onclick="fbOpenForm()"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> New report</button></div></div>'
+  +'<div class="fb-chips" id="fbChips"></div><div id="fbList"></div>'
+  +fbModalHtml();
+  const rn=document.getElementById('fbRoleNote');if(rn)rn.textContent=isAdminMode?'You can change status, add notes, and archive.':'You can submit and view. Admin manages status and notes.';
+}
+function fbModalHtml(){
+  return '<div class="fb-ov" id="fbOv"><div class="fb-modal">'
+    +'<h3>Report a bug or idea</h3><div style="font-size:12px;color:var(--muted);margin:2px 0 4px">Flag anything broken or suggest an improvement.</div>'
+    +'<div class="fb-lbl">Type</div><div class="fb-seg" id="fbTypeSeg"><b class="sel" data-t="Bug" onclick="fbPickType(this)">Bug</b><b data-t="Improvement" onclick="fbPickType(this)">Improvement</b></div>'
+    +'<div class="fb-lbl">Title</div><input class="fb-inp" id="fbTitle" placeholder="Short summary"><div class="fb-err" id="fbErrTitle">Add a short title.</div>'
+    +'<div class="fb-lbl">Details</div><textarea class="fb-inp" id="fbDetails" placeholder="What happened, or what you&rsquo;d like"></textarea>'
+    +'<div class="fb-two"><div><div class="fb-lbl">Area / page</div><select class="fb-inp" id="fbArea"><option>Client Search</option><option>Mailbox</option><option>Forward Queue</option><option>Overdue</option><option>Docs</option><option>Affiliates</option><option>Stats</option><option>Feedback</option><option>Other</option></select></div>'
+    +'<div id="fbPrioWrap"><div class="fb-lbl">Priority</div><select class="fb-inp" id="fbPrio"><option>Low</option><option selected>Medium</option><option>High</option></select></div></div>'
+    +'<div class="fb-lbl">Your name <span style="font-weight:400;color:var(--muted)">(optional)</span></div><input class="fb-inp" id="fbName" placeholder="Leave blank if you like">'
+    +'<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button class="btn btn-ghost" onclick="fbCloseForm()">Cancel</button><button class="btn btn-red" id="fbSubmitBtn" onclick="fbSubmit()">Submit report</button></div>'
+  +'</div></div>';
+}
+function fbOpenForm(){fbType='Bug';document.querySelectorAll('#fbTypeSeg b').forEach(x=>x.classList.toggle('sel',x.dataset.t==='Bug'));document.getElementById('fbPrioWrap').style.visibility='visible';document.getElementById('fbTitle').value='';document.getElementById('fbDetails').value='';document.getElementById('fbName').value='';document.getElementById('fbErrTitle').style.display='none';const b=document.getElementById('fbSubmitBtn');b.dataset.busy='';b.disabled=false;b.textContent='Submit report';document.getElementById('fbOv').classList.add('on');document.getElementById('fbTitle').focus();}
+function fbCloseForm(){document.getElementById('fbOv').classList.remove('on');}
+function fbPickType(b){fbType=b.dataset.t;document.querySelectorAll('#fbTypeSeg b').forEach(x=>x.classList.toggle('sel',x===b));document.getElementById('fbPrioWrap').style.visibility=fbType==='Bug'?'visible':'hidden';}
+function fbSetFilter(i){fbFilter=FB_CHIPS[i][0];fbRender();}
+
+function fbRender(){
+  const cnt=k=>k==='all'?fbList.length:k==='active'?fbList.filter(d=>d.status!=='Done'&&d.status!=="Won't do").length:(k==='Bug'||k==='Improvement')?fbList.filter(d=>d.type===k).length:fbList.filter(d=>d.status===k).length;
+  document.getElementById('fbChips').innerHTML=FB_CHIPS.map((c,i)=>'<span class="fb-chip '+(fbFilter===c[0]?'on':'')+'" onclick="fbSetFilter('+i+')">'+esc(c[1])+' '+cnt(c[0])+'</span>').join('');
+  let list=fbList.filter(d=>{if(fbFilter==='all')return true;if(fbFilter==='active')return d.status!=='Done'&&d.status!=="Won't do";if(fbFilter==='Bug'||fbFilter==='Improvement')return d.type===fbFilter;return d.status===fbFilter;});
+  list.sort((a,b)=>fbStRank(a.status)-fbStRank(b.status)||fbPd(b.date)-fbPd(a.date));
+  const el=document.getElementById('fbList');
+  el.innerHTML=list.length?list.map(fbRow).join(''):'<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px">Nothing here.</div>';
+}
+function fbRow(d){
+  const tb=d.type==='Bug'?'<span class="badge fb-b-bug">BUG</span>':'<span class="badge fb-b-imp">IMPROVEMENT</span>';
+  const pc=d.prio==='High'?'fb-b-hi':d.prio==='Medium'?'fb-b-med':'fb-b-lo';
+  const pb=(d.type==='Bug'&&d.prio&&d.prio!=='—')?'<span class="badge '+pc+'">'+esc(d.prio.toUpperCase())+'</span>':'';
+  const status=isAdminMode
+    ? '<select class="fb-sel" id="fbsel_'+d.id+'" onclick="event.stopPropagation()" onchange="fbSetStatus(\''+d.id+'\',this.value)">'+FB_STATUSES.map(s=>'<option'+(d.status===s?' selected':'')+'>'+esc(s)+'</option>').join('')+'</select>'
+    : '<span class="badge '+fbStClass(d.status)+'">'+esc(d.status.toUpperCase())+'</span>';
+  const arch=isAdminMode?'<button class="fb-trash" title="Archive report" onclick="event.stopPropagation();fbArchive(\''+d.id+'\')"><svg class="ic" aria-hidden="true"><use href="#i-archive"/></svg></button>':'';
+  const meta=esc(d.area)+(d.by?' · by '+esc(d.by):'')+' · '+esc(fbFmtDate(d.date))+(((d.status==='Done'||d.status==="Won't do")&&d.resolved)?' · closed '+esc(fbFmtDate(d.resolved)):'');
+  let noteBlock='';
+  if(isAdminMode){
+    noteBlock='<div class="fb-lbl">Admin note</div><textarea class="fb-note" id="fbnote_'+d.id+'" placeholder="Add a note for the team&hellip;">'+esc(d.note)+'</textarea>'
+      +'<div class="fb-actions"><button class="btn btn-red btn-sm" id="fbnotebtn_'+d.id+'" onclick="fbSaveNote(\''+d.id+'\')">Save note</button><button class="btn btn-ghost btn-sm" onclick="fbArchive(\''+d.id+'\')">Archive</button></div>';
+  } else if(d.note){
+    noteBlock='<div class="fb-lbl">Admin note</div><div class="fb-notetxt">'+esc(d.note)+'</div>';
+  }
+  return '<div class="fb-ri" id="fbri_'+d.id+'"><div class="fb-ri-top" onclick="this.parentNode.classList.toggle(\'open\')">'
+    +tb+pb+'<span class="fb-ri-title">'+esc(d.title)+'</span>'+status+arch+'</div>'
+    +'<div class="fb-ri-meta">'+meta+'</div>'
+    +'<div class="fb-ri-details">'+esc(d.details||'(no details)')+noteBlock+'</div></div>';
+}
+
+async function fbSubmit(){
+  const title=document.getElementById('fbTitle').value.trim();
+  const err=document.getElementById('fbErrTitle');
+  if(!title){err.style.display='block';document.getElementById('fbTitle').focus();return;}err.style.display='none';
+  const btn=document.getElementById('fbSubmitBtn');if(btn.dataset.busy)return;const old=btn.textContent;btn.dataset.busy='1';btn.disabled=true;btn.textContent='Submitting…';
+  const params=new URLSearchParams({action:'addFeedback',type:fbType,title:title,details:document.getElementById('fbDetails').value.trim(),area:document.getElementById('fbArea').value,priority:(fbType==='Bug'?document.getElementById('fbPrio').value:''),reporter:document.getElementById('fbName').value.trim()});
+  try{
+    const res=await fetch(APPS_SCRIPT_URL+'?'+params,{redirect:'follow'});
+    let ok=false;try{ok=(await res.json()).success;}catch(e){ok=false;}
+    if(!ok){btn.dataset.busy='';btn.disabled=false;btn.textContent=old;showToast('Could not submit — try again','error');return;}
+    showToast('Report submitted — thank you','success');
+    fbCloseForm();feedbackLoaded=false;renderFeedbackTab(true);
+  }catch(e){btn.dataset.busy='';btn.disabled=false;btn.textContent=old;showToast('Network error — try again','error');}
+}
+async function fbSetStatus(id,val){
+  const d=fbList.find(x=>x.id===id);if(!d)return;const prev=d.status;
+  const sel=document.getElementById('fbsel_'+id);if(sel)sel.disabled=true;
+  try{
+    const res=await fetch(APPS_SCRIPT_URL+'?'+new URLSearchParams({action:'setFeedbackStatus',feedbackId:id,status:val}),{redirect:'follow'});
+    let ok=false;try{ok=(await res.json()).success;}catch(e){ok=false;}
+    if(!ok){if(sel){sel.value=prev;sel.disabled=false;}showToast('Could not update status — try again','error');return;}
+    d.status=val;d.resolved=(val==='Done'||val==="Won't do")?(d.resolved||fbNowLocal()):'';
+    showToast('Status → '+esc(val),'success');fbRender();fbSetBadge();
+  }catch(e){if(sel){sel.value=prev;sel.disabled=false;}showToast('Network error — try again','error');}
+}
+async function fbSaveNote(id){
+  const box=document.getElementById('fbnote_'+id);if(!box)return;const val=box.value.trim();
+  const btn=document.getElementById('fbnotebtn_'+id);if(btn&&btn.dataset.busy)return;if(btn){btn.dataset.busy='1';btn.disabled=true;btn.textContent='Saving…';}
+  try{
+    const res=await fetch(APPS_SCRIPT_URL+'?'+new URLSearchParams({action:'saveFeedbackNote',feedbackId:id,note:val}),{redirect:'follow'});
+    let ok=false;try{ok=(await res.json()).success;}catch(e){ok=false;}
+    if(!ok){if(btn){btn.dataset.busy='';btn.disabled=false;btn.textContent='Save note';}showToast('Could not save note — try again','error');return;}
+    const d=fbList.find(x=>x.id===id);if(d)d.note=val;showToast('Note saved','success');fbRender();
+    const row=document.getElementById('fbri_'+id);if(row)row.classList.add('open');
+  }catch(e){if(btn){btn.dataset.busy='';btn.disabled=false;btn.textContent='Save note';}showToast('Network error — try again','error');}
+}
+async function fbArchive(id){
+  if(fbArchiving)return;
+  if(!confirm('Archive this report? It will be hidden from the list but kept in the sheet.'))return;
+  fbArchiving=true;
+  try{
+    const res=await fetch(APPS_SCRIPT_URL+'?'+new URLSearchParams({action:'archiveFeedback',feedbackId:id}),{redirect:'follow'});
+    let ok=false;try{ok=(await res.json()).success;}catch(e){ok=false;}
+    if(!ok){showToast('Could not archive — try again','error');return;}
+    fbList=fbList.filter(x=>x.id!==id);
+    if(feedbackData)feedbackData.forEach(r=>{if(fbG(r,'Feedback ID')===id)r['Archived']='yes';});
+    showToast('Report archived','success');fbRender();fbSetBadge();
+  }catch(e){showToast('Network error — try again','error');}
+  finally{fbArchiving=false;}
+}
+
 // ===== AFFILIATES & REFERRALS TAB =====
 let affApplicants=null, affRawClients=null, affLoaded=false;
 let affList=[];
@@ -2887,6 +3124,90 @@ function affStBadge(s){const c={PENDING:'badge-pending',APPROVED:'badge-active',
 async function affLoad(){
   const [apps,raw]=await Promise.all([fetchSheet('affiliateProgram'),fetchSheet('planRegistryRAW')]);
   affApplicants=apps; affRawClients=raw; affLoaded=true;
+}
+
+// --- CLIENT PROFILE: affiliate referral notify -----------------------
+function _niceDate(d){
+  if(!d)return'';
+  try{const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];let dt;
+    if(d instanceof Date)dt=d;else{const s=String(d).trim();if(!s)return'';
+      if(s.indexOf('/')>-1){const p=s.split('/').map(Number);if(!p[0]||!p[1]||!p[2])return String(d);dt=new Date(p[2],p[0]-1,p[1]);}
+      else if(s.indexOf('T')>-1)dt=new Date(s);else dt=new Date(s+'T00:00:00');}
+    return isNaN(dt)?String(d):M[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+  }catch(e){return String(d);}
+}
+function _clientAffiliateCode(pid){
+  const raw=affRawClients||[];
+  for(let i=0;i<raw.length;i++){if(affG(raw[i],'Plan ID|hidden-1')===String(pid).trim())return affG(raw[i],'Affiliate Code|radio-4');}
+  return '';
+}
+function _findAffiliateByCode(code){
+  if(!code)return null;const cu=String(code).trim().toUpperCase();const apps=affApplicants||[];
+  for(let i=0;i<apps.length;i++){const a=apps[i];const ac=affG(a,'Affiliate Code');
+    if(ac&&ac.trim().toUpperCase()===cu){
+      return {id:affG(a,'Affiliate ID|hidden-5'),
+        first:affG(a,'First Name|name-1-first-name'),
+        name:((affG(a,'First Name|name-1-first-name')+' '+affG(a,'Last Name|name-1-last-name')).trim())||'(no name)',
+        email:affG(a,'Email Address|email-1'),code:ac.trim(),company:affG(a,'Company / Business Name (optional)|text-7'),
+        approved:affG(a,'Account Status|hidden-3').toUpperCase()==='APPROVED'};
+    }
+  }
+  return null;
+}
+function viewAffiliateFromClient(id){
+  affSel=id;
+  try{switchTab('referrals');}catch(e){}
+  if(affLoaded){try{affRefreshLists();}catch(e){}}
+  else{affLoad().then(function(){affSel=id;try{affRefreshLists();}catch(e){}}).catch(function(){});}
+}
+function renderClientAffiliateCard(c,pid){
+  // data loads in background at startup; if not ready, load then re-open this client
+  if(!affLoaded){
+    if(!window._affReloading){window._affReloading=true;
+      affLoad().then(function(){window._affReloading=false;try{openClient(c);}catch(e){}}).catch(function(){window._affReloading=false;});}
+    return '';
+  }
+  const usedCode=_clientAffiliateCode(pid);
+  if(!usedCode)return '';
+  const aff=_findAffiliateByCode(usedCode);
+  if(!aff||!aff.approved){
+    return '<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;margin-bottom:14px;padding:13px 16px;display:flex;gap:11px;align-items:flex-start">'
+      +'<svg class="ic ic-amber" aria-hidden="true" style="flex-shrink:0;margin-top:1px"><use href="#i-warn"/></svg>'
+      +'<div><div style="font-size:13px;font-weight:700;color:#92400e">Affiliate code \''+esc(usedCode)+'\' isn\'t an approved affiliate</div>'
+      +'<div style="font-size:12px;color:#a16207;line-height:1.5;margin-top:2px">This signup used a code that doesn\'t match an approved affiliate. Nothing to notify \u2014 approve the client normally.</div></div></div>';
+  }
+  const n=parseFloat(String(c['Subtotal|calculation-1']==null?'':c['Subtotal|calculation-1']).replace(/[^0-9.\-]/g,''));
+  const sub=isFinite(n)?n:0;
+  const comm=Math.round(sub*10)/100;
+  const firstName=c['First Name|name-1-first-name']||'';
+  const planName=c['planName']||c['Select Plan|radio-1']||'';
+  const signup=_niceDate(c['Registration Date|hidden-4']);
+  const params=new URLSearchParams({
+    Request_Type:'Affiliate Notification', email:aff.email,
+    affiliate_code_used:aff.code, Referred_First_Name:firstName,
+    Selected_Plan:planName, referred_subtotal:sub.toFixed(2),
+    Commission:comm.toFixed(2), signup_date:signup,
+    Company_Legal_Name:(aff.company||aff.name||'')
+  });
+  const url='https://yyzoffices.com/yyz-dashboard-7/?'+params.toString();
+  const cell=function(k,v){return '<div style="flex:1;min-width:120px;background:#f7f8fa;border:1px solid #eceef1;border-radius:9px;padding:9px 11px"><div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:3px">'+k+'</div><div style="font-size:13px;font-weight:600;color:var(--ink)">'+v+'</div></div>';};
+  return '<div style="background:var(--white);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:10px;margin-bottom:14px;overflow:hidden">'
+    +'<div style="display:flex;align-items:center;gap:9px;padding:13px 16px;border-bottom:1px solid var(--border2)">'
+    +'<span style="width:26px;height:26px;border-radius:7px;background:var(--red-light);display:flex;align-items:center;justify-content:center"><svg class="ic" style="color:var(--red)" aria-hidden="true"><use href="#i-user"/></svg></span>'
+    +'<span style="font-size:14px;font-weight:700;color:var(--ink);flex:1">Affiliate referral</span>'
+    +'<span style="font-size:10px;font-weight:700;color:#92400e;background:var(--amber-bg);padding:3px 9px;border-radius:99px;text-transform:uppercase;letter-spacing:.03em">Referral</span></div>'
+    +'<div style="padding:15px 16px">'
+    +'<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:13px">'
+    +cell('Code used','<span style="font-family:monospace">'+esc(aff.code)+'</span>')
+    +cell('Notify',esc(aff.name))
+    +'<div style="flex:1;min-width:120px;background:var(--red-light);border:1px solid #dbe3ee;border-radius:9px;padding:9px 11px"><div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:3px">Commission</div><div style="font-size:17px;font-weight:800;color:var(--red)">$'+comm.toFixed(2)+'</div><div style="font-size:10.5px;color:var(--muted);font-weight:500">10% of $'+sub.toFixed(2)+'</div></div>'
+    +'</div>'
+    +'<div style="display:flex;gap:8px">'
+    +'<a href="'+url+'" target="_blank" style="flex:1;text-decoration:none;background:var(--ink);color:#fff;font-size:13px;font-weight:600;padding:11px;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:8px"><svg class="ic" style="color:#fff" aria-hidden="true"><use href="#i-mail"/></svg> Notify '+esc(aff.first||aff.name)+'</a>'
+    +'<button onclick="viewAffiliateFromClient(\''+esc(aff.id)+'\')" class="btn btn-ghost btn-sm" style="padding:11px 14px"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-user"/></svg> View affiliate</button>'
+    +'</div>'
+    +'<div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5">Sends to '+esc(aff.email)+'. Disappears once you approve or reject.</div>'
+    +'</div></div>';
 }
 function affBuildModel(){
   const byCode={};
@@ -3096,14 +3417,14 @@ function affClientRow(c){
   const company=affG(c,'Recipient Name (1) | Legal Company Name|text-2')||'—';
   const name=((affG(c,'First Name|name-1-first-name')+' '+affG(c,'Last Name|name-1-last-name')).trim())||'—';
   const email=affG(c,'Email Address|email-1')||'—';
-  const plan=affG(c,'Select Plan|radio-1')||'—';
+  const plan=planLabel(affG(c,'Select Plan|radio-1'))||'—';
   const pid=affG(c,'Plan ID|hidden-1')||'—';
   const reg=affG(c,'Registration Date|hidden-4')||'—';
   const rate=affG(c,'Affiliate Discount Rate|calculation-4');
   const rateTxt=(function(r){const n=parseFloat(r);if(isNaN(n))return esc(r||'—');return (n<=1?Math.round(n*100):Math.round(n))+'% off';})(rate);
   const status=(affG(c,'Account Status|hidden-2')||'ACTIVE').toUpperCase();
   return '<div class="aff-refrow"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px"><div style="font-size:13px;font-weight:700;color:var(--ink)">'+esc(company)+'</div><div style="display:flex;gap:6px">'+affStBadge(status)+'<span class="badge badge-plan">'+esc(plan)+'</span></div></div>'
-    +'<div class="aff-grid" style="margin-bottom:8px"><div><span class="k">Plan ID:</span> <strong>'+esc(pid)+'</strong></div><div><span class="k">Contact:</span> '+esc(name)+'</div><div><span class="k">Email:</span> '+esc(email)+'</div><div><span class="k">Discount:</span> '+esc(rateTxt)+'</div><div><span class="k">Registered:</span> '+esc(affFmtDate(reg))+'</div></div>'
+    +'<div class="aff-grid" style="margin-bottom:8px"><div><span class="k">Plan ID:</span> <strong>'+esc(pid)+'</strong></div><div><span class="k">Contact:</span> '+esc(name)+'</div><div style="grid-column:1/-1;min-width:0;display:flex;gap:4px;align-items:baseline"><span class="k" style="flex:none">Email:</span><span title="'+esc(email)+'" style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(email?esc(email):'\u2014')+'</span></div><div><span class="k">Discount:</span> '+esc(rateTxt)+'</div><div><span class="k">Registered:</span> '+esc(affFmtDate(reg))+'</div></div>'
     +'<button class="btn btn-ghost btn-sm" onclick="affViewClient(\''+esc(pid)+'\')"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-user"/></svg> View client</button></div>';
 }
 function affViewClient(pid){if(!pid||pid==='—')return;if(typeof getClientByPid==='function'&&!getClientByPid(pid)){showToast('Client not loaded — open the Clients tab first','error');return;}switchTab('clients');setTimeout(function(){try{openClientFromList(pid);}catch(e){showToast('Could not open client','error');}},60);}
@@ -3128,7 +3449,7 @@ function affRenderDetail(subOnly){
     if(affEditProfile){ h+=affProfileEdit(a); }
     else {
     h+='<div class="aff-sec"><div class="aff-sec-h"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg> Contact</div><div class="aff-inforows">'
-      +affInforow('i-mail','Email',esc(a.email||'—'))+affInforow('i-phone','Phone',esc(a.phone||'—'))+affInforow('i-globe','Location',esc([a.state,a.country].filter(Boolean).join(', ')||'—'))+'</div></div>';
+      +affInforow('i-mail','Email',emailTrunc(a.email,210))+affInforow('i-phone','Phone',esc(a.phone||'—'))+affInforow('i-globe','Location',esc([a.state,a.country].filter(Boolean).join(', ')||'—'))+'</div></div>';
     h+='<div class="aff-sec"><div class="aff-sec-h"><svg class="ic" aria-hidden="true"><use href="#i-star"/></svg> About</div><div class="aff-inforows">'
       +affInforow('i-calendar','Applied',esc(affFmtDate(a.reg)))+affInforow('i-search','Found us via',esc(a.howHeard||'—'))+'</div>'
       +(a.refPlan?'<div class="aff-quote" style="margin-top:10px">&ldquo;'+esc(a.refPlan)+'&rdquo;</div>':'')
@@ -3486,6 +3807,53 @@ function buildStats(){
     +'</div>';
   }
 
+  function forecastPanel(){
+    function parse(d){ if(!d)return null; var dt;
+      if(d instanceof Date)dt=d; else{ var s=String(d).trim(); if(!s)return null;
+        if(s.indexOf('/')>-1){var p=s.split(/[\/ :]/);var mo=+p[0],da=+p[1],yr=+p[2];if(!mo||!da||!yr)return null;dt=new Date(yr,mo-1,da);}
+        else dt=new Date(s.indexOf('T')>-1?s:s.replace(' ','T')); }
+      return isNaN(dt)?null:dt; }
+    function ymd(dt){return dt.getFullYear()+'-'+('0'+(dt.getMonth()+1)).slice(-2)+'-'+('0'+dt.getDate()).slice(-2);}
+    var mail=[0,0,0,0,0], collByDate={}, collSum=0, lo=null, hi=null;
+    mailData.forEach(function(m){
+      var md=parse(m['Notification Date|hidden-1']); if(md){var g=md.getDay(); if(g>=1&&g<=5)mail[g-1]++;}
+      var cd=parse(m['collectedAt']); if(cd){var k=ymd(cd); collByDate[k]=(collByDate[k]||0)+1; collSum++; if(!lo||cd<lo)lo=cd; if(!hi||cd>hi)hi=cd;}
+    });
+    var mailSum=mail.reduce(function(a,b){return a+b;},0);
+    if(mailSum+collSum===0) return '';
+    var totalWD=[0,0,0,0,0], hitWD=[0,0,0,0,0];
+    if(lo&&hi){ var d=new Date(lo.getFullYear(),lo.getMonth(),lo.getDate());
+      while(d<=hi){ var g=d.getDay(); if(g>=1&&g<=5){ totalWD[g-1]++; if(collByDate[ymd(d)])hitWD[g-1]++; } d.setDate(d.getDate()+1); } }
+    var mailPct=mail.map(function(v){return mailSum?Math.round(v/mailSum*100):0;});
+    var chance=[0,1,2,3,4].map(function(i){return totalWD[i]?Math.round(hitWD[i]/totalWD[i]*100):0;});
+    var days=['Mon','Tue','Wed','Thu','Fri'];
+    function argmax(a){var mi=0;for(var i=1;i<a.length;i++)if(a[i]>a[mi])mi=i;return mi;}
+    var mp=argmax(mail), cp=argmax(chance), ref=Math.max.apply(null,mailPct.concat(chance))||1;
+    var BLUE='#2a78d6', GREEN='#1baf7a';
+    function h(pct){return pct>0?Math.max(3,Math.round(pct/ref*44)):0;}
+    var cols=days.map(function(d,i){ var peak=(i===mp||i===cp);
+      return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end">'
+        +'<div style="display:flex;align-items:flex-end;gap:4px;height:100%;width:100%;justify-content:center">'
+          +'<div title="Mail '+mailPct[i]+'% of the week" style="width:15px;border-radius:4px 4px 2px 2px;background:'+BLUE+';height:'+h(mailPct[i])+'px"></div>'
+          +'<div title="'+chance[i]+'% chance a customer collects" style="width:15px;border-radius:4px 4px 2px 2px;background:'+GREEN+';height:'+h(chance[i])+'px"></div>'
+        +'</div>'
+        +'<span style="font-size:11px;color:'+(peak?'var(--ink)':'var(--muted)')+';font-weight:'+(peak?'700':'600')+';margin-top:5px">'+d+'</span></div>';
+    }).join('');
+    var dot=function(c){return '<span style="width:9px;height:9px;border-radius:3px;background:'+c+';display:inline-block"></span>';};
+    return '<div style="background:var(--white);border:0.5px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:18px">'
+      +'<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:center">'
+        +'<div style="flex:1 1 250px;min-width:0">'
+          +'<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:5px">'
+            +'<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--red)">Weekly Forecast</span>'
+            +'<span style="display:flex;gap:11px;font-size:10.5px;color:var(--muted)"><span style="display:inline-flex;align-items:center;gap:5px">'+dot(BLUE)+'Mail in</span><span style="display:inline-flex;align-items:center;gap:5px">'+dot(GREEN)+'Collection chance</span></span>'
+          +'</div>'
+          +'<div style="font-size:12.5px;color:var(--ink);line-height:1.45">Mail arrives most on <b>'+days[mp]+'</b>. A customer is most likely to collect on <b>'+days[cp]+'</b> (~'+chance[cp]+'% of '+days[cp]+'s).</div>'
+          +'<div style="font-size:10.5px;color:var(--muted);margin-top:6px">Mon&ndash;Fri &middot; '+mailSum+' items, '+collSum+' collections logged.</div>'
+        +'</div>'
+        +'<div style="flex:1 1 300px;min-width:0"><div style="display:flex;align-items:flex-end;gap:14px;height:56px;padding-top:10px">'+cols+'</div></div>'
+      +'</div></div>';
+  }
+
   // New clients this month vs last
   const now=new Date(),thisMonth=now.getMonth(),thisYear=now.getFullYear();
   const lastMonth=thisMonth===0?11:thisMonth-1,lastYear=thisMonth===0?thisYear-1:thisYear;
@@ -3559,6 +3927,7 @@ function buildStats(){
 
   document.getElementById('statsContent').innerHTML=`
     ${revenueBar()}
+    ${forecastPanel()}
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;margin-bottom:18px;align-items:stretch">
       ${metricCard('Total clients',planData.length,active.length+' active · '+inactive.length+' inactive')}
       ${metricCard('Monthly revenue',fmtCAD(monthlyRevenue),active.filter(c=>String(c['Term']||'')==='Monthly').length+' monthly plans','','',true)}
@@ -4438,7 +4807,7 @@ function renderMailboxTable(allItems){
     const cnoteHtml=cnote?'<div style="font-size:11px;margin-top:4px;padding:3px 9px;background:#f0f9ff;border-radius:6px;color:#0369a1"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-chat"/></svg> Note to client: '+esc(cnote)+'</div>':'';
     if(mbxActiveTab==='history'){
       const hstyle=HIST_STATUS_STYLE[status]||'background:#F3F4F6;color:#555';
-      const _col=m['collectedAt']?'<div style="font-size:11px;margin-top:3px;color:'+(status==='Discarded'?'#991b1b':'#15803d')+'"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-calendar"/></svg> '+(status==='Discarded'?'Discarded':'Collected')+': '+fmtD(m['collectedAt'])+'</div>':'';
+      const _col=m['collectedAt']?'<div style="font-size:11px;margin-top:3px;color:'+(status==='Discarded'?'#991b1b':'#15803d')+'"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-calendar"/></svg> '+stampLabel(status)+': '+fmtD(m['collectedAt'])+'</div>':'';
       const _sndr=m['Sender Name|text-2']?'<span style="font-size:11px;color:#6b7280"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-mail"/></svg> '+esc(m['Sender Name|text-2'])+'</span>':'';
       const _inote=m['Internal Note|text-3']?'<div style="font-size:11px;margin-top:3px;padding:3px 8px;background:#fef3c7;border-radius:5px;color:#92400e"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-clipboard"/></svg> '+esc(m['Internal Note|text-3'])+'</div>':'';
       const _cnote=m['Note to Customer|textarea-1']?'<div style="font-size:11px;margin-top:3px;padding:3px 8px;background:#f0f9ff;border-radius:5px;color:#0369a1"><svg class="ic ic-muted" aria-hidden="true"><use href="#i-chat"/></svg> '+esc(m['Note to Customer|textarea-1'])+'</div>':'';
@@ -4639,7 +5008,8 @@ async function updateMailboxStatus(mailId,sel){
 
 
 // CLOCK
-function updateClock(){document.getElementById('headerTime').textContent=new Date().toLocaleTimeString('en-CA',{timeZone:'America/Toronto',hour:'2-digit',minute:'2-digit'})+' ET';}
+function updateQuarter(){var d=new Date();var q=Math.floor(d.getMonth()/3)+1;var el=document.getElementById('headerQ');if(el)el.textContent='Q'+q+' '+d.getFullYear();}
+function updateClock(){document.getElementById('headerTime').textContent=new Date().toLocaleTimeString('en-CA',{timeZone:'America/Toronto',hour:'2-digit',minute:'2-digit'})+' ET';updateQuarter();}
 
 // INIT
 function initPortal(){
@@ -4649,6 +5019,7 @@ function initPortal(){
 }
 function initPortalUI(){
   updateClock();
+  loadBanner();
   setInterval(updateClock,30000);
   document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
   renderRecentClients();
